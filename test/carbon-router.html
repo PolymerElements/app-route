@@ -1,0 +1,187 @@
+<!doctype html>
+<!--
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+<head>
+  <title>iron-ajax</title>
+
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../promise-polyfill/promise-polyfill.html">
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../carbon-router.html">
+  <link rel="import" href="../carbon-route.html">
+  <link rel="import" href="combined-elem.html">
+</head>
+<body>
+
+<script>
+  'use strict';
+
+  function timePasses(ms) {
+    return new Promise(function(resolve) {
+      window.setTimeout(function() {
+        resolve();
+      }, ms);
+    });
+  }
+
+  function tryUntilTrue(f) {
+    return new Promise(function(resolve) {
+      if (f()) {
+        resolve();
+      }
+      var interval = setInterval(function() {
+        if (f()) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 1);
+    });
+  }
+
+  var originalFlush = flush;
+  flush = function() {
+    return new Promise(function(resolve) {
+      originalFlush(resolve);
+    });
+  }
+
+  suite('<carbon-router>', function () {
+    var initialUrl;
+    setup(function() {
+      initialUrl = window.location.href;
+    });
+    teardown(function(){
+      window.history.replaceState({}, '', initialUrl);
+    });
+
+    suite('when used solo', function() {
+      var router;
+      setup(function() {
+        router = document.createElement('carbon-router');
+        router.attached();
+      });
+      teardown(function() {
+        router.detached();
+      });
+      test('basic functionality with #hash urls', function() {
+        // Initialized to the window location's hash.
+        expect(window.location.hash).to.be.equal(router.hash);
+
+        // Changing the router's hash changes the URL
+        router.hash = '/lol/ok';
+        expect(window.location.hash).to.be.equal('#/lol/ok');
+
+        // Changing the hash via normal means changes the router.
+        var anchor = document.createElement('a');
+        anchor.href = '#/wat';
+        document.body.appendChild(anchor);
+        anchor.click();
+        expect(router.hash).to.be.equal('/wat');
+      });
+      test('basic functionality with paths', function() {
+        // Initialized to the window location's path.
+        expect(window.location.pathname).to.be.equal(router.path);
+
+        // Changing the router's path changes the URL
+        router.path = '/foo/bar';
+        expect(window.location.pathname).to.be.equal('/foo/bar');
+
+        // Changing the path and sending a custom event on the window changes
+        // the router.
+        window.history.replaceState({}, '', '/baz')
+        window.dispatchEvent(new CustomEvent('location-changed'));
+        expect(router.path).to.be.equal('/baz');
+      });
+      test('basic functionality with ?key=value params', function() {
+        // Initialized to the window location's params.
+        expect(router.params).to.deep.eq({});
+
+        // Changing location.search and sending a custom event on the window
+        // changes the router.
+        window.history.replaceState({}, '', '/?greeting=hello&target=world');
+        window.dispatchEvent(new CustomEvent('location-changed'));
+        expect(router.params).to.deep.equal(
+            {greeting: 'hello', target: 'world'});
+
+        // Changing the router's path changes the URL.
+        router.set('params.another', 'key');
+        expect(window.location.search).to.be.equal(
+            '?greeting=hello&target=world&another=key');
+      });
+    });
+
+    suite('used with <carbon-route> based on hash', function() {
+      var combinedElem;
+      var router;
+      var route1;
+      var route2;
+      setup(function() {
+        combinedElem = document.createElement('combined-elem');
+        document.body.appendChild(combinedElem);
+        router = combinedElem.$.router;
+        route1 = combinedElem.$.route1;
+        route2 = combinedElem.$.route2;
+      });
+      teardown(function() {
+        document.body.removeChild(combinedElem);
+      });
+
+      test('the route matches after hash changes', function() {
+        router.hash = '/wat';
+
+        // The matched route's state should be correct
+        expect(route1.matched).to.be.equal('/wat');
+        expect(route1.rest).to.be.equal('');
+        expect(route1.data).to.deep.equal({});
+
+        // The unmatched route's state should be null.
+        expect(route2.matched).to.be.equal(null);
+        expect(route2.rest).to.be.equal(null);
+        expect(route2.data).to.be.equal(null);
+        expect(route2.name).to.be.equal(undefined);
+        expect(route2.action).to.be.equal(undefined);
+
+        // Modifying the matched route's `rest` param should update the URL.
+        route1.rest = 'more/pieces';
+        expect(router.hash).to.be.equal('/wat/more/pieces');
+
+        // Modifying the unmatched route's `rest` param should have no effect.
+        route2.rest = 'hey whats up';
+        expect(router.hash).to.be.equal('/wat/more/pieces');
+      });
+
+      test('a structured route match works after the hash changes', function() {
+        router.hash = '/user/jane/edit/details';
+        // The unmatched route's state should be correct
+        expect(route1.route).to.be.equal('/user/jane/edit/details')
+        expect(route1.matched).to.be.equal(null);
+        expect(route1.rest).to.be.equal(null);
+        expect(route1.data).to.deep.equal(null);
+
+        expect(route2.route).to.be.equal('/user/jane/edit/details')
+        expect(route2.matched).to.be.equal('/user/jane/edit');
+        expect(route2.rest).to.be.equal('details');
+        expect(route2.data).to.deep.equal(
+            {name: 'jane', action: 'edit'});
+        expect(route2.name).to.be.equal('jane');
+        expect(route2.action).to.be.equal('edit');
+
+        route2.action = 'view';
+        expect(router.hash).to.be.equal('/user/jane/view/details');
+      });
+    });
+  });
+
+</script>
+</body>

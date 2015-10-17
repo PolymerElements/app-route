@@ -1,0 +1,22 @@
+<link rel='import' href='../polymer.html'>
+<link rel='import' href='../carbon-router.html'>
+<link rel='import' href='../carbon-route.html'>
+
+<dom-module id='combined-elem'>
+  <template>
+    <carbon-router id='router' hash='{{hash}}'></carbon-router>
+    <carbon-route id='route1' match='/wat' route='{{hash}}'></carbon-route>
+    <carbon-route id='route2' match='/user/:name/:action' route='{{hash}}'>
+    </carbon-route>
+  </template>
+  <script>
+    Polymer({
+      is: 'combined-elem',
+      properties: {
+        hash: {
+          type: String
+        }
+      }
+    });
+  </script>
+</dom-module>

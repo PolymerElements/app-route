@@ -9,8 +9,8 @@
 
   <link rel="import" href="components.html">
 
-  <link rel="import" href="../../carbon-router.html">
-  <link rel="import" href="../../extras.html">
+  <link rel="import" href="../carbon-router.html">
+  <link rel="import" href="../extras.html">
 
   <style>
 
@@ -37,7 +37,7 @@
   <!-- display some basic route links -->
   <a is="route-link" head="" path="page">Page</a>
   <a is="route-link" head="" path="page/foo">Page/Foo</a>
-  
+
   <!-- connects route data with address bar -->
   <carbon-router route="{{route}}"></carbon-router>
 
@@ -60,7 +60,7 @@
     }
   });
 </script>
-  
+
 <!-- main-view.html -->
 
 <dom-module id="main-view">
@@ -73,8 +73,10 @@
   </style>
   <template>
 
-    <carbon-route route="{{route}}" matches="page" head="{{head}}"></carbon-route>
-    <carbon-route route="{{route}}" matches="page/:page" page="{{page}}"></carbon-route>
+    <carbon-route route="{{route}}" matches="page" head="{{head}}">
+    </carbon-route>
+    <carbon-route route="{{route}}" matches="page/:page" page="{{page}}">
+    </carbon-route>
 
     <sub-view head="{{head}}" page="{{page}}"></sub-view>
 
@@ -82,7 +84,7 @@
   <script>
 
     Polymer({
-  
+
       properties: {
       }
 

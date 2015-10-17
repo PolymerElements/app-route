@@ -1,0 +1,147 @@
+<script>
+  'use strict';
+
+  Polymer.CarbonRoutingBehavior = {
+
+    properties: {
+      // the actual route managed by this element
+      // notifies so we can have an api here to affect the route too
+      route: {
+        type: String,
+        notify: true
+      },
+
+      // pattern to compare to `route`
+      // "<literal>|:<macro>/..."
+      // path value matching `<macro>` is converted into values on pseudo-
+      // property `data`
+      match: {
+        type: String
+      },
+
+      // The part of `route` that's consumed by `match`
+      matched: {
+        type: String,
+        notify: true
+      },
+
+      // The part of `route` NOT consumed by `match`.
+      // Equivalent to `route.substring(matched.length + 1)`
+      rest: {
+        notify: true,
+        observer: '_restChanged'
+      },
+
+      // object form of data processed from route
+      // experimental
+      data: {
+        computed: '_computeData(route, match)',
+        notify: true
+      }
+
+    },
+
+    created: function() {
+      this._dynData = {};
+    },
+
+    _computeData: function(route, match) {
+      return this._tryToMatch(route, match);
+    },
+
+    _tryToMatch: function(route, match) {
+      console.log('trying to match ', route, ' with ', match);
+      var remainingPieces = route.split('/');
+      var matchPieces = match.split('/');
+
+      var matched = [];
+      var namedMatches = {};
+
+      for (var i=0; i < matchPieces.length; i++) {
+        var matchPiece = matchPieces[i];
+        if (!matchPiece && matchPiece !== '') {
+          break;
+        }
+        var routePiece = remainingPieces.shift();
+
+        // We don't match this path.
+        if (!routePiece && routePiece !== '') {
+          this.matched = this.rest = null;
+          return null;
+        }
+        matched.push(routePiece);
+
+        if (matchPiece.charAt(0) == ':') {
+          matchPiece = matchPiece.slice(1);
+          namedMatches[matchPiece] = routePiece;
+        } else if (matchPiece !== routePiece) {
+          this.matched = this.rest = null;
+          return null;
+        }
+      }
+
+      Object.keys(namedMatches).forEach(function(name) {
+        this._fauxNotify(name, namedMatches[name]);
+      }, this);
+
+      var matched = matched.join('/');
+      var tail = remainingPieces.join('/');
+
+      this.matched = matched;
+      this.rest = tail;
+
+      return namedMatches;
+    },
+
+    _restChanged: function(rest) {
+      if (rest && this.matched) {
+        this.route = this.matched + '/' + this.rest;
+      }
+    },
+
+    _fauxNotify: function(property, value) {
+      Object.defineProperty(this, property, {
+        configurable: true,
+        get: function() {
+          //console.log('getting', property);
+          return this._dynData[property];
+        },
+        set: function(value) {
+          //console.log('setting route data: ', property, value);
+          this._dynData[property] = value;
+          this._routinate()
+        }
+      });
+      this._dynData[property] = value;
+      // TODO(sjmiles): flaw in fauxification:
+      // the notification can occur before the parent listener is ready
+      // `async` fixes it, but at what cost?
+      this.async(function() {
+        this._notifyChange(property);
+      });
+    },
+
+    _routinate: function() {
+      var trg = this.match.split('/');
+      var interp = trg.map(function(value) {
+        if (value[0] == ':') {
+          value = this[value.slice(1)];
+        }
+        return value;
+      }, this);
+      if (this.rest) {
+        interp.push(this.rest);
+      }
+      //console.log('generated route: ', interp.join('/'));
+      this.route = interp.join('/');
+    },
+  };
+
+  Polymer({
+    is: 'carbon-route',
+
+    behaviors: [
+      Polymer.CarbonRoutingBehavior
+    ]
+  });
+</script>
