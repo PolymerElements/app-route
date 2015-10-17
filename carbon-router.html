@@ -1,0 +1,53 @@
+<link rel='import' href='../polymer/polymer.html'>
+<link rel='import' href='iron-page-url.html'>
+<link rel='import' href='carbon-route.html'>
+
+
+<script>
+  Polymer({
+    is: 'carbon-router',
+    properties: {
+      route: {
+        type: String,
+        value: null,
+        notify: true
+      },
+
+      _routes: {
+        value: []
+      }
+    },
+
+    ready: function() {
+      var routes = [];
+      var candidates = Polymer.dom(this).children;
+      for (var i = 0; i < candidates.length; i++) {
+        var child = candidates[i];
+        if (/-route$/i.test(child.tagName)) {
+          routes.push(child);
+          this.listen(child, 'matched-changed', '_matchedChanged');
+        }
+      }
+      this._routes = routes;
+    },
+
+    detached: function() {
+      for (var i = 0; i < this._routes; i++) {
+        this.unlisten(this._routes[i], 'matched-changed', '_matchedChanged');
+      }
+    },
+
+    _matchedChanged: function() {
+      this.debounce('_matchedChanged', function() {
+        for (var i = 0; i < this._routes.length; i++) {
+          var route = this._routes[i];
+          if (route.matched) {
+            this.route = route.id;
+            return;
+          }
+        }
+        this.route = null;
+      });
+    }
+  })
+</script>

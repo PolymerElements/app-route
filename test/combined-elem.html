@@ -1,10 +1,10 @@
-<link rel='import' href='../polymer.html'>
-<link rel='import' href='../carbon-page-url.html'>
+<link rel='import' href='../../polymer/polymer.html'>
+<link rel='import' href='../iron-page-url.html'>
 <link rel='import' href='../carbon-route.html'>
 
 <dom-module id='combined-elem'>
   <template>
-    <carbon-page-url id='router' hash='{{hash}}'></carbon-page-url>
+    <iron-page-url id='pageurl' hash='{{hash}}'></iron-page-url>
     <carbon-route id='route1' match='/wat' path='{{hash}}'></carbon-route>
     <carbon-route
         id='route2' match='/user/:name/:action' path='{{hash}}'

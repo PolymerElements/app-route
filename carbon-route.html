@@ -4,42 +4,47 @@
   Polymer.CarbonRoutingBehavior = {
 
     properties: {
-      // the actual path managed by this element
-      // notifies so we can have an api here to affect the path too
+      /**
+       * The URL component managed by this element.
+       */
       path: {
         type: String,
         notify: true
       },
 
-      // pattern to compare to `path`
-      // "<literal>|:<macro>/..."
-      // path value matching `<macro>` is converted into values on pseudo-
-      // property `data`
+      /**
+       * The pattern to match `path` against.
+       * "<literal>|:<named>/..."
+       * Path values like `:named` become pseudo-properties of the same name
+       * on this element.
+       */
       match: {
         type: String
       },
 
-      // The part of `path` that's consumed by `match`
+      /**
+       * The part of `path` that's consumed by `match`
+       */
       matched: {
         type: String,
         notify: true
       },
 
-      // The part of `path` NOT consumed by `match`.
-      // Equivalent to `path.substring(matched.length + 1)`
+      /**
+       * The part of `path` NOT consumed by `match`.
+       * Equivalent to `path.substring(matched.length + 1)`
+       */
       rest: {
         notify: true,
         observer: '_restChanged'
       },
 
-      // object form of data processed from path
-      // experimental
-      data: {
-        computed: '_computeData(path, match)',
-        notify: true
-      }
-
     },
+
+    observers: [
+      '_tryToMatch(path, match)',
+    ],
+
 
     created: function() {
       this._dynData = {};
@@ -50,12 +55,21 @@
     },
 
     _tryToMatch: function(path, match) {
-      console.log('trying to match ', path, ' with ', match);
       var remainingPieces = path.split('/');
       var matchPieces = match.split('/');
 
       var matched = [];
       var namedMatches = {};
+
+      var clearProperties = function clearProperties() {
+        this.matched = this.rest = null;
+        for (var i = 0; i < matchPieces.length; i++) {
+          var matchPiece = matchPieces[i];
+          if (matchPiece.charAt(0) === ':') {
+            this[matchPiece.slice(1)] = null;
+          }
+        }
+      }.bind(this);
 
       for (var i=0; i < matchPieces.length; i++) {
         var matchPiece = matchPieces[i];
@@ -66,8 +80,8 @@
 
         // We don't match this path.
         if (!pathPiece && pathPiece !== '') {
-          this.matched = this.rest = null;
-          return null;
+          clearProperties();
+          return;
         }
         matched.push(pathPiece);
 
@@ -75,8 +89,8 @@
           matchPiece = matchPiece.slice(1);
           namedMatches[matchPiece] = pathPiece;
         } else if (matchPiece !== pathPiece) {
-          this.matched = this.rest = null;
-          return null;
+          clearProperties();
+          return;
         }
       }
 
@@ -89,8 +103,6 @@
 
       this.matched = matched;
       this.rest = tail;
-
-      return namedMatches;
     },
 
     _restChanged: function(rest) {
@@ -127,18 +139,29 @@
       if (!this.matched) {
         return;
       }
+      this.path = this.getLink({});
+    },
+
+    getLink: function(overrideValues) {
+      var values = {rest: this.rest};
+      for (var key in this._dynData) {
+        values[key] = this._dynData[key];
+      }
+      for (var key in overrideValues) {
+        values[key] = overrideValues[key];
+      }
       var matchPieces = this.match.split('/');
       var interp = matchPieces.map(function(value) {
         if (value[0] == ':') {
-          value = this[value.slice(1)];
+          value = values[value.slice(1)];
         }
         return value;
       }, this);
-      if (this.rest) {
-        interp.push(this.rest);
+      if (values.rest) {
+        interp.push(values.rest);
       }
-      this.path = interp.join('/');
-    },
+      return interp.join('/');
+    }
   };
 
   Polymer({

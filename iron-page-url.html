@@ -1,23 +1,54 @@
 <link rel="import" href="../polymer/polymer.html">
 
+<!--
+
+This element manages binding to and from the current URL.
+
+When the URL is: `/search?query=mr%20skeltal#doot` this element will have:
+  - path: `/search`
+  - params: `{query: 'mr skeltal'}`
+  - hash: 'doot'
+
+These bindings are bidirectional, so modifying them will in turn modify the URL.
+
+This element is only active while it is attached to the document.
+
+ -->
 <script>
   'use strict';
 
   Polymer({
-    is: 'carbon-page-url',
+    is: 'iron-page-url',
     properties: {
+      /**
+       * The pathname component of the URL.
+       */
       path: {
         type: String,
         notify: true
       },
+      /**
+       * The GET params of the URL.
+       */
       params: {
         type: Object,
         notify: true
       },
+      /**
+       * The hash component of the URL.
+       */
       hash: {
         type: String,
         notify: true
       },
+      /**
+       * If the user was on a URL for less than `dwellTime` milliseconds, it
+       * won't be added to the browser's history, but instead will be replaced
+       * by the next entry.
+       *
+       * This is to prevent large numbers of entries from clogging up the user's
+       * browser history. Disable by setting to a negative number.
+       */
       dwellTime: {
         type: Number,
         value: 2000
@@ -107,7 +138,7 @@
       var encodedParams = [];
       for (var key in params) {
         var value = params[key];
-        if (value === true || value === '') {
+        if (value === '') {
           encodedParams.push(encodeURIComponent(key));
         } else if (value) {
           encodedParams.push(
