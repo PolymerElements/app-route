@@ -1,12 +1,14 @@
 <link rel='import' href='../polymer.html'>
-<link rel='import' href='../carbon-router.html'>
+<link rel='import' href='../carbon-page-url.html'>
 <link rel='import' href='../carbon-route.html'>
 
 <dom-module id='combined-elem'>
   <template>
-    <carbon-router id='router' hash='{{hash}}'></carbon-router>
-    <carbon-route id='route1' match='/wat' route='{{hash}}'></carbon-route>
-    <carbon-route id='route2' match='/user/:name/:action' route='{{hash}}'>
+    <carbon-page-url id='router' hash='{{hash}}'></carbon-page-url>
+    <carbon-route id='route1' match='/wat' path='{{hash}}'></carbon-route>
+    <carbon-route
+        id='route2' match='/user/:name/:action' path='{{hash}}'
+        name='{{name}}' action='{{action}}'>
     </carbon-route>
   </template>
   <script>
@@ -14,6 +16,12 @@
       is: 'combined-elem',
       properties: {
         hash: {
+          type: String
+        },
+        user: {
+          type: String
+        },
+        action: {
           type: String
         }
       }

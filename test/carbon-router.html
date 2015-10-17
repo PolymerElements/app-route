@@ -18,7 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../../polymer/polymer.html">
   <link rel="import" href="../../promise-polyfill/promise-polyfill.html">
   <link rel="import" href="../../test-fixture/test-fixture.html">
-  <link rel="import" href="../carbon-router.html">
+  <link rel="import" href="../carbon-page-url.html">
   <link rel="import" href="../carbon-route.html">
   <link rel="import" href="combined-elem.html">
 </head>
@@ -56,7 +56,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
   }
 
-  suite('<carbon-router>', function () {
+  suite('<carbon-page-url>', function () {
     var initialUrl;
     setup(function() {
       initialUrl = window.location.href;
@@ -68,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     suite('when used solo', function() {
       var router;
       setup(function() {
-        router = document.createElement('carbon-router');
+        router = document.createElement('carbon-page-url');
         router.attached();
       });
       teardown(function() {
@@ -137,7 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         document.body.removeChild(combinedElem);
       });
 
-      test('the route matches after hash changes', function() {
+      test('route matching works', function() {
         router.hash = '/wat';
 
         // The matched route's state should be correct
@@ -161,15 +161,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(router.hash).to.be.equal('/wat/more/pieces');
       });
 
-      test('a structured route match works after the hash changes', function() {
+      test('structured route matching works', function() {
         router.hash = '/user/jane/edit/details';
-        // The unmatched route's state should be correct
-        expect(route1.route).to.be.equal('/user/jane/edit/details')
+        // The unmatched route's state should be null.
+        expect(route1.path).to.be.equal('/user/jane/edit/details')
         expect(route1.matched).to.be.equal(null);
         expect(route1.rest).to.be.equal(null);
         expect(route1.data).to.deep.equal(null);
 
-        expect(route2.route).to.be.equal('/user/jane/edit/details')
+        // The matched structured route's state is correct.
+        expect(route2.path).to.be.equal('/user/jane/edit/details')
         expect(route2.matched).to.be.equal('/user/jane/edit');
         expect(route2.rest).to.be.equal('details');
         expect(route2.data).to.deep.equal(
@@ -177,8 +178,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(route2.name).to.be.equal('jane');
         expect(route2.action).to.be.equal('edit');
 
+        // We can change a faux property on the route and the URL changes.
         route2.action = 'view';
         expect(router.hash).to.be.equal('/user/jane/view/details');
+
+        return flush().then(function() {
+          expect(combinedElem.name).to.be.equal('jane');
+          expect(combinedElem.action).to.be.equal('view');
+        });
       });
     });
   });

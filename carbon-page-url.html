@@ -4,7 +4,7 @@
   'use strict';
 
   Polymer({
-    is: 'carbon-router',
+    is: 'carbon-page-url',
     properties: {
       path: {
         type: String,
@@ -104,17 +104,20 @@
       }
     },
     _encodeParams: function(params) {
-      var paramList = [];
+      var encodedParams = [];
       for (var key in params) {
         var value = params[key];
-        if (value === true) {
-          paramList.push(encodeURIComponent(key));
-        } else if (value && value != '') {
-          paramList.push(
-              encodeURIComponent(key) + '=' + encodeURIComponent(value + ''));
+        if (value === true || value === '') {
+          encodedParams.push(encodeURIComponent(key));
+        } else if (value) {
+          encodedParams.push(
+              encodeURIComponent(key) +
+              '=' +
+              encodeURIComponent(value.toString())
+          );
         }
       }
-      return paramList.join('&');
+      return encodedParams.join('&');
     },
     _decodeParams: function(paramString) {
       var params = {};

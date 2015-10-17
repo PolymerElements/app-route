@@ -4,14 +4,14 @@
   Polymer.CarbonRoutingBehavior = {
 
     properties: {
-      // the actual route managed by this element
-      // notifies so we can have an api here to affect the route too
-      route: {
+      // the actual path managed by this element
+      // notifies so we can have an api here to affect the path too
+      path: {
         type: String,
         notify: true
       },
 
-      // pattern to compare to `route`
+      // pattern to compare to `path`
       // "<literal>|:<macro>/..."
       // path value matching `<macro>` is converted into values on pseudo-
       // property `data`
@@ -19,23 +19,23 @@
         type: String
       },
 
-      // The part of `route` that's consumed by `match`
+      // The part of `path` that's consumed by `match`
       matched: {
         type: String,
         notify: true
       },
 
-      // The part of `route` NOT consumed by `match`.
-      // Equivalent to `route.substring(matched.length + 1)`
+      // The part of `path` NOT consumed by `match`.
+      // Equivalent to `path.substring(matched.length + 1)`
       rest: {
         notify: true,
         observer: '_restChanged'
       },
 
-      // object form of data processed from route
+      // object form of data processed from path
       // experimental
       data: {
-        computed: '_computeData(route, match)',
+        computed: '_computeData(path, match)',
         notify: true
       }
 
@@ -45,13 +45,13 @@
       this._dynData = {};
     },
 
-    _computeData: function(route, match) {
-      return this._tryToMatch(route, match);
+    _computeData: function(path, match) {
+      return this._tryToMatch(path, match);
     },
 
-    _tryToMatch: function(route, match) {
-      console.log('trying to match ', route, ' with ', match);
-      var remainingPieces = route.split('/');
+    _tryToMatch: function(path, match) {
+      console.log('trying to match ', path, ' with ', match);
+      var remainingPieces = path.split('/');
       var matchPieces = match.split('/');
 
       var matched = [];
@@ -62,19 +62,19 @@
         if (!matchPiece && matchPiece !== '') {
           break;
         }
-        var routePiece = remainingPieces.shift();
+        var pathPiece = remainingPieces.shift();
 
         // We don't match this path.
-        if (!routePiece && routePiece !== '') {
+        if (!pathPiece && pathPiece !== '') {
           this.matched = this.rest = null;
           return null;
         }
-        matched.push(routePiece);
+        matched.push(pathPiece);
 
         if (matchPiece.charAt(0) == ':') {
           matchPiece = matchPiece.slice(1);
-          namedMatches[matchPiece] = routePiece;
-        } else if (matchPiece !== routePiece) {
+          namedMatches[matchPiece] = pathPiece;
+        } else if (matchPiece !== pathPiece) {
           this.matched = this.rest = null;
           return null;
         }
@@ -95,35 +95,40 @@
 
     _restChanged: function(rest) {
       if (rest && this.matched) {
-        this.route = this.matched + '/' + this.rest;
+        this.path = this.matched + '/' + this.rest;
       }
     },
 
     _fauxNotify: function(property, value) {
-      Object.defineProperty(this, property, {
-        configurable: true,
-        get: function() {
-          //console.log('getting', property);
-          return this._dynData[property];
-        },
-        set: function(value) {
-          //console.log('setting route data: ', property, value);
-          this._dynData[property] = value;
-          this._routinate()
-        }
-      });
-      this._dynData[property] = value;
-      // TODO(sjmiles): flaw in fauxification:
-      // the notification can occur before the parent listener is ready
-      // `async` fixes it, but at what cost?
-      this.async(function() {
-        this._notifyChange(property);
-      });
+      if (!Object.hasOwnProperty(this, property)) {
+        Object.defineProperty(this, property, {
+          configurable: true,
+          get: function() {
+            return this._dynData[property];
+          },
+          set: function(value) {
+            this._dynData[property] = value;
+            this._updatePathOnDataChange();
+
+            // TODO(sjmiles): flaw in fauxification:
+            // the notification can occur before the parent listener is ready
+            // `async` fixes it, but at what cost?
+            this.async(function() {
+              this._notifyChange(property);
+            });
+          }
+        });
+      }
+
+      this[property] = value;
     },
 
-    _routinate: function() {
-      var trg = this.match.split('/');
-      var interp = trg.map(function(value) {
+    _updatePathOnDataChange: function() {
+      if (!this.matched) {
+        return;
+      }
+      var matchPieces = this.match.split('/');
+      var interp = matchPieces.map(function(value) {
         if (value[0] == ':') {
           value = this[value.slice(1)];
         }
@@ -132,8 +137,7 @@
       if (this.rest) {
         interp.push(this.rest);
       }
-      //console.log('generated route: ', interp.join('/'));
-      this.route = interp.join('/');
+      this.path = interp.join('/');
     },
   };
 
