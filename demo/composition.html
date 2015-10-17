@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+
+  <title>carbon-router: composition demo</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <link rel="import" href="components.html">
+
+  <link rel="import" href="../../carbon-router.html">
+
+  <style>
+
+    main-view {
+      font-family: sans-serif;
+    }
+
+  </style>
+
+</head>
+<body>
+
+<template is="dom-bind">
+
+  <!-- element that manages the actual url -->
+  <carbon-router route="{{route}}"></carbon-router>
+
+  <!-- views treat routes as pure data -->
+  <main-view route="{{route}}"></main-view>
+
+</template>
+
+<!-- sub-view.html -->
+
+<dom-module id="sub-view">
+  <style>
+
+    :host {
+      display: block;
+      padding: 8px;
+      margin: 8px;
+      border: 8px solid lightblue;
+    }
+
+  </style>
+  <template>
+
+    <!--
+      `route` is supplied by owner
+      matching routes are decomposed into data, `:<name>` matches any string
+    -->
+    <carbon-route route="{{route}}" matches=":section" section="{{section}}"></carbon-route>
+
+    <p>route: [<span>{{route}}</span>]</p>
+    <hr>
+
+    <iron-pages selected="{{effectiveSection}}" attr-for-selected="name">
+
+      <div name="alpha">
+        <p>Section <b>Alpha</b></p>
+        <p>
+          <a href="{{_route(base, 'beta')}}">Go to Section Beta</a><br>
+          <br>
+          <button on-tap="_sectionTwoAction">Simulate Programmatic Selection of Section Beta</button>
+        </p>
+      </div>
+
+      <div name="beta">
+        <p>Section <b>Beta</b></p>
+        <p>
+          <a href="{{_route(base, 'alpha')}}">Go to Section Alpha</a>
+        </p>
+      </div>
+    </iron-pages>
+
+  </template>
+  <script>
+
+    Polymer({
+
+      properties: {
+
+        route: {
+          // important to notify on `route` changes if we care to affect the route from here
+          notify: true
+        },
+
+        section: {
+          value: 'alpha'
+        },
+
+        effectiveSection: {
+          computed: '_computeEffectiveSection(section)'
+        }
+
+      },
+
+      _route: function(base, route) {
+        return base + '/' + route;
+      },
+
+      _computeEffectiveSection: function(section) {
+        return section || 'alpha';
+      },
+
+
+      // changes to `section` are observed by the carbon-route which modifies `route`,
+      //  which can be observed by owner
+      _sectionTwoAction: function() {
+        this.section = 'beta';
+      }
+
+    });
+
+  </script>
+</dom-module>
+
+<!-- main-view.html -->
+
+<dom-module id="main-view">
+  <style>
+
+    :host {
+      display: block;
+    }
+
+    [name] {
+      padding: 8px;
+      margin: 8px;
+      border: 8px solid orange;
+    }
+
+  </style>
+  <template>
+
+    <carbon-route route="{{route}}" matches=":page" page="{{page}}"></carbon-route>
+    <carbon-route route="{{route}}" matches="one" tail="{{subroute}}"></carbon-route>
+
+    <p>route: [<span>{{route}}</span>]</p>
+    <hr>
+
+    <iron-pages selected="{{effectivePage}}" attr-for-selected="name">
+
+      <div name="one">
+
+        <p>Page <b>One</b></p>
+
+        <a href="#/two">Go to Two</a><br>
+        <br>
+        <button on-tap="pageTwoAction">Simulate Programmatic Selection of Page Two</button>
+
+        <hr>
+
+        <sub-view base="#/one" route="{{subroute}}"></sub-view>
+
+      </div>
+
+      <div name="two">
+        <p>Page <b>Two</b></p>
+        <a href="#/one">Go to One</a>
+      </div>
+
+    </iron-pages>
+
+  </template>
+  <script>
+
+    Polymer({
+
+      properties: {
+
+        effectivePage: {
+          computed: '_computeEffectivePage(page)'
+        },
+
+        route: {
+          // important to notify on `route` changes if we care to affect the route from here
+          notify: true
+        }
+
+      },
+
+      _computeEffectivePage: function(page) {
+        return page || 'one';
+      },
+
+      pageTwoAction: function() {
+        this.page = 'two';
+      }
+
+    });
+
+  </script>
+</dom-module>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+
+  <title>carbon-router: experiment-00</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <link rel="import" href="components.html">
+
+  <link rel="import" href="../../carbon-router.html">
+
+  <style>
+
+    body {
+      font-family: sans-serif;
+    }
+
+    a {
+      display: block;
+      padding: 4px;
+    }
+
+    input {
+      padding: 4px;
+    }
+
+  </style>
+
+</head>
+<body>
+
+<template is="dom-bind">
+
+  <!-- connects route data with address bar -->
+  <carbon-router route="{{route}}"></carbon-router>
+
+  <!-- views treat routes as pure data -->
+  <main-view id="view" route="{{route}}"></main-view>
+
+</template>
+
+<!-- main-view.html -->
+
+<script>
+  Polymer({
+    is: 'route-link',
+    extends: 'a',
+    properties: {
+      path: {
+        observer: '_pathChanged'
+      }
+    },
+    observers: [
+      'calcHref(head, path)'
+    ],
+    calcHref: function(head, path) {
+      this.href = '#/' + head + '/' + path;
+    },
+    attached: function() {
+      this._pathChanged(this.path);
+    },
+    _pathChanged: function(path) {
+      if (!this.head) {
+        var response = this.fire('route-head').detail;
+        if (response) {
+          this.head = response.head;
+        }
+      }
+    }
+  });
+</script>
+
+<dom-module id="main-view">
+  <style>
+
+    :host {
+      display: block;
+    }
+
+  </style>
+  <template>
+
+    <carbon-route route="{{route}}" matches="page" head="{{head}}"></carbon-route>
+    <carbon-route route="{{route}}" matches="page/:page" page="{{page}}"></carbon-route>
+
+    <sub-view page="{{page}}"></sub-view>
+
+  </template>
+  <script>
+
+    Polymer({
+
+      properties: {
+      },
+
+      listeners: {
+        'route-head': 'onRouteHead'
+      },
+
+      onRouteHead: function(e) {
+        e.detail.head = this.head;
+      }
+
+    });
+
+  </script>
+</dom-module>
+
+<!-- sub-view.html -->
+
+<dom-module id="sub-view">
+  <style>
+
+    :host {
+      display: block;
+    }
+
+  </style>
+  <template>
+
+    <p>Page is [<b>{{page}}</b>]</p>
+
+    <p>
+      <a is="route-link" path="foo">Go to Foo</a>
+    </p>
+
+    <p>
+      <a is="route-link" path="zot">Go to Zot</a>
+    </p>
+
+  </template>
+  <script>
+
+    Polymer({
+    });
+
+  </script>
+</dom-module>
+
+</body>
+</html>

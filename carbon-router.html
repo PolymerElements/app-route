@@ -1,0 +1,251 @@
+<script>
+(function() {
+
+  var route;
+
+  var requireRouting = function() {
+    requireRouting = function() {};
+    parseLocation();
+    addEventListener('popstate', popStateHandler);
+  };
+
+  var parseLocation = function() {
+    route = location.hash.slice(2);
+  };
+
+  var popStateHandler = function() {
+    parseLocation();
+    Polymer.Base.fire('route-change', route, {node: window});
+  };
+
+  var getRoute = function() {
+    return route;
+  };
+
+  var setRoute = function(value) {
+    if (value !== route) {
+      route = value;
+      history.pushState(null, '', '#/' + route);
+      popStateHandler();
+    }
+  };
+
+  var topRoute = function(instance) {
+    addEventListener('route-change', function() {
+      instance.route = getRoute();
+    });
+    return getRoute();
+  };
+
+  Polymer.CarbonRoutingBehavior = {
+
+    properties: {
+
+      // the actual route managed by this element
+      // notifies so we can have an api here to affect the route too
+      route: {
+        notify: true
+      },
+
+      // pattern to compare to `route`
+      // matches: String
+      // "<literal>|:<macro>/..."
+      // path value matching `<macro>` is converted into values on pseudo-property `<macro>`
+
+      // part of `route` consumed by `matches`
+      head: {
+        notify: true
+      },
+
+      // part of `route` NOT consumed by `matches`
+      // alias for subroute
+      tail: {
+        notify: true,
+        observer: '_tailChanged'
+      },
+
+      // alias for tail
+      subroute: {
+        notify: true,
+        observer: '_subrouteChanged'
+      },
+
+      // object form of data processed from route
+      // experimental
+      data: {
+        computed: '_computeData(route, matches)',
+        notify: true
+      }
+
+    },
+
+    created: function() {
+      this._dynData = {};
+      requireRouting();
+    },
+
+    _computeData: function(route, matches) {
+      return this._routinize(route, matches);
+    },
+
+    _routinize: function(route, match) {
+      var src = route.split('/');
+      var trg = match.split('/');
+      //
+      var head = [];
+      var values = {};
+      //
+      for (var i=0;;i++) {
+        var t = trg[i];
+        if (!t) {
+          break;
+        }
+        var s = src.shift();
+        head.push(s);
+        if (t[0] == ':') {
+          t = t.slice(1);
+          values[t] = s;
+        }
+        else if (!s || t !== s) {
+          return null;
+        }
+      }
+      //
+      Object.keys(values).forEach(function(name) {
+        this._fauxNotify(name, values[name]);
+      }, this);
+      //
+      var head = head.join('/');
+      var tail = src.join('/');
+      //
+      this.head = head;
+      this.tail = tail;
+      //
+      //if (Object.keys(values).length === 0) {
+      //  return tail;
+      //} else {
+      values.head = head;
+      values.tail = tail;
+      //
+      //console.log(route, values);
+      //
+      return values;
+      //}
+    },
+
+    _subrouteChanged: function(subroute) {
+      this.tail = subroute;
+    },
+
+    _tailChanged: function(tail) {
+      this.subroute = tail;
+      if (tail) {
+        //console.log('got new route tail, new route', this.head + '/' + tail, this.route);
+        this.route = this.head + '/' + this.tail;
+      }
+    },
+
+    _fauxNotify: function(property, value) {
+      Object.defineProperty(this, property, {
+        configurable: true,
+        get: function() {
+          //console.log('getting', property);
+          return this._dynData[property];
+        },
+        set: function(value) {
+          //console.log('setting route data: ', property, value);
+          this._dynData[property] = value;
+          this._routinate()
+        }
+      });
+      this._dynData[property] = value;
+      // TODO(sjmiles): flaw in fauxification:
+      // the notification can occur before the parent listener is ready
+      // `async` fixes it, but at what cost?
+      this.async(function() {
+        this._notifyChange(property);
+      });
+    },
+
+    _routinate: function() {
+      var trg = this.matches.split('/');
+      var interp = trg.map(function(value) {
+        if (value[0] == ':') {
+          value = this[value.slice(1)];
+        }
+        return value;
+      }, this);
+      if (this.tail) {
+        interp.push(this.tail);
+      }
+      //console.log('generated route: ', interp.join('/'));
+      this.route = interp.join('/');
+    },
+
+    // static
+    setRoute: function(route) {
+      setRoute(route);
+    }
+
+  };
+
+  Polymer.CarbonRoutingRootBehavior = {
+
+    properties: {
+      route: {
+        value: function() {
+          return topRoute(this) || this.defaultRoute || '';
+        },
+        observer: '_setRoute'
+      }
+    },
+
+    _setRoute: function(route) {
+      //console.warn('setting route: ', route);
+      setRoute(route);
+    }
+
+  };
+
+})();
+</script>
+
+<dom-module id="carbon-router">
+  <script>
+
+    Polymer({
+
+      behaviors: [
+        Polymer.CarbonRoutingBehavior,
+        Polymer.CarbonRoutingRootBehavior
+      ],
+
+      properties: {
+
+        route: {
+          notify: true
+        },
+
+        matches: {
+          value: ':base'
+        }
+
+      }
+
+    });
+  </script>
+</dom-module>
+
+<dom-module id="carbon-route">
+  <script>
+    
+    Polymer({
+
+      behaviors: [
+        Polymer.CarbonRoutingBehavior
+      ]
+
+    });
+    
+  </script>
+</dom-module>

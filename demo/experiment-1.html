@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+
+  <title>carbon-router: experiment-1</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <link rel="import" href="components.html">
+
+  <link rel="import" href="../../carbon-router.html">
+  <link rel="import" href="../../extras.html">
+
+  <style>
+
+    body {
+      font-family: sans-serif;
+    }
+
+    a {
+      display: block;
+      padding: 4px;
+    }
+
+    input {
+      padding: 4px;
+    }
+
+  </style>
+
+</head>
+<body>
+
+<template is="dom-bind">
+
+  <!-- display some basic route links -->
+  <a is="route-link" head="" path="page">Page</a>
+  <a is="route-link" head="" path="page/foo">Page/Foo</a>
+  
+  <!-- connects route data with address bar -->
+  <carbon-router route="{{route}}"></carbon-router>
+
+  <!-- views treat routes as pure data -->
+  <main-view id="view" route="{{route}}"></main-view>
+
+</template>
+
+<!-- experimental -->
+
+<script>
+  Polymer({
+    is: 'route-link',
+    extends: 'a',
+    observers: [
+      'calcHref(head, path)'
+    ],
+    calcHref: function(head, path) {
+      this.href = '#/' + (head ? head + '/' : '') + path;
+    }
+  });
+</script>
+  
+<!-- main-view.html -->
+
+<dom-module id="main-view">
+  <style>
+
+    :host {
+      display: block;
+    }
+
+  </style>
+  <template>
+
+    <carbon-route route="{{route}}" matches="page" head="{{head}}"></carbon-route>
+    <carbon-route route="{{route}}" matches="page/:page" page="{{page}}"></carbon-route>
+
+    <sub-view head="{{head}}" page="{{page}}"></sub-view>
+
+  </template>
+  <script>
+
+    Polymer({
+  
+      properties: {
+      }
+
+    });
+
+  </script>
+</dom-module>
+
+<!-- sub-view.html -->
+
+<dom-module id="sub-view">
+  <style>
+
+    :host {
+      display: block;
+    }
+
+  </style>
+  <template>
+
+    <p>Page is [<b>{{page}}</b>]</p>
+
+    <p>
+      <a is="route-link" head="{{head}}" path="foo">Go to Foo</a>
+      <a is="route-link" head="{{head}}" path="zot">Go to Zot</a>
+    </p>
+
+  </template>
+  <script>
+
+    Polymer({
+    });
+
+  </script>
+</dom-module>
+
+</body>
+</html>
