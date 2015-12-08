@@ -28,7 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </carbon-route>
         <carbon-route id="browsePage" match="/browse">
         </carbon-route>
-        <carbon-route id="fallback" match="/">
+        <carbon-route id="homePage" match="/">
         </carbon-route>
       </carbon-router>
     </template>
@@ -67,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         setUrl('/');
         return flush();
       }).then(function() {
-        expect(router.route).to.be.equal('fallback');
+        expect(router.route).to.be.equal('homePage');
 
         setUrl('/nothing_matches_this');
         return flush();

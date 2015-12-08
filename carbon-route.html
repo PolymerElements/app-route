@@ -54,6 +54,8 @@
       return this._tryToMatch(path, match);
     },
 
+    // TODO: disallow name clashes in match. Allow regex?
+
     _tryToMatch: function(path, match) {
       var remainingPieces = path.split('/');
       var matchPieces = match.split('/');

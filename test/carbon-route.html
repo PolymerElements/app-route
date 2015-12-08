@@ -18,11 +18,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="../../polymer/polymer.html">
   <link rel="import" href="../../promise-polyfill/promise-polyfill.html">
   <link rel="import" href="../../test-fixture/test-fixture.html">
-  <link rel="import" href="../carbon-router.html">
+  <link rel="import" href="../carbon-route.html">
+  <link rel="import" href="combined-elem.html">
 </head>
 <body>
 <script>
   'use strict';
+
+  var originalFlush = flush;
+  flush = function() {
+    return new Promise(function(resolve) {
+      originalFlush(resolve);
+    });
+  }
+
   suite('<carbon-route>', function () {
     test('it parses a path', function() {
       var route = document.createElement('carbon-route');
@@ -55,7 +64,76 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       //
       // Maybe there are some more restrictive uses of carbon-router where we
       // can assume that we know what's up?
-    })
+    });
+
+    suite('used with multiple routes and <iron-page-url>', function() {
+      var combinedElem;
+      var urlElem;
+      var route1;
+      var route2;
+      setup(function() {
+        combinedElem = document.createElement('combined-elem');
+        document.body.appendChild(combinedElem);
+        urlElem = combinedElem.$.pageurl;
+        route1 = combinedElem.$.route1;
+        route2 = combinedElem.$.route2;
+      });
+      teardown(function() {
+        document.body.removeChild(combinedElem);
+      });
+
+      test('route matching works', function() {
+        urlElem.hash = '/wat';
+
+        // The matched route's state should be correct
+        expect(route1.matched).to.be.equal('/wat');
+        expect(route1.rest).to.be.equal('');
+
+        // The unmatched route's state should be null.
+        expect(route2.matched).to.be.equal(null);
+        expect(route2.rest).to.be.equal(null);
+        expect(route2.name).to.be.equal(null);
+        expect(route2.action).to.be.equal(null);
+
+        // Modifying the matched route's `rest` param should update the URL.
+        route1.rest = 'more/pieces';
+        expect(urlElem.hash).to.be.equal('/wat/more/pieces');
+
+        // Modifying the unmatched route's `rest` param should have no effect.
+        route2.rest = 'hey whats up';
+        expect(urlElem.hash).to.be.equal('/wat/more/pieces');
+      });
+
+      test('structured route matching works', function() {
+        urlElem.hash = '/user/jane/edit/details';
+        // The unmatched route's state should be null.
+        expect(route1.path).to.be.equal('/user/jane/edit/details')
+        expect(route1.matched).to.be.equal(null);
+        expect(route1.rest).to.be.equal(null);
+
+        // The matched structured route's state is correct.
+        expect(route2.path).to.be.equal('/user/jane/edit/details')
+        expect(route2.matched).to.be.equal('/user/jane/edit');
+        expect(route2.rest).to.be.equal('details');
+        expect(route2.name).to.be.equal('jane');
+        expect(route2.action).to.be.equal('edit');
+
+        // We can change a faux property on the route and the URL changes.
+        route2.action = 'view';
+        expect(urlElem.hash).to.be.equal('/user/jane/view/details');
+
+        return flush().then(function() {
+          expect(combinedElem.name).to.be.equal('jane');
+          expect(combinedElem.action).to.be.equal('view');
+
+          // When the route no longer matches, the dynamic properties are nulled
+          // out again.
+          urlElem.hash = '/nothing_matches_this';
+          expect(route2.name).to.be.equal(null);
+          expect(route2.action).to.be.equal(null);
+        });
+      });
+    });
   });
 </script>
 </body>
