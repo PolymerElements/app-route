@@ -1,11 +1,15 @@
 <!doctype html>
 <!--
 Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+This code may only be used under the BSD style license found at
+http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at
+http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at
+http://polymer.github.io/CONTRIBUTORS.txt
 Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+subject to an additional IP rights grant found at
+http://polymer.github.io/PATENTS.txt
 -->
 <html>
 <head>
@@ -15,6 +19,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="../../iron-page-url/iron-page-url.html">
+  <link rel="import" href="../../iron-page-url/iron-query-params.html">
+  <link rel="import" href="../../neon-animation/neon-animated-pages.html">
+  <link rel="import" href="../../neon-animation/neon-animations.html">
+  <link rel="import" href="../../neon-animation/neon-animatable.html">
+
   <link rel="import" href="../carbon-route.html">
   <link rel="import" href="../carbon-router.html">
   <link rel="import" href="../../polymer/polymer.html">
@@ -40,39 +49,84 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           --paper-tab-ink: var(--google-blue-500);
         }
       </style>
-      <iron-page-url hash='{{hash}}' params='{{params}}'>
+      <iron-page-url hash='{{hash}}'>
       </iron-page-url>
-
-      <carbon-route path='{{hash}}' match='/:pageName' page-name='{{pageName}}'>
+      <carbon-router path='{{hash}}' route='{{route}}'>
+      </carbon-router>
+      <carbon-route route='{{route}}' match='/:page' data='{{data}}'>
+      </carbon-route>
+      <carbon-route route='{{route}}' match='/user' tail='{{userRoute}}'>
       </carbon-route>
 
-      <paper-tabs selected='{{pageName}}' attr-for-selected='key'>
-        <paper-tab key='one'>Page 1</paper-tab>
-        <paper-tab key='two'>Page 2</paper-tab>
-        <paper-tab key='three'>Page 3</paper-tab>
+      <debug-route route='{{route}}' data='{{data}}'>
+      </debug-route>
+
+      <paper-tabs selected='{{data.page}}' attr-for-selected='key'>
+        <paper-tab key='user'>User</paper-tab>
+        <paper-tab key='store'>Store</paper-tab>
+        <paper-tab key='cats'>Cat Pictures</paper-tab>
       </paper-tabs>
+
+      <neon-animated-pages selected='{{data.page}}' attr-for-selected='key'
+                           entry-animation='slide-from-left-animation'
+                           exit-animation='slide-right-animation'>
+        <neon-animatable key='user'>
+          User
+          <carbon-route route='{{userRoute}}' match=':userPage' data='{{userData}}' key='lol'>
+          </carbon-route>
+          <debug-route route='{{userRoute}}' data='{{userData}}'>
+          </debug-route>
+
+          <paper-tabs selected='{{userData.userPage}}' attr-for-selected='key'>
+            <paper-tab key='profile'>Profile</paper-tab>
+            <paper-tab key='details'>Details</paper-tab>
+          </paper-tabs>
+        </neon-animatable>
+        <neon-animatable key='store'>
+          Page two!
+        </neon-animatable>
+        <neon-animatable key='cats'>
+          Page three!
+        </neon-animatable>
+      </neon-animated-pages>
     </template>
     <script>
       Polymer({
         is: 'carbon-router-demo',
         properties: {
-          paramsString: {
-            observer: 'paramsStringChanged'
-          },
-          params: {
-            observer: 'paramsChanged'
-          },
-          paramsInvalid: {
-            value: false,
-          }
         },
-        observers: [
-          'checkHistorySize(path, hash, paramsString)'
-        ],
-        ready: function() {
-          this.startingHistoryLength = window.history.length;
+        json: function json(v) {
+          return JSON.stringify(v, null, 2);
         }
       });
+    </script>
+  </dom-module>
+
+  <dom-module id='debug-route'>
+    <template>
+      <div>
+        Route: prefix:{{json(route.prefix)}} – path:{{json(route.path)}}
+      </div>
+      <div>
+        Data:
+        <pre>{{json(data)}}</pre>
+      </div>
+    </template>
+    <script>
+      Polymer({
+        is: 'debug-route',
+        properties: {
+          route: {
+            type: Object,
+          },
+          data: {
+            type: Object,
+          }
+        },
+        json: function json(v) {
+          return JSON.stringify(v, null, 2);
+        }
+      })
     </script>
   </dom-module>
 

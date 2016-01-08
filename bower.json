@@ -14,11 +14,12 @@
     "**/.*"
   ],
   "devDependencies": {
-    "iron-page-url": "polymerelements/iron-page-url",
+    "iron-page-url": "polymerelements/iron-page-url#iron-query-params",
     "paper-styles": "polymerelements/paper-styles#~1.0.13",
     "paper-tabs": "polymerelements/paper-tabs#~1.2.3",
     "paper-input": "polymerelements/paper-input#~1.1.2",
-    "paper-slider": "polymerelements/paper-slider#~1.0.8"
+    "paper-slider": "polymerelements/paper-slider#~1.0.8",
+    "neon-animation": "polymerelements/neon-animation#~1.0.8"
   },
   "dependencies": {
     "polymer": "polymer/polymer#~1.2.3"

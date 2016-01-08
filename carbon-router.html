@@ -1,50 +1,45 @@
-<link rel='import' href='../polymer/polymer.html'>
+<link rel="import" href="../polymer/polymer.html">
 
 <script>
   Polymer({
     is: 'carbon-router',
     properties: {
       route: {
-        type: String,
+        type: Object,
         value: null,
         notify: true
       },
 
-      _routes: {
-        value: []
+      queryParams: {
+        type: Object,
+        value: function() {return {};},
+        notify: true
+      },
+
+      path: {
+        type: String,
+        notify: true,
+        observer: '_pathChanged'
       }
     },
+    observers: [
+      '_routeChanged(route.prefix, route.path)'
+    ],
 
-    ready: function() {
-      var routes = [];
-      var candidates = Polymer.dom(this).children;
-      for (var i = 0; i < candidates.length; i++) {
-        var child = candidates[i];
-        if (/-route$/i.test(child.tagName)) {
-          routes.push(child);
-          this.listen(child, 'matched-changed', '_matchedChanged');
-        }
-      }
-      this._routes = routes;
+    _pathChanged: function() {
+      this.route = {
+        prefix: '',
+        path: this.path,
+        queryParams: this.queryParams
+      };
     },
 
-    detached: function() {
-      for (var i = 0; i < this._routes; i++) {
-        this.unlisten(this._routes[i], 'matched-changed', '_matchedChanged');
+    _routeChanged: function() {
+      if (!this.route) {
+        return;
       }
-    },
-
-    _matchedChanged: function() {
-      this.debounce('_matchedChanged', function() {
-        for (var i = 0; i < this._routes.length; i++) {
-          var route = this._routes[i];
-          if (route.matched) {
-            this.route = route.id;
-            return;
-          }
-        }
-        this.route = null;
-      });
+      this.path = this.route.prefix + this.route.path;
     }
-  })
+
+  });
 </script>

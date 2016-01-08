@@ -1,0 +1,32 @@
+<link rel='import' href='../carbon-route.html'>
+<link rel='import' href='../carbon-router.html'>
+
+<dom-module id='app-example-1'>
+  <template>
+    <carbon-router path='{{path}}' route='{{route}}'>
+    </carbon-router>
+    <carbon-route route='{{route}}' match='/:page' data='{{data}}'>
+    </carbon-route>
+    <carbon-route route='{{route}}' match='/user' tail='{{userRoute}}'>
+    </carbon-route>
+
+    <carbon-route route='{{userRoute}}' match='/:page' data='{{userData}}'>
+    </carbon-route>
+  </template>
+  <script>
+    Polymer({
+      is: 'app-example-1',
+      properties: {
+        path: {
+
+        },
+        data: {
+
+        },
+        userData: {
+          
+        }
+      }
+    })
+  </script>
+</dom-module>
