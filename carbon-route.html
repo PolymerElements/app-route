@@ -95,19 +95,23 @@
       }
 
       var matched = matched.join('/');
-      var tail = remainingPieces.join('/');
+      var tailPath = remainingPieces.join('/');
       if (remainingPieces.length > 0) {
-        tail = '/' + tail;
+        tailPath = '/' + tailPath;
       }
 
       this._skipMatch = true;
       this._matched = matched;
       this.data = namedMatches;
-      this.tail.prefix = this.route.prefix + matched;
-      this.tail.path = tail;
-      this.notifyPath('tail.prefix', this.tail.prefix);
-      this.notifyPath('tail.path', this.tail.path);
-      this.set('tail.queryParams', this.route.queryParams);
+      var tailPrefix = this.route.prefix + matched;
+
+      if (!this.tail || this.tail.prefix !== tailPrefix || this.tail.path !== tailPath) {
+        this.tail = {
+          prefix: tailPrefix,
+          path: tailPath,
+          queryParams: this.route.queryParams
+        };
+      }
       this._skipMatch = false;
     },
 
@@ -117,6 +121,9 @@
       }
       var newPath = this._matched;
       if (path) {
+        if (path.charAt(0) !== '/') {
+          path = '/' + path;
+        }
         newPath += path;
       }
       this.set('route.path', newPath);

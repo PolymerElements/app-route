@@ -38,7 +38,6 @@ http://polymer.github.io/PATENTS.txt
   <link rel="import" href="../../paper-slider/paper-slider.html">
 </head>
 <body>
-
   <dom-module id='carbon-router-demo'>
     <template>
       <style>
@@ -71,8 +70,9 @@ http://polymer.github.io/PATENTS.txt
                            entry-animation='slide-from-left-animation'
                            exit-animation='slide-right-animation'>
         <neon-animatable key='user'>
+          <br><br>
           User
-          <carbon-route route='{{userRoute}}' match=':userPage' data='{{userData}}' key='lol'>
+          <carbon-route route='{{userRoute}}' match='/:userPage' data='{{userData}}' key='lol'>
           </carbon-route>
           <debug-route route='{{userRoute}}' data='{{userData}}'>
           </debug-route>
@@ -81,12 +81,24 @@ http://polymer.github.io/PATENTS.txt
             <paper-tab key='profile'>Profile</paper-tab>
             <paper-tab key='details'>Details</paper-tab>
           </paper-tabs>
+          <neon-animated-pages selected='{{userData.userPage}}' attr-for-selected='key'
+                               entry-animation='slide-from-left-animation'
+                               exit-animation='slide-right-animation'>
+            <neon-animatable key='details'>
+              <br><br>Details!!!
+            </neon-animatable>
+            <neon-animatable key='profile'>
+              <br><br>Profile!!!
+            </neon-animatable>
+          </neon-animated-pages>
         </neon-animatable>
         <neon-animatable key='store'>
-          Page two!
+          <br><br>
+          Store here!
         </neon-animatable>
         <neon-animatable key='cats'>
-          Page three!
+          <br><br>
+          Cats!
         </neon-animatable>
       </neon-animated-pages>
     </template>
@@ -104,12 +116,21 @@ http://polymer.github.io/PATENTS.txt
 
   <dom-module id='debug-route'>
     <template>
+      <style>
+        :host {
+          display: block;
+          margin: 12px;
+          padding: 12px;
+          background-color: #eee;
+          color: #666
+        }
+      </style>
       <div>
         Route: prefix:{{json(route.prefix)}} – path:{{json(route.path)}}
       </div>
       <div>
         Data:
-        <pre>{{json(data)}}</pre>
+        <pre>{{json(data, data.*)}}</pre>
       </div>
     </template>
     <script>
