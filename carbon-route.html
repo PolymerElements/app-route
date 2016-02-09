@@ -16,7 +16,7 @@
 
       /**
        * The pattern to match `path` against.
-       * "<literal>|:<named>/..."
+       *
        * Path values like `:named` become pseudo-properties of the same name
        * on this element.
        */
@@ -24,6 +24,10 @@
         type: String
       },
 
+      /**
+       * The parameterized values that are extracted from the route as
+       * described by match.
+       */
       data: {
         type: Object,
         value: function() {return {};},
@@ -69,7 +73,7 @@
       var clearProperties = function clearProperties() {
         this._matched = null;
         // this.tail = null;
-        // this.data = ???;
+        // this.data = {};
       }.bind(this);
 
       for (var i=0; i < matchPieces.length; i++) {
@@ -130,16 +134,16 @@
     },
 
     _updatePathOnDataChange: function() {
-      if (!this.route || this._skipMatch) {
+      if (!this.route || this._skipMatch || !this._matched) {
         return;
       }
       this._skipMatch = true;
       this.tail = {path: null, prefix: null, queryParams: null};
-      this.set('route.path', this.getLink({}));
+      this.set('route.path', this.__getLink({}));
       this._skipMatch = false;
     },
 
-    getLink: function(overrideValues) {
+    __getLink: function(overrideValues) {
       var values = {tail: this.tail};
       for (var key in this.data) {
         values[key] = this.data[key];
