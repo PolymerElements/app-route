@@ -24,12 +24,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <test-fixture id="BasicRouting">
     <template>
       <carbon-router>
-        <carbon-route id="userPage" match="/user/:username" >
-        </carbon-route>
-        <carbon-route id="browsePage" match="/browse">
-        </carbon-route>
-        <carbon-route id="homePage" match="/">
-        </carbon-route>
       </carbon-router>
     </template>
   </test-fixture>
@@ -45,35 +39,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   suite('<carbon-router>', function () {
-    test('it selects the first child that matches', function() {
+    test('it bidirectionally maps path and queryParams to route', function() {
       var router = fixture('BasicRouting');
 
-      function setUrl(path) {
-        var routes = router.querySelectorAll('carbon-route');
-        for (var i = 0; i < routes.length; i++) {
-          routes[i].path = path;
-        }
-      }
+      var queryParams = {x: '10'};
+      router.path = '/a/b/c';
+      router.queryParams = queryParams;
 
-      setUrl('/user/sans');
-      return flush().then(function() {
-        expect(router.route).to.be.equal('userPage');
-
-        setUrl('/browse/product/102013490');
-        return flush();
-      }).then(function() {
-        expect(router.route).to.be.equal('browsePage');
-
-        setUrl('/');
-        return flush();
-      }).then(function() {
-        expect(router.route).to.be.equal('homePage');
-
-        setUrl('/nothing_matches_this');
-        return flush();
-      }).then(function() {
-        expect(router.route).to.be.equal(null);
+      expect(router.route).to.be.deep.equal({
+        prefix: '',
+        path: '/a/b/c',
+        queryParams: queryParams
       });
+
+      router.set('route.path', '/d/e/f');
+      expect(router.path).to.be.equal('/d/e/f');
+
+      queryParams = {y: '11'};
+      router.set('route.queryParams', queryParams);
+      expect(router.queryParams).to.be.deep.equal(queryParams);
+
+      queryParams['z'] = '12';
+      expect(router.queryParams).to.be.deep.equal(queryParams);
     });
   });
 </script>

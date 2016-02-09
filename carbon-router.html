@@ -13,24 +13,25 @@
       queryParams: {
         type: Object,
         value: function() {return {};},
-        notify: true
+        notify: true,
       },
 
       path: {
         type: String,
-        notify: true,
-        observer: '_pathChanged'
+        notify: true
       }
     },
     observers: [
-      '_routeChanged(route.prefix, route.path)'
+      '_locationChanged(path, queryParams)',
+      '_routeChanged(route.prefix, route.path)',
+      '_routeQueryParamsChanged(route.queryParams)'
     ],
 
-    _pathChanged: function() {
+    _locationChanged: function(path, queryParams) {
       this.route = {
         prefix: '',
-        path: this.path,
-        queryParams: this.queryParams
+        path: path,
+        queryParams: queryParams
       };
     },
 
@@ -39,6 +40,13 @@
         return;
       }
       this.path = this.route.prefix + this.route.path;
+    },
+
+    _routeQueryParamsChanged: function() {
+      if (!this.route) {
+        return;
+      }
+      this.queryParams = this.route.queryParams;
     }
 
   });
