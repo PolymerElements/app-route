@@ -3,7 +3,8 @@
 <script>
   'use strict';
 
-  Polymer.CarbonRoutingBehavior = {
+  Polymer({
+    is: 'carbon-route',
 
     properties: {
       /**
@@ -53,14 +54,14 @@
     },
 
     observers: [
-      '_tryToMatch(route.path, match)',
-      '_updatePathOnDataChange(data.*)',
-      '_tailChanged(tail.path)'
+      '__tryToMatch(route.path, match)',
+      '__updatePathOnDataChange(data.*)',
+      '__tailChanged(tail.path)'
     ],
 
     // TODO: disallow name clashes in match. Allow regex?
 
-    _tryToMatch: function(path, match) {
+    __tryToMatch: function(path, match) {
       if (this._skipMatch || !path || !match) {
         return;
       }
@@ -119,7 +120,7 @@
       this._skipMatch = false;
     },
 
-    _tailChanged: function(path) {
+    __tailChanged: function(path) {
       if (!this._matched || this._skipMatch) {
         return;
       }
@@ -133,7 +134,7 @@
       this.set('route.path', newPath);
     },
 
-    _updatePathOnDataChange: function() {
+    __updatePathOnDataChange: function() {
       if (!this.route || this._skipMatch || !this._matched) {
         return;
       }
@@ -163,13 +164,5 @@
       }
       return interp.join('/');
     }
-  };
-
-  Polymer({
-    is: 'carbon-route',
-
-    behaviors: [
-      Polymer.CarbonRoutingBehavior
-    ]
   });
 </script>
