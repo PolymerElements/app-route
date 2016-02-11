@@ -1,0 +1,76 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
+  'use strict';
+
+  Polymer({
+    is: 'carbon-route-converter',
+
+    properties: {
+      /**
+       * A model representing the deserialized path through the route tree, as
+       * well as the current queryParams.
+       *
+       * A route object is the kernel of the routing system. It is intended to
+       * be fed into consuming elements such as `carbon-route`.
+       */
+      route: {
+        type: Object,
+        value: null,
+        notify: true
+      },
+
+      /**
+       * A set of key/value pairs that are universally accessible to branches of
+       * the route tree.
+       */
+      queryParams: {
+        type: Object,
+        value: null,
+        notify: true
+      },
+
+      /**
+       * The serialized path through the route tree. This corresponds to the
+       * `window.location.pathname` value, and will update to reflect changes
+       * to that valaue.
+       */
+      path: {
+        type: String,
+        notify: true
+      }
+    },
+
+    observers: [
+      '_locationChanged(path, queryParams)',
+      '_routeChanged(route.prefix, route.path)',
+      '_routeQueryParamsChanged(route.queryParams)'
+    ],
+
+    created: function() {
+      this.linkPaths('route.queryParams', 'queryParams');
+    },
+
+    _locationChanged: function(path) {
+      this.route = {
+        prefix: '',
+        path: path,
+        queryParams: this.queryParams
+      };
+    },
+
+    _routeChanged: function(prefix, path) {
+      if (!this.route) {
+        return;
+      }
+      this.path = prefix + path;
+    },
+
+    _routeQueryParamsChanged: function(queryParams) {
+      if (!this.route) {
+        return;
+      }
+      this.queryParams = queryParams;
+    }
+  });
+</script>
