@@ -65,17 +65,36 @@
       if (this._skipMatch || !path || !match) {
         return;
       }
+
+      var matchResult = this.matchPath(path, match);
+      if (matchResult == null) {
+        this._matched = null;
+        // this.tail = null;
+        // this.data = ???;
+        return;
+      }
+
+      this._skipMatch = true;
+      this._matched = matchResult.matched;
+      this.data = matchResult.data;
+      var newTail = matchResult.tail;
+
+      if (!this.tail || this.tail.prefix !== newTail.prefix || this.tail.path !== newTail.prefix) {
+        newTail.queryParams = newTail.queryParams || this.route.queryParams;
+        if (newTail.queryParams === null) {
+          debugger;
+        }
+        this.tail = newTail;
+      }
+      this._skipMatch = false;
+    },
+
+    matchPath: function(path, match) {
       var remainingPieces = path.split('/');
       var matchPieces = match.split('/');
 
       var matched = [];
       var namedMatches = {};
-
-      var clearProperties = function clearProperties() {
-        this._matched = null;
-        // this.tail = null;
-        // this.data = {};
-      }.bind(this);
 
       for (var i=0; i < matchPieces.length; i++) {
         var matchPiece = matchPieces[i];
@@ -86,7 +105,6 @@
 
         // We don't match this path.
         if (!pathPiece && pathPiece !== '') {
-          clearProperties();
           return;
         }
         matched.push(pathPiece);
@@ -94,30 +112,27 @@
         if (matchPiece.charAt(0) == ':') {
           namedMatches[matchPiece.slice(1)] = pathPiece;
         } else if (matchPiece !== pathPiece) {
-          clearProperties();
           return;
         }
       }
 
-      var matched = matched.join('/');
+      var matchedString = matched.join('/');
+
       var tailPath = remainingPieces.join('/');
       if (remainingPieces.length > 0) {
         tailPath = '/' + tailPath;
       }
+      var tailPrefix = this.route.prefix + matchedString;
 
-      this._skipMatch = true;
-      this._matched = matched;
-      this.data = namedMatches;
-      var tailPrefix = this.route.prefix + matched;
-
-      if (!this.tail || this.tail.prefix !== tailPrefix || this.tail.path !== tailPath) {
-        this.tail = {
+      return {
+        data: namedMatches,
+        matched: matched.join('/'),
+        tail: {
           prefix: tailPrefix,
           path: tailPath,
           queryParams: this.route.queryParams
-        };
+        }
       }
-      this._skipMatch = false;
     },
 
     __tailChanged: function(path) {

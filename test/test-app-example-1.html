@@ -18,15 +18,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="./app-example-1.html">
 </head>
 <body>
+<test-fixture id='Example'>
+  <template>
+    <app-example-1></app-example-1>
+  </template>
+</test-fixture>
 <script>
   'use strict';
 
+  function setLocation(url) {
+    window.history.pushState({}, '', url);
+    Polymer.Base.fire('location-changed', {}, { node: window });
+  }
+
   suite('<test-app-example-1>', function () {
-    test('does the thing', function() {
-      var exampleApp = document.createElement('app-example-1');
+    test('runs through basic usage', function() {
+      var exampleApp = fixture('Example');
 
       // Navigate to /lol
-      exampleApp.path = '/lol';
+      setLocation('/lol');
+
       expect(exampleApp.data).to.be.deep.eq({
         page: 'lol'
       });
@@ -44,6 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
 
       // Navigate to /user
+      setLocation('/user');
       exampleApp.path = '/user';
       expect(exampleApp.data).to.be.deep.eq({
         page: 'user'
@@ -60,7 +72,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
 
       // Navigate to /user/details
-      exampleApp.path = '/user/details';
+      setLocation('/user/details');
       expect(exampleApp.data).to.be.deep.eq({
         page: 'user'
       });
@@ -80,16 +92,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       // Data binding changes to a different user subpage.
       exampleApp.set('userData.page', 'profile');
-      expect(exampleApp.path).to.be.eq('/user/profile');
+
+      expect(window.location.pathname).to.be.eq('/user/profile');
 
 
       // Data binding changes to the aunt of the current page.
       exampleApp.set('data.page', 'feed');
-      expect(exampleApp.path).to.be.eq('/feed');
+      expect(window.location.pathname).to.be.eq('/feed');
 
-      exampleApp.path = '/user';
+      setLocation('/user');
       exampleApp.set('userData.page', 'details');
-      expect(exampleApp.path).to.be.eq('/user/details')
+      expect(window.location.pathname).to.be.eq('/user/details')
     });
   });
 </script>

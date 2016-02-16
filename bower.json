@@ -23,6 +23,6 @@
     "web-component-tester": "polymer/web-component-tester#^4.0.0"
   },
   "dependencies": {
-    "polymer": "polymer/polymer#~1.2.3"
+    "polymer": "polymer/polymer#extends"
   }
 }
