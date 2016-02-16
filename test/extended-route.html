@@ -1,0 +1,32 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../carbon-route.html">
+<link rel="import" href="../carbon-location.html">
+
+<script>
+  Polymer({
+    is: 'extended-route',
+    extends: 'carbon-route',
+    matchPath: function(path) {
+      if (path != '/froggit') {
+        return; // no match
+      }
+      return {
+        data: {monster: 'froggit'},
+        matched: '/froggit',
+        tail: {
+          prefix: this.route.prefix,
+          path: path
+        }
+      }
+    }
+  });
+</script>
+
+<dom-module id="extended-app">
+  <template>
+    <carbon-location route="{{route}}"></carbon-location>
+    <extended-route route="{{route}}" match="/froggit" tail="{{tail}}" _matched="{{matched}}" data="{{data}}">
+    </extended-route>
+  </template>
+  <script>Polymer({is: 'extended-app'});</script>
+</dom-module>

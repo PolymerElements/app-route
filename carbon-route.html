@@ -62,7 +62,8 @@
     // TODO: disallow name clashes in match. Allow regex?
 
     __tryToMatch: function(path, match) {
-      if (this._skipMatch || !path || !match) {
+      debugger;
+      if (this._skipMatch || !path) {
         return;
       }
 
@@ -90,6 +91,9 @@
     },
 
     matchPath: function(path, match) {
+      if (!match) {
+        return;
+      }
       var remainingPieces = path.split('/');
       var matchPieces = match.split('/');
 
