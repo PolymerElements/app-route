@@ -11,26 +11,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <head>
   <title>carbon-route</title>
 
-  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="../../polymer/polymer.html">
-  <link rel="import" href="../../promise-polyfill/promise-polyfill.html">
-  <link rel="import" href="../../test-fixture/test-fixture.html">
-  <link rel="import" href="../carbon-route.html">
   <link rel="import" href="./app-example-1.html">
 </head>
 <body>
 <script>
   'use strict';
-
-  var originalFlush = flush;
-  flush = function() {
-    return new Promise(function(resolve) {
-      originalFlush(resolve);
-    });
-  }
 
   suite('<test-app-example-1>', function () {
     test('does the thing', function() {

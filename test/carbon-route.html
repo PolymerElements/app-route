@@ -11,128 +11,100 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <head>
   <title>carbon-route</title>
 
-  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../test-fixture/test-fixture-mocha.js"></script>
 
   <link rel="import" href="../../polymer/polymer.html">
-  <link rel="import" href="../../promise-polyfill/promise-polyfill.html">
-  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../carbon-route.html">
-  <link rel="import" href="combined-elem.html">
 </head>
 <body>
+  <test-fixture id="BasicRoute">
+    <template>
+      <carbon-route match='/user/:username'>
+      </carbon-route>
+    </template>
+  </test-fixture>
+
 <script>
   'use strict';
 
-  var originalFlush = flush;
-  flush = function() {
-    return new Promise(function(resolve) {
-      originalFlush(resolve);
-    });
-  }
-
   suite('<carbon-route>', function () {
     test('it parses a path', function() {
-      var route = document.createElement('carbon-route');
-      route.match = '/user/:username'
-      route.path = '/user/papyrus/details';
-      expect(route.matched).to.be.equal('/user/papyrus');
-      expect(route.rest).to.be.equal('details');
-      expect(route.username).to.be.equal('papyrus');
-    });
-    test('it can produce links', function() {
-      var route = document.createElement('carbon-route');
-      route.match = '/user/:username';
+      var route = fixture('BasicRoute');
+      route.route = {
+        prefix: '',
+        path: '/user/papyrus/details',
+        queryParams: {}
+      }
 
-      expect(route.getLink({username: 'Toriel'})).to.be.equal('/user/Toriel');
-      expect(route.getLink({username: 'Toriel', rest: 'home'})).to.be.equal(
-          '/user/Toriel/home');
-
-      route.path = '/user/Asgore/hotland';
-      expect(route.getLink({username: 'Alphys'})).to.be.equal(
-          '/user/Alphys/hotland');
-
-      // How is this supposed to work with chained carbon-route elements though?
-      // Like:
-      //    <carbon-route match='/user/' rest='{{userSubPath}}'>
-      //    <carbon-route match='details' path='{{userSubPath}}'>
-      //    <carbon-route match='home' path='{{userSubPath}}'>
-      //
-      // This is tricky because nothing knows about the relationships between
-      // the three routes.
-      //
-      // Maybe there are some more restrictive uses of carbon-router where we
-      // can assume that we know what's up?
+      expect(route.tail.prefix).to.be.equal('/user/papyrus');
+      expect(route.tail.path).to.be.equal('/details');
+      expect(route.data.username).to.be.equal('papyrus');
     });
 
-    suite('used with multiple routes and <iron-page-url>', function() {
-      var combinedElem;
-      var urlElem;
-      var route1;
-      var route2;
-      setup(function() {
-        combinedElem = document.createElement('combined-elem');
-        document.body.appendChild(combinedElem);
-        urlElem = combinedElem.$.pageurl;
-        route1 = combinedElem.$.route1;
-        route2 = combinedElem.$.route2;
+    test('it bidirectionally maps changes between tail and route', function() {
+      var route = fixture('BasicRoute');
+      route.route = {
+        prefix: '',
+        path: '/user/papyrus/details',
+        queryParams: {}
+      };
+
+      route.set('tail.path', '/messages');
+      expect(route.route.path).to.be.deep.equal('/user/papyrus/messages');
+      route.set('route.path', '/user/toriel');
+      expect(route.tail).to.be.deep.equal({
+        prefix: '/user/toriel',
+        path: '',
+        queryParams: {}
       });
-      teardown(function() {
-        document.body.removeChild(combinedElem);
-      });
+    });
 
-      test('route matching works', function() {
-        urlElem.hash = '/wat';
+    test('it creates data as described by match', function() {
+      var route = fixture('BasicRoute');
 
-        // The matched route's state should be correct
-        expect(route1.matched).to.be.equal('/wat');
-        expect(route1.rest).to.be.equal('');
+      route.route = {
+        prefix: '',
+        path: '/user/sans'
+      };
 
-        // The unmatched route's state should be null.
-        expect(route2.matched).to.be.equal(null);
-        expect(route2.rest).to.be.equal(null);
-        expect(route2.name).to.be.equal(null);
-        expect(route2.action).to.be.equal(null);
+      expect(route.data).to.be.deep.equal({username: 'sans'});
 
-        // Modifying the matched route's `rest` param should update the URL.
-        route1.rest = 'more/pieces';
-        expect(urlElem.hash).to.be.equal('/wat/more/pieces');
+      route.match = '/user/:username/likes/:count';
 
-        // Modifying the unmatched route's `rest` param should have no effect.
-        route2.rest = 'hey whats up';
-        expect(urlElem.hash).to.be.equal('/wat/more/pieces');
-      });
+      // At the moment, we don't reset data when we no longer match.
+      expect(route.data).to.be.deep.equal({username: 'sans'});
 
-      test('structured route matching works', function() {
-        urlElem.hash = '/user/jane/edit/details';
-        // The unmatched route's state should be null.
-        expect(route1.path).to.be.equal('/user/jane/edit/details')
-        expect(route1.matched).to.be.equal(null);
-        expect(route1.rest).to.be.equal(null);
+      route.set('route.path', "/does/not/match");
 
-        // The matched structured route's state is correct.
-        expect(route2.path).to.be.equal('/user/jane/edit/details')
-        expect(route2.matched).to.be.equal('/user/jane/edit');
-        expect(route2.rest).to.be.equal('details');
-        expect(route2.name).to.be.equal('jane');
-        expect(route2.action).to.be.equal('edit');
+      expect(route.data).to.be.deep.equal({username: 'sans'});
 
-        // We can change a faux property on the route and the URL changes.
-        route2.action = 'view';
-        expect(urlElem.hash).to.be.equal('/user/jane/view/details');
+      route.set('route.path', '/user/undyne/likes/20');
+      expect(route.data).to.be.deep.equal({username: 'undyne', count: '20'});
+    });
 
-        return flush().then(function() {
-          expect(combinedElem.name).to.be.equal('jane');
-          expect(combinedElem.action).to.be.equal('view');
+    test('changing data changes the path', function() {
+      var route = fixture('BasicRoute');
 
-          // When the route no longer matches, the dynamic properties are nulled
-          // out again.
-          urlElem.hash = '/nothing_matches_this';
-          expect(route2.name).to.be.equal(null);
-          expect(route2.action).to.be.equal(null);
-        });
-      });
+      route.route = {
+        prefix: '',
+        path: '/user/asgore'
+      };
+
+      expect(route.data).to.be.deep.equal({username: 'asgore'});
+      route.data = {username: 'toriel'};
+      expect(route.route.path).to.be.equal('/user/toriel');
+    });
+
+    test('changing data on an inactive route won\'t change the path', function() {
+      var route = fixture('BasicRoute');
+
+      route.route = {
+        prefix: '',
+        path: '/does/not/match'
+      };
+      route.data = {username: 'undyne'};
+      expect(route.route.path).to.be.equal('/does/not/match');
     });
   });
 </script>

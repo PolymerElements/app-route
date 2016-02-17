@@ -1,0 +1,59 @@
+link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-page-url/iron-page-url.html">
+<link rel="import" href="../iron-page-url/iron-query-params.html">
+<link rel="import" href="carbon-route-converter.html">
+
+<dom-module id="carbon-location">
+  <template>
+    <iron-page-url path="{{__path}}" query="{{__query}}"></iron-page-url>
+    <iron-query-params
+        params-string="{{__query}}"
+        params-object="{{__queryParams}}">
+    </iron-query-params>
+    <carbon-route-converter
+        path="{{__path}}"
+        query-params="{{__queryParams}}"
+        route="{{route}}">
+    </carbon-route-converter>
+  </template>
+  <script>
+    'use strict';
+
+    Polymer({
+      is: 'carbon-location',
+
+      properties: {
+        /**
+         * A model representing the deserialized path through the route tree, as
+         * well as the current queryParams.
+         */
+        route: {
+          type: Object,
+          notify: true
+        },
+
+        /**
+         * A set of key/value pairs that are universally accessible to branches
+         * of the route tree.
+         */
+        __queryParams: {
+          type: Object
+        },
+
+        /**
+         * The pathname component of the current URL.
+         */
+        __path: {
+          type: String
+        },
+
+        /**
+         * The query string portion of the current URL.
+         */
+        __query: {
+          type: String
+        }
+      }
+    });
+  </script>
+</dom-module>

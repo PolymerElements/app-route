@@ -3,7 +3,8 @@
 <script>
   'use strict';
 
-  Polymer.CarbonRoutingBehavior = {
+  Polymer({
+    is: 'carbon-route',
 
     properties: {
       /**
@@ -16,7 +17,7 @@
 
       /**
        * The pattern to match `path` against.
-       * "<literal>|:<named>/..."
+       *
        * Path values like `:named` become pseudo-properties of the same name
        * on this element.
        */
@@ -24,6 +25,10 @@
         type: String
       },
 
+      /**
+       * The parameterized values that are extracted from the route as
+       * described by match.
+       */
       data: {
         type: Object,
         value: function() {return {};},
@@ -49,12 +54,12 @@
     },
 
     observers: [
-      '_tryToMatch(route.path, match)',
-      '_updatePathOnDataChange(data.*)',
-      '_tailChanged(tail.path)'
+      '__tryToMatch(route.path, match)',
+      '__updatePathOnDataChange(data.*)',
+      '__tailChanged(tail.path)'
     ],
 
-    _tryToMatch: function(path, match) {
+    __tryToMatch: function(path, match) {
       if (this._skipMatch || !path || !match) {
         return;
       }
@@ -67,7 +72,7 @@
       var clearProperties = function clearProperties() {
         this._matched = null;
         // this.tail = null;
-        // this.data = ???;
+        // this.data = {};
       }.bind(this);
 
       for (var i=0; i < matchPieces.length; i++) {
@@ -113,7 +118,7 @@
       this._skipMatch = false;
     },
 
-    _tailChanged: function(path) {
+    __tailChanged: function(path) {
       if (!this._matched || this._skipMatch) {
         return;
       }
@@ -127,17 +132,17 @@
       this.set('route.path', newPath);
     },
 
-    _updatePathOnDataChange: function() {
-      if (!this.route || this._skipMatch) {
+    __updatePathOnDataChange: function() {
+      if (!this.route || this._skipMatch || !this._matched) {
         return;
       }
       this._skipMatch = true;
       this.tail = {path: null, prefix: null, queryParams: null};
-      this.set('route.path', this.getLink({}));
+      this.set('route.path', this.__getLink({}));
       this._skipMatch = false;
     },
 
-    getLink: function(overrideValues) {
+    __getLink: function(overrideValues) {
       var values = {tail: this.tail};
       for (var key in this.data) {
         values[key] = this.data[key];
@@ -157,13 +162,5 @@
       }
       return interp.join('/');
     }
-  };
-
-  Polymer({
-    is: 'carbon-route',
-
-    behaviors: [
-      Polymer.CarbonRoutingBehavior
-    ]
   });
 </script>

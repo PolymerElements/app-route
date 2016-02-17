@@ -1,10 +1,10 @@
 <link rel='import' href='../carbon-route.html'>
-<link rel='import' href='../carbon-router.html'>
+<link rel='import' href='../carbon-route-converter.html'>
 
 <dom-module id='app-example-1'>
   <template>
-    <carbon-router path='{{path}}' route='{{route}}'>
-    </carbon-router>
+    <carbon-route-converter path='{{path}}' route='{{route}}'>
+    </carbon-route-converter>
     <carbon-route route='{{route}}' match='/:page' data='{{data}}'>
     </carbon-route>
     <carbon-route route='{{route}}' match='/user' tail='{{userRoute}}'>
@@ -24,7 +24,7 @@
 
         },
         userData: {
-          
+
         }
       }
     })
