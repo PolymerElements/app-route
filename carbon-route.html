@@ -62,7 +62,6 @@
     // TODO: disallow name clashes in match. Allow regex?
 
     __tryToMatch: function(path, match) {
-      debugger;
       if (this._skipMatch || !path) {
         return;
       }
@@ -82,9 +81,6 @@
 
       if (!this.tail || this.tail.prefix !== newTail.prefix || this.tail.path !== newTail.prefix) {
         newTail.queryParams = newTail.queryParams || this.route.queryParams;
-        if (newTail.queryParams === null) {
-          debugger;
-        }
         this.tail = newTail;
       }
       this._skipMatch = false;
