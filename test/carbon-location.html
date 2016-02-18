@@ -119,6 +119,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
         });
       });
+
+      suite('manipulating the urlSpace', function() {
+        var pageUrl;
+
+        setup(function() {
+          pageUrl = carbonLocation.$$('iron-page-url');
+        });
+
+        test('changing the urlSpace pattern propagates to the iron-page-url', function() {
+          carbonLocation.urlSpacePattern = 'foo'
+
+          expect(pageUrl.urlSpaceRegex).to.be.equal('foo');
+
+          carbonLocation.urlSpacePattern = 'foo/bar'
+
+          expect(pageUrl.urlSpaceRegex).to.be.equal('foo/bar');
+
+          carbonLocation.urlSpacePattern = 'foo/bar/baz'
+
+          expect(pageUrl.urlSpaceRegex).to.be.equal('foo/bar/baz');
+        });
+      });
     });
   </script>
 </body>
