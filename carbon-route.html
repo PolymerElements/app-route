@@ -69,7 +69,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     ],
 
     __tryToMatch: function(path, match) {
-      if (this._skipMatch || !path || !match) {
+      if (this._skipMatch || !path) {
+        return;
+      }
+
+      var matchResult = this.matchPath(path, match);
+      if (matchResult == null) {
+        this._matched = null;
+        // this.tail = null;
+        // this.data = ???;
+        return;
+      }
+
+      this._skipMatch = true;
+      this._matched = matchResult.matched;
+      this.data = matchResult.data;
+      var newTail = matchResult.tail;
+
+      if (!this.tail || this.tail.prefix !== newTail.prefix || this.tail.path !== newTail.prefix) {
+        newTail.queryParams = newTail.queryParams || this.route.queryParams;
+        this.tail = newTail;
+      }
+      this._skipMatch = false;
+    },
+
+    matchPath: function(path, match) {
+      if (!match) {
         return;
       }
       var remainingPieces = path.split('/');
@@ -77,12 +102,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       var matched = [];
       var namedMatches = {};
-
-      var clearProperties = function clearProperties() {
-        this._matched = null;
-        // this.tail = null;
-        // this.data = {};
-      }.bind(this);
 
       for (var i=0; i < matchPieces.length; i++) {
         var matchPiece = matchPieces[i];
@@ -93,7 +112,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         // We don't match this path.
         if (!pathPiece && pathPiece !== '') {
-          clearProperties();
           return;
         }
         matched.push(pathPiece);
@@ -101,30 +119,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (matchPiece.charAt(0) == ':') {
           namedMatches[matchPiece.slice(1)] = pathPiece;
         } else if (matchPiece !== pathPiece) {
-          clearProperties();
           return;
         }
       }
 
-      var matched = matched.join('/');
+      var matchedString = matched.join('/');
+
       var tailPath = remainingPieces.join('/');
       if (remainingPieces.length > 0) {
         tailPath = '/' + tailPath;
       }
+      var tailPrefix = this.route.prefix + matchedString;
 
-      this._skipMatch = true;
-      this._matched = matched;
-      this.data = namedMatches;
-      var tailPrefix = this.route.prefix + matched;
-
-      if (!this.tail || this.tail.prefix !== tailPrefix || this.tail.path !== tailPath) {
-        this.tail = {
+      return {
+        data: namedMatches,
+        matched: matched.join('/'),
+        tail: {
           prefix: tailPrefix,
           path: tailPath,
           queryParams: this.route.queryParams
-        };
+        }
       }
-      this._skipMatch = false;
     },
 
     __tailChanged: function(path) {
