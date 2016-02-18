@@ -91,12 +91,33 @@ turn is consumed by the `carbon-route`.
        */
       path: {
         type: String,
-        notify: true
+        notify: true,
+        value: ''
+      },
+
+      /**
+       * Equivalent to `window.location.hash` without the leading `#`. This can
+       * be used as a stand-in for the `window.location.pathname` if
+       * `useHashAsPath` is `true`.
+       */
+      hash: {
+        type: String,
+        notify: true,
+        value: ''
+      },
+
+      /**
+       * When this property is set to true, the `hash` will be used in place of
+       * the `path` for generating a `route`.
+       */
+      useHashAsPath: {
+        type: Boolean,
+        value: false
       }
     },
 
     observers: [
-      '_locationChanged(path, queryParams)',
+      '_locationChanged(path, hash, queryParams, useHashAsPath)',
       '_routeChanged(route.prefix, route.path)',
       '_routeQueryParamsChanged(route.queryParams)'
     ],
@@ -107,22 +128,25 @@ turn is consumed by the `carbon-route`.
 
     /**
      * Handler called when the path or queryParams change.
-     * 
+     *
      * @param  {string} path The serialized path through the route tree.
+     * @param  {string} hash The serialized path through the route tree.
      * @param  {Object} queryParams A set of key/value pairs that are
+     * @param  {boolean} useHashAsPath True if the hash should be preferred as
+     * the route's path.
      * universally accessible to branches of the route tree.
      */
-    _locationChanged: function(path, queryParams) {
+    _locationChanged: function(path, hash, queryParams, useHashAsPath) {
       this.route = {
         prefix: '',
-        path: path,
+        path: useHashAsPath ? hash : path,
         queryParams: queryParams
       };
     },
 
     /**
      * Handler called when the route prefix and route path change.
-     * 
+     *
      * @param  {string} prefix The fragment of the pathname that precedes the
      * path.
      * @param  {string} path The serialized path through the route tree.
@@ -131,12 +155,17 @@ turn is consumed by the `carbon-route`.
       if (!this.route) {
         return;
       }
-      this.path = prefix + path;
+
+      if (this.useHashAsPath) {
+        this.hash = prefix + path;
+      } else {
+        this.path = prefix + path;
+      }
     },
 
     /**
      * Handler called when the route queryParams change.
-     * 
+     *
      * @param  {Object} queryParams A set of key/value pairs that are
      * universally accessible to branches of the route tree.
      */

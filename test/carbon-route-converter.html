@@ -1,5 +1,6 @@
 <!doctype html>
 <!--
+@license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -25,10 +26,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <test-fixture id="HashRouteConversion">
+    <template>
+      <carbon-route-converter use-hash-as-path hash="foo">
+      </carbon-route-converter>
+    </template>
+  </test-fixture>
+
   <script>
     'use strict';
 
-    suite('<carbon-route-converter>', function () {
+    suite('<carbon-route-converter>', function() {
       test('it bidirectionally maps path and queryParams to route', function() {
         var converter = fixture('BasicRouteConversion');
 
@@ -51,6 +59,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         queryParams['z'] = '12';
         expect(converter.queryParams).to.be.deep.equal(queryParams);
+      });
+
+      suite('when using the hash as the canonical path', function() {
+        var converter;
+
+        setup(function() {
+          converter = fixture('HashRouteConversion');
+        });
+
+        test('produces a route with a path that matches hash', function() {
+          expect(converter.route.path).to.be.equal(converter.hash);
+        });
+
+        test('updates the route path when the hash changes', function() {
+          converter.hash = 'bar';
+          expect(converter.route.path).to.be.equal('bar');
+        });
+
+        test('updates the hash when the route path changes', function() {
+          converter.set('route.path', 'baz');
+          expect(converter.hash).to.be.equal('baz');
+        });
       });
     });
   </script>
