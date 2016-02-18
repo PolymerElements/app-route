@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <iron-page-url 
         path="{{__path}}"
         query="{{__query}}"
-        url-space-regex={{urlSpacePattern}}>
+        url-space-regex={{urlSpaceRegex}}>
     </iron-page-url>
     <iron-query-params
         params-string="{{__query}}"
@@ -58,7 +58,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          *
          * @type {string|RegExp}
          */
-        urlSpacePattern: {
+        urlSpaceRegex: {
           type: String,
           notify: true
         },
