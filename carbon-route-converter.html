@@ -91,7 +91,8 @@ turn is consumed by the `carbon-route`.
        */
       path: {
         type: String,
-        notify: true
+        notify: true,
+        value: ''
       }
     },
 
@@ -107,7 +108,7 @@ turn is consumed by the `carbon-route`.
 
     /**
      * Handler called when the path or queryParams change.
-     * 
+     *
      * @param  {!string} path The serialized path through the route tree.
      * @param  {Object} queryParams A set of key/value pairs that are
      * universally accessible to branches of the route tree.
@@ -122,7 +123,7 @@ turn is consumed by the `carbon-route`.
 
     /**
      * Handler called when the route prefix and route path change.
-     * 
+     *
      * @param  {!string} prefix The fragment of the pathname that precedes the
      * path.
      * @param  {!string} path The serialized path through the route tree.
@@ -131,12 +132,13 @@ turn is consumed by the `carbon-route`.
       if (!this.route) {
         return;
       }
+
       this.path = prefix + path;
     },
 
     /**
      * Handler called when the route queryParams change.
-     * 
+     *
      * @param  {Object} queryParams A set of key/value pairs that are
      * universally accessible to branches of the route tree.
      */

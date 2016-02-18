@@ -14,13 +14,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="carbon-location">
   <template>
-    <iron-page-url path="{{__path}}" query="{{__query}}"></iron-page-url>
+    <iron-page-url path="{{__path}}" hash="{{__hash}}" query="{{__query}}"></iron-page-url>
     <iron-query-params
         params-string="{{__query}}"
         params-object="{{__queryParams}}">
     </iron-query-params>
     <carbon-route-converter
-        path="{{__path}}"
+        on-path-changed="__onPathChanged"
+        path="[[__computeRoutePath(__path, __hash, useHashAsPath)]]"
         query-params="{{__queryParams}}"
         route="{{route}}">
     </carbon-route-converter>
@@ -39,6 +40,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         route: {
           type: Object,
           notify: true
+        },
+
+        /**
+         * In many scenarios, it is convenient to treat the `hash` as a stand-in
+         * alternative to the `path`. For example, if deploying an app to a static
+         * web server (e.g., Github Pages) - where one does not have control over
+         * server-side routing - it is usually a better experience to use the hash
+         * to represent paths through one's app.
+         *
+         * When this property is set to true, the `hash` will be used in place of
+         * the `path` for generating a `route`.
+         */
+        useHashAsPath: {
+          type: Boolean,
+          value: false
         },
 
         /**
@@ -61,6 +77,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          */
         __query: {
           type: String
+        },
+
+        /**
+         * The hash portion of the current URL.
+         */
+        __hash: {
+          type: String
+        }
+      },
+
+      __computeRoutePath: function(path, hash, useHashAsPath) {
+        return useHashAsPath ? hash : path;
+      },
+
+      __onPathChanged: function(event) {
+        var path = event.detail.value;
+
+        if (this.useHashAsPath) {
+          this.__hash = path;
+        } else {
+          this.__path = path;
         }
       }
     });

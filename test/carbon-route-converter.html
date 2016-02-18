@@ -1,5 +1,6 @@
 <!doctype html>
 <!--
+@license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -25,10 +26,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <test-fixture id="HashRouteConversion">
+    <template>
+      <carbon-route-converter use-hash-as-path hash="foo">
+      </carbon-route-converter>
+    </template>
+  </test-fixture>
+
   <script>
     'use strict';
 
-    suite('<carbon-route-converter>', function () {
+    suite('<carbon-route-converter>', function() {
       test('it bidirectionally maps path and queryParams to route', function() {
         var converter = fixture('BasicRouteConversion');
 
