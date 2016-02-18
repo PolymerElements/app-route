@@ -128,15 +128,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         test('changing the urlSpace pattern propagates to the iron-page-url', function() {
-          carbonLocation.urlSpacePattern = 'foo'
+          carbonLocation.urlSpaceRegex = 'foo'
 
           expect(pageUrl.urlSpaceRegex).to.be.equal('foo');
 
-          carbonLocation.urlSpacePattern = 'foo/bar'
+          carbonLocation.urlSpaceRegex = 'foo/bar'
 
           expect(pageUrl.urlSpaceRegex).to.be.equal('foo/bar');
 
-          carbonLocation.urlSpacePattern = 'foo/bar/baz'
+          carbonLocation.urlSpaceRegex = 'foo/bar/baz'
 
           expect(pageUrl.urlSpaceRegex).to.be.equal('foo/bar/baz');
         });
