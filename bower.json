@@ -1,28 +1,30 @@
 {
-  "name": "carbon-router",
+  "name": "carbon-route",
   "version": "0.0.0",
   "authors": [
     "The Polymer Authors"
   ],
-  "description": "",
-  "main": "",
-  "moduleType": [],
-  "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/PolymerElements/carbon-router",
-  "private": true,
-  "ignore": [
-    "**/.*"
+  "description": "App routing expressed as Polymer Custom Elements.",
+  "main": [
+    "carbon-route.html",
+    "carbon-location.html",
+    "carbon-route-converter.html"
   ],
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/PolymerElements/carbon-route",
+  "private": true,
+  "ignore": [],
   "devDependencies": {
     "iron-page-url": "polymerelements/iron-page-url#iron-query-params",
-    "paper-styles": "polymerelements/paper-styles#~1.0.13",
-    "paper-tabs": "polymerelements/paper-tabs#~1.2.3",
-    "paper-input": "polymerelements/paper-input#~1.1.2",
-    "paper-slider": "polymerelements/paper-slider#~1.0.8",
-    "neon-animation": "polymerelements/neon-animation#~1.0.8",
-    "web-component-tester": "polymer/web-component-tester#^4.0.0"
+    "paper-styles": "polymerelements/paper-styles#^1.0.13",
+    "paper-tabs": "polymerelements/paper-tabs#^1.2.3",
+    "paper-input": "polymerelements/paper-input#^1.1.2",
+    "paper-slider": "polymerelements/paper-slider#^1.0.8",
+    "neon-animation": "polymerelements/neon-animation#^1.0.8",
+    "web-component-tester": "polymer/web-component-tester#^4.0.0",
+    "iron-component-page": "polymerelements/iron-component-page#^1.0.0"
   },
   "dependencies": {
-    "polymer": "polymer/polymer#~1.2.3"
+    "polymer": "polymer/polymer#^1.2.3"
   }
 }
