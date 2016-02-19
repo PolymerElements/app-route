@@ -1,5 +1,6 @@
 <!doctype html>
 <!--
+@license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -21,6 +22,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <test-fixture id="BasicLocation">
     <template>
       <carbon-location></carbon-location>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="LocationViaHash">
+    <template>
+      <carbon-location use-hash-as-path></carbon-location>
     </template>
   </test-fixture>
 
@@ -118,6 +125,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fiz: 'buz'
           });
         });
+      });
+    });
+
+    suite('using the hash as the route path', function() {
+      var carbonLocation;
+      var originalLocation;
+
+      setup(function() {
+        originalLocation = window.location.toString();
+      });
+
+      teardown(function() {
+        setLocation(originalLocation);
+      });
+
+      setup(function() {
+        carbonLocation = fixture('LocationViaHash');
+      });
+
+      test('it reflects location.hash to route.path', function() {
+        setLocation('#/fiz/buz');
+        expect(carbonLocation.route.path).to.be.equal('/fiz/buz');
+      });
+
+      test('it reflects route.path to location.hash', function() {
+        carbonLocation.set('route.path', '/foo/bar');
+        expect(window.location.hash).to.be.equal('#/foo/bar');
       });
     });
   </script>
