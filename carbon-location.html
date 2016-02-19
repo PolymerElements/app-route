@@ -12,6 +12,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-page-url/iron-query-params.html">
 <link rel="import" href="carbon-route-converter.html">
 
+<!--
+`carbon-location` is an element that provides synchronization between the
+browser location bar and the state of an app. When created, `carbon-location`
+elements will automatically watch the global location for changes. As changes
+occur, `carbon-location` produces and updates an object called `route`. This
+`route` object is suitable for passing into a `carbon-route`, and other similar
+elements.
+
+An example of a route object that describes the URL
+`https://elements.polymer-project.org/elements/carbon-route-converter?foo=bar&baz=qux`:
+    {
+      prefix: '',
+      path: '/elements/carbon-route-converter',
+      queryParams: {
+        foo: 'bar',
+        baz: 'qux'
+      }
+    }
+
+Example Usage:
+    <carbon-location route="{{route}}"></carbon-location>
+    <carbon-route route="{{route}}" match="/:page" data="{{data}}"></carbon-route>
+
+As you can see above, the `carbon-location` element produces a `route` and that
+property is then bound into the `carbon-route` element. The bindings are two-
+directional, so when changes to the `route` object occur within `carbon-route`,
+they automatically reflect back to the global location.
+
+A `carbon-location` can be configured to use the hash part of a URL as the
+canonical source for path information.
+
+Example:
+    <carbon-location route="{{route}}" use-hash-as-path></carbon-location>
+
+@element carbon-location
+@demo demo/index.html
+-->
+
 <dom-module id="carbon-location">
   <template>
     <iron-page-url
@@ -55,6 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          * to represent paths through one's app.
          *
          * When this property is set to true, the `hash` will be used in place of
+
          * the `path` for generating a `route`.
          */
         useHashAsPath: {
