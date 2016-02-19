@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="../../web-component-tester/browser.js"></script>
 
   <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
   <link rel="import" href="../carbon-location.html">
 </head>
 <body>
@@ -24,12 +25,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
+  <test-fixture id="ClickableLink">
+    <template>
+      <a></a>
+    </template>
+  </test-fixture>
+
   <script>
     'use strict';
 
     function setLocation(url) {
       window.history.pushState({}, '', url);
       Polymer.Base.fire('location-changed', {}, { node: window });
+    }
+
+    // This will not perform a regular navigation; iron-page-url listens for the
+    // click, prevents default, and then compares the navigation to the url
+    // space configuration.
+    function setLocationClick(url) {
+      var clickableLink = fixture('ClickableLink');
+      clickableLink.setAttribute('href', url);
+      MockInteractions.tap(clickableLink);
     }
 
     function assign(a, b) {
@@ -117,6 +133,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           expect(carbonLocation.route.queryParams).to.be.eql({
             fiz: 'buz'
           });
+        });
+      });
+
+      suite('manipulating the urlSpace', function() {
+        var pageUrl;
+        var originalLocation;
+
+        setup(function() {
+          pageUrl = carbonLocation.$$('iron-page-url');
+          originalLocation = window.location.toString();
+        });
+
+        teardown(function() {
+          setLocation(originalLocation);
+        });
+
+        test('changing the urlSpace pattern and testing paths', function() {
+          setLocationClick('/test');
+
+          carbonLocation.urlSpaceRegex = '/foo'
+
+          expect(carbonLocation.route.path).to.be.equal('/test');
+
+          setLocationClick('/foo');
+          expect(carbonLocation.route.path).to.be.equal('/foo');
+
+          setLocationClick('/foo/bar');
+          expect(carbonLocation.route.path).to.be.equal('/foo/bar');
+
+          setLocationClick('/bar');
+          expect(carbonLocation.route.path).to.be.equal('/foo/bar');
+
+          carbonLocation.urlSpaceRegex = '/foo/[0-9]+'
+
+          setLocationClick('/foo/123');
+          expect(carbonLocation.route.path).to.be.equal('/foo/123');
+
+          setLocationClick('/foo/');
+          expect(carbonLocation.route.path).to.be.equal('/foo/123');
+
+          setLocationClick('/foo/456');
+          expect(carbonLocation.route.path).to.be.equal('/foo/456');
         });
       });
     });

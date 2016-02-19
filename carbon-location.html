@@ -14,7 +14,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="carbon-location">
   <template>
-    <iron-page-url path="{{__path}}" query="{{__query}}"></iron-page-url>
+    <iron-page-url 
+        path="{{__path}}"
+        query="{{__query}}"
+        url-space-regex={{urlSpaceRegex}}>
+    </iron-page-url>
     <iron-query-params
         params-string="{{__query}}"
         params-object="{{__queryParams}}">
@@ -38,6 +42,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          */
         route: {
           type: Object,
+          notify: true
+        },
+
+        /**
+         * A regexp that defines the set of URLs that should be considered part
+         * of this web app.
+         *
+         * Clicking on a link that matches this regex won't result in a full page
+         * navigation, but will instead just update the URL state in place.
+         *
+         * This regexp is given everything after the origin in an absolute
+         * URL. So to match just URLs that start with /search/ do:
+         *     url-space-regex="^/search/"
+         *
+         * @type {string|RegExp}
+         */
+        urlSpaceRegex: {
+          type: String,
           notify: true
         },
 
