@@ -46,9 +46,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer.Base.fire('location-changed', {}, { node: window });
     }
 
-    // This will not perform a regular navigation; iron-page-url listens for the
-    // click, prevents default, and then compares the navigation to the url
-    // space configuration.
+    // Iron-page-url listens for the click, if it matches the url space
+    // configuration, then it prevents default.
     function setLocationClick(url) {
       var clickableLink = fixture('ClickableLink');
       clickableLink.setAttribute('href', url);
