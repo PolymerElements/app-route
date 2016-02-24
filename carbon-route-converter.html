@@ -105,6 +105,7 @@ turn is consumed by the `carbon-route`.
 
     created: function() {
       this.linkPaths('route.queryParams', 'queryParams');
+      this.linkPaths('queryParams', 'route.queryParams');
     },
 
     /**

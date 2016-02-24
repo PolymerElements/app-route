@@ -131,8 +131,28 @@ the `carbon-route` will update `route.path`. This in-turn will update the
     observers: [
       '__tryToMatch(route.path, pattern)',
       '__updatePathOnDataChange(data.*)',
-      '__tailChanged(tail.path)'
+      '__tailPathChanged(tail.path)',
+      '__routeQueryParamsChanged(route.queryParams)',
+      '__tailQueryParamsChanged(tail.queryParams)'
     ],
+
+    created: function() {
+      this.linkPaths('route.queryParams', 'tail.queryParams');
+      this.linkPaths('tail.queryParams', 'route.queryParams');
+    },
+
+    // Deal with the query params object being assigned to wholesale
+    __routeQueryParamsChanged: function(queryParams) {
+      if (queryParams && this.tail) {
+        this.set('tail.queryParams', queryParams);
+      }
+    },
+
+    __tailQueryParamsChanged: function(queryParams) {
+      if (queryParams && this.route) {
+        this.set('route.queryParams', queryParams);
+      }
+    },
 
     __tryToMatch: function(path, pattern) {
       if (this._skipMatch || !path || !pattern) {
@@ -193,7 +213,7 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       this._skipMatch = false;
     },
 
-    __tailChanged: function(path) {
+    __tailPathChanged: function(path) {
       if (!this._matched || this._skipMatch) {
         return;
       }
