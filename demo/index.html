@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <!--
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at
@@ -13,144 +13,160 @@ http://polymer.github.io/PATENTS.txt
 -->
 <html>
 <head>
+<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <title>carbon-route Demo</title>
+<title>carbon-route Demo</title>
+<link rel="import" href="../../polymer/polymer.html">
 
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+<link rel="import" href="../../paper-styles/paper-styles.html">
+<link rel="import" href="../../paper-card/paper-card.html">
+<link rel="import" href="../../iron-pages/iron-pages.html">
 
-  <link rel="import" href="../../iron-location/iron-location.html">
-  <link rel="import" href="../../iron-location/iron-query-params.html">
-  <link rel="import" href="../../neon-animation/neon-animated-pages.html">
-  <link rel="import" href="../../neon-animation/neon-animations.html">
-  <link rel="import" href="../../neon-animation/neon-animatable.html">
+<link rel="import" href="../carbon-location.html">
+<link rel="import" href="../carbon-route.html">
 
-  <link rel="import" href="../carbon-route.html">
-  <link rel="import" href="../carbon-router.html">
-  <link rel="import" href="../../polymer/polymer.html">
-
-  <link rel="import" href="../../paper-styles/classes/typography.html">
-  <link rel="import" href="../../iron-flex-layout/classes/iron-flex-layout.html">
-  <link rel="stylesheet" href="../../paper-styles/demo.css">
-
-  <link rel="import" href="../../paper-tabs/paper-tabs.html">
-  <link rel="import" href="../../paper-tabs/paper-tab.html">
-  <link rel="import" href="../../paper-input/paper-input.html">
-  <link rel="import" href="../../paper-slider/paper-slider.html">
+<link rel="import" href="input-card.html">
+<link rel="import" href="video-viewer.html">
 </head>
+
 <body>
-  <dom-module id='carbon-router-demo'>
-    <template>
-      <style>
-        paper-tabs {
-          --paper-tabs-selection-bar-color: var(--google-blue-500);
-        }
-        paper-tab {
-          --paper-tab-ink: var(--google-blue-500);
-        }
-      </style>
-      <iron-location hash='{{hash}}'>
-      </iron-location>
-      <carbon-router path='{{hash}}' route='{{route}}'>
-      </carbon-router>
-      <carbon-route route='{{route}}' match='/:page' data='{{data}}'>
-      </carbon-route>
-      <carbon-route route='{{route}}' match='/user' tail='{{userRoute}}'>
-      </carbon-route>
+<carbon-router-demo>
+</carbon-router-demo>
 
-      <debug-route route='{{route}}' data='{{data}}'>
-      </debug-route>
+<dom-module id="carbon-router-demo">
+  <template>
+    <style>
+      paper-button {
+        @apply(--paper-font-common-base);
+        color: var(--paper-red-500);
+        margin-bottom: 16px;
+      }
 
-      <paper-tabs selected='{{data.page}}' attr-for-selected='key'>
-        <paper-tab key='user'>User</paper-tab>
-        <paper-tab key='store'>Store</paper-tab>
-        <paper-tab key='cats'>Cat Pictures</paper-tab>
-      </paper-tabs>
+      a {
+        color: black;
+        text-decoration: none;
+      }
 
-      <neon-animated-pages selected='{{data.page}}' attr-for-selected='key'
-                           entry-animation='slide-from-left-animation'
-                           exit-animation='slide-right-animation'>
-        <neon-animatable key='user'>
-          <br><br>
-          User
-          <carbon-route route='{{userRoute}}' match='/:userPage' data='{{userData}}' key='lol'>
-          </carbon-route>
-          <debug-route route='{{userRoute}}' data='{{userData}}'>
-          </debug-route>
+      paper-card {
+        max-width: 300px;
+        margin-bottom: 16px;
+      }
+    </style>
 
-          <paper-tabs selected='{{userData.userPage}}' attr-for-selected='key'>
-            <paper-tab key='profile'>Profile</paper-tab>
-            <paper-tab key='details'>Details</paper-tab>
-          </paper-tabs>
-          <neon-animated-pages selected='{{userData.userPage}}' attr-for-selected='key'
-                               entry-animation='slide-from-left-animation'
-                               exit-animation='slide-right-animation'>
-            <neon-animatable key='details'>
-              <br><br>Details!!!
-            </neon-animatable>
-            <neon-animatable key='profile'>
-              <br><br>Profile!!!
-            </neon-animatable>
-          </neon-animated-pages>
-        </neon-animatable>
-        <neon-animatable key='store'>
-          <br><br>
-          Store here!
-        </neon-animatable>
-        <neon-animatable key='cats'>
-          <br><br>
-          Cats!
-        </neon-animatable>
-      </neon-animated-pages>
-    </template>
-    <script>
-      Polymer({
-        is: 'carbon-router-demo',
-        properties: {
+    <!-- route is produced by carbon-location we are using hashes as paths for the sake of
+    preventing a page change in our demo site and prevent real navigation -->
+    <carbon-location route={{route}} use-hash-as-path></carbon-location>
+
+    <!-- Route is consumed by the carbon-routes which parse the data based on the match property.
+    data output from the match is in the data, and a route object is produced by the tail to be
+    consumed by other carbon-routes -->
+    <carbon-route route="{{route}}" match="/:page" data="{{data}}"></carbon-route>
+    <carbon-route route="{{route}}" match="/search" tail="{{searchTail}}"></carbon-route>
+    <carbon-route route="{{route}}" match="/video" tail="{{videoTail}}"></carbon-route>
+
+    <iron-pages attr-for-selected="page" selected="{{data.page}}">
+      <div page="search">
+        <!-- The input-card has a carbon-route that consumes the tail of another route -->
+        <input-card
+            route="{{searchTail}}"
+            category="{{newCategory}}"
+            video-data="{{videoData}}">
+        </input-card>
+        <div>
+          <template is="dom-repeat" items="{{videos}}" as="video">
+            <!-- The '#' is included because of the use-hash-as-path property is set to true in the
+            carbon-location above -->
+            <a href="#/video/{{video.id}}">
+              <paper-card image="{{video.thumbnail}}">
+                <div class="card-content">
+                  {{video.title}}
+                </div>
+              </paper-card>
+            </a>
+          </template>
+        </div>
+      </div>
+
+      <div page="video">
+        <!-- The '#' is included because of the use-hash-as-path property is set to true in the
+        carbon-location above -->
+        <a href="#/search">
+          <paper-button>Back to Search</paper-button>
+        </a>
+
+        <!-- The video-viewer has a carbon-route that consumes the tail of another route -->
+        <video-viewer route="{{videoTail}}"></video-viewer>
+      </div>
+    </iron-pages>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'carbon-router-demo',
+
+      properties: {
+        route: {
+          type: Object
         },
-        json: function json(v) {
-          return JSON.stringify(v, null, 2);
-        }
-      });
-    </script>
-  </dom-module>
 
-  <dom-module id='debug-route'>
-    <template>
-      <style>
-        :host {
-          display: block;
-          margin: 12px;
-          padding: 12px;
-          background-color: #eee;
-          color: #666
-        }
-      </style>
-      <div>
-        Route: prefix:{{json(route.prefix)}} – path:{{json(route.path)}}
-      </div>
-      <div>
-        Data:
-        <pre>{{json(data, data.*)}}</pre>
-      </div>
-    </template>
-    <script>
-      Polymer({
-        is: 'debug-route',
-        properties: {
-          route: {
-            type: Object,
-          },
-          data: {
-            type: Object,
+        videoData: {
+          type: Object,
+          observer: '_videoDataChanged'
+        },
+
+        searchTail: {
+          type: Object,
+          notify: true
+        },
+
+        videoTail: {
+          type: Object,
+          notify: true
+        },
+
+        newCategory: {
+          type: String
+        },
+
+        videos: {
+          type: Array,
+          value: []
+        },
+
+        data: {
+          type: Object,
+          value: {
+            page: '/search/'
           }
-        },
-        json: function json(v) {
-          return JSON.stringify(v, null, 2);
         }
-      })
-    </script>
-  </dom-module>
+      },
 
-  <carbon-router-demo></carbon-router-demo>
+      ready: function() {
+        this.async(function() {
+          if (!this.route.path) {
+            this.set('route.path', '/search');
+          }
+        },1);
+      },
+
+      _videoDataChanged: function(data) {
+        this.splice('videos', 0);
+
+        var that = this;
+
+        data.items.forEach(function (videoItem) {
+          var youtubeVideo = {
+            id: videoItem.id.videoId,
+            title: videoItem.snippet.title,
+            thumbnail: videoItem.snippet.thumbnails.high.url
+          };
+
+          that.push('videos', youtubeVideo);
+        });
+      }
+    });
+  </script>
+</dom-module>
 </body>
 </html>

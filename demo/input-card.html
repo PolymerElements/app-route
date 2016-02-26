@@ -1,0 +1,112 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../iron-image/iron-image.html">
+<link rel="import" href="../../paper-styles/paper-styles.html">
+<link rel="import" href="../../paper-material/paper-material.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../carbon-route.html">
+
+<dom-module id="input-card">
+  <template>
+    <style>
+      :host {
+        --primary-color: var(--paper-red-500);
+        display: inline-block;
+        position: relative;
+        @apply(--paper-font-common-base);
+        margin-bottom: 16px;
+      }
+
+      paper-material {
+        box-sizing: border-box;
+        background-color: var(--paper-card-background-color, --primary-background-color);
+        border-radius: 2px;
+        padding: 16px;
+      }
+
+      paper-button {
+        color: var(--paper-red-500);
+      }
+    </style>
+
+    <!-- This carbon-route consumes the route which was provided by the tail of a carbon-route in
+    the host of this element -->
+    <carbon-route route="{{route}}" match="/:searchQuery" data="{{data}}"></carbon-route>
+
+    <paper-material>
+      <paper-input label="category" value="{{data.searchQuery}}"></paper-input>
+    </paper-material>
+
+    <ul>
+      <li>Route prefix: {{route.prefix}}</li>
+      <li>Route path: {{route.path}}</li>
+      <li>QueryParams</li>
+      <ul>
+        <li>State: {{route.queryParams.state}}</li>
+        <li>Time: {{route.queryParams.time}}</li>
+      </ul>
+    </ul>
+
+    <iron-ajax auto
+        id="youtubeSearch"
+        url="https://www.googleapis.com/youtube/v3/search"
+        params="{{params}}"
+        last-response="{{videoData}}">
+      </iron-ajax>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'input-card',
+
+      properties: {
+        route: {
+          type: Object,
+          notify: true
+        },
+
+        data: {
+          type: Object
+        },
+
+        category: {
+          type: String,
+          notify: true,
+          observer: '_categoryChanged'
+        },
+
+        params: {
+          type: String,
+          computed: '_setParams(data.searchQuery)'
+        },
+
+        videoData: {
+          type: Object,
+          notify: true
+        }
+      },
+
+      observers: ['_pathChanged(route.path)'],
+
+      _pathChanged: function() {
+        this.async(function() {
+          if (!this.route.path) {
+            this.set('route.path', '/');
+          }
+        });
+      },
+
+      _setParams: function(category) {
+        return {
+          part: 'snippet',
+          q: this.data.searchQuery,
+          key: 'AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI',
+          type: 'video'
+        }
+      }
+    });
+  </script>
+</dom-module>
