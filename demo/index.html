@@ -25,13 +25,13 @@ http://polymer.github.io/PATENTS.txt
 <link rel="import" href="../carbon-location.html">
 <link rel="import" href="../carbon-route.html">
 
-<link rel="import" href="input-card.html">
+<link rel="import" href="youtube-search.html">
 <link rel="import" href="video-viewer.html">
 </head>
 
 <body>
-<carbon-router-demo>
-</carbon-router-demo>
+
+<carbon-router-demo></carbon-router-demo>
 
 <dom-module id="carbon-router-demo">
   <template>
@@ -53,30 +53,33 @@ http://polymer.github.io/PATENTS.txt
       }
     </style>
 
-    <!-- route is produced by carbon-location we are using hashes as paths for the sake of
-    preventing a page change in our demo site and prevent real navigation -->
+    <!-- carbon-location binds with the URL and produces a route for
+    carbon-route elements to consume. Since this demo is needs to run without
+    server cooperation (e.g. with polyserve, in the elements catalog, etc) we'll
+    use the hash portion of the URL for our route paths. -->
     <carbon-location route={{route}} use-hash-as-path></carbon-location>
 
-    <!-- Route is consumed by the carbon-routes which parse the data based on the match property.
-    data output from the match is in the data, and a route object is produced by the tail to be
-    consumed by other carbon-routes -->
+    <!-- carbon-routes parse route paths based on the their `match` pattern.
+    Parameters are extracted into the `data` object. The rest of the path that
+    comes after the `match` pattern is put into the `tail` object, which can be
+    passed to the `route` property of downstream carbon-routes. -->
     <carbon-route route="{{route}}" match="/:page" data="{{data}}"></carbon-route>
     <carbon-route route="{{route}}" match="/search" tail="{{searchTail}}"></carbon-route>
     <carbon-route route="{{route}}" match="/video" tail="{{videoTail}}"></carbon-route>
 
     <iron-pages attr-for-selected="page" selected="{{data.page}}">
       <div page="search">
-        <!-- The input-card has a carbon-route that consumes the tail of another route -->
-        <input-card
+        <!-- The input-card has a carbon-route that consumes the tail of another
+        route -->
+        <youtube-search
             route="{{searchTail}}"
-            category="{{newCategory}}"
             video-data="{{videoData}}">
-        </input-card>
+        </youtube-search>
         <div>
           <template is="dom-repeat" items="{{videos}}" as="video">
-            <!-- The '#' is included because of the use-hash-as-path property is set to true in the
-            carbon-location above -->
-            <a href="#/video/{{video.id}}">
+            <!-- The '#' is included because of the use-hash-as-path property is
+            set to true in the carbon-location above -->
+            <a href="./#/video/{{video.id}}">
               <paper-card image="{{video.thumbnail}}">
                 <div class="card-content">
                   {{video.title}}
@@ -88,13 +91,14 @@ http://polymer.github.io/PATENTS.txt
       </div>
 
       <div page="video">
-        <!-- The '#' is included because of the use-hash-as-path property is set to true in the
-        carbon-location above -->
-        <a href="#/search">
+        <!-- The '#' is included because of the use-hash-as-path property is set
+        to true in the carbon-location above -->
+        <a href="./#/search">
           <paper-button>Back to Search</paper-button>
         </a>
 
-        <!-- The video-viewer has a carbon-route that consumes the tail of another route -->
+        <!-- The video-viewer has a carbon-route that consumes the tail of
+        another route -->
         <video-viewer route="{{videoTail}}"></video-viewer>
       </div>
     </iron-pages>
@@ -143,6 +147,7 @@ http://polymer.github.io/PATENTS.txt
       },
 
       ready: function() {
+        // If we do not have an initial URL, we redirect tp /search
         this.async(function() {
           if (!this.route.path) {
             this.set('route.path', '/search');
@@ -151,7 +156,7 @@ http://polymer.github.io/PATENTS.txt
       },
 
       _videoDataChanged: function(data) {
-        this.splice('videos', 0);
+        var allVideos = [];
 
         var that = this;
 
@@ -162,8 +167,10 @@ http://polymer.github.io/PATENTS.txt
             thumbnail: videoItem.snippet.thumbnails.high.url
           };
 
-          that.push('videos', youtubeVideo);
+          allVideos.push(youtubeVideo);
         });
+
+        this.set('videos', allVideos);
       }
     });
   </script>

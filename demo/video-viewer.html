@@ -3,7 +3,8 @@
 <link rel="import" href="../../paper-styles/paper-styles.html">
 <link rel="import" href="../../paper-input/paper-input.html">
 <link rel="import" href="../../paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="../../paper-listbox/paper-listbox.html">
+<link rel="import" href="../../paper-menu/paper-menu.html">
+<link rel="import" href="../../paper-item/paper-item.html">
 
 <link rel="import" href="../carbon-route.html">
 
@@ -26,11 +27,16 @@
       }
     </style>
 
-    <!-- This carbon-route consumes the route which was provided by the tail of a carbon-route in
-    the host of this element -->
+    <!-- This carbon-route consumes the route which was provided by the tail of
+    a carbon-route in the host of this element. This means that the parent that
+    provides this route decides where this element lives in the URL space. In
+    this case, the parent, which uses hashes, matches #/video and hence this
+    element lives in <App serving point>?querParams#/video/:vid -->
     <carbon-route route="{{route}}" match="/:vid" data="{{data}}"></carbon-route>
 
-    <!-- youtube-lite consumes the route queryParams and updates the url accordingly -->
+    <!-- You can bind any element's state into the URL by binding their
+    properties into the queryParams object. youtube-lite doesn't have any code
+    that's even aware of routing or the URL. -->
     <youtube-lite
         id="player"
         video-id="{{data.vid}}"
@@ -47,13 +53,13 @@
           value="{{route.queryParams.time}}">
       </paper-input>
       <paper-dropdown-menu id="state" label="State">
-        <paper-listbox
+        <paper-menu
             class="dropdown-content"
             selected="{{route.queryParams.state}}"
             attr-for-selected="state">
           <paper-item state="playing">playing</paper-item>
           <paper-item state="paused">paused</paper-item>
-        </paper-listbox>
+        </paper-menu>
       </paper-dropdown-menu>
     </div>
     <ul>

@@ -9,7 +9,7 @@
 
 <link rel="import" href="../carbon-route.html">
 
-<dom-module id="input-card">
+<dom-module id="youtube-search">
   <template>
     <style>
       :host {
@@ -32,13 +32,12 @@
       }
     </style>
 
-    <!-- This carbon-route consumes the route which was provided by the tail of a carbon-route in
-    the host of this element -->
-    <carbon-route route="{{route}}" match="/:searchQuery" data="{{data}}"></carbon-route>
+    <!-- This carbon-route consumes the route which was provided by the tail of
+    a carbon-route in the host of this element -->
+    <carbon-route route="{{route}}" match="/:searchQuery" data="{{data}}">
+    </carbon-route>
 
-    <paper-material>
-      <paper-input label="category" value="{{data.searchQuery}}"></paper-input>
-    </paper-material>
+    <paper-input label="Search Youtube" value="{{data.searchQuery}}"></paper-input>
 
     <ul>
       <li>Route prefix: {{route.prefix}}</li>
@@ -60,7 +59,7 @@
 
   <script>
     Polymer({
-      is: 'input-card',
+      is: 'youtube-search',
 
       properties: {
         route: {

@@ -1,11 +1,11 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../google-youtube/google-youtube.html">
-
-<link rel="import" href="../carbon-route.html">
 <!--
-youtube-lite is a wrapper around google-youtube to make it act as a two-way-bound element there is
-no carbon routing involved in this webcomponent and for the purposes of this demo be treated as a
-two-way-bounding blackbox that should act as the public properties' names suggest.
+youtube-lite provides a simple subset of the google-youtube element's API. By
+simplifying the API we're also able to make it more amenable to two-way data
+binding.
+
+Note that this element is totally agnostic to routing!
 -->
 <dom-module id="youtube-lite">
   <template>
