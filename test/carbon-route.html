@@ -69,18 +69,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       };
 
       expect(route.data).to.be.deep.equal({username: 'sans'});
+      expect(route.active).to.be.equal(true);
 
       route.pattern = '/user/:username/likes/:count';
 
       // At the moment, we don't reset data when we no longer match.
       expect(route.data).to.be.deep.equal({username: 'sans'});
+      expect(route.active).to.be.equal(false);
 
       route.set('route.path', "/does/not/match");
 
       expect(route.data).to.be.deep.equal({username: 'sans'});
+      expect(route.active).to.be.equal(false);
 
       route.set('route.path', '/user/undyne/likes/20');
       expect(route.data).to.be.deep.equal({username: 'undyne', count: '20'});
+      expect(route.active).to.be.equal(true);
     });
 
     test('changing data changes the path', function() {
