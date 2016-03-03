@@ -77,7 +77,7 @@ http://polymer.github.io/PATENTS.txt
         </youtube-search>
         <div>
           <template is="dom-repeat" items="{{videos}}" as="video">
-            <!-- The '#' is included because of the use-hash-as-path property is
+            <!-- The '#' is included because the use-hash-as-path property is
             set to true in the carbon-location above -->
             <a href="./#/video/{{video.id}}">
               <paper-card image="{{video.thumbnail}}">
@@ -91,7 +91,7 @@ http://polymer.github.io/PATENTS.txt
       </div>
 
       <div page="video">
-        <!-- The '#' is included because of the use-hash-as-path property is set
+        <!-- The '#' is included because the use-hash-as-path property is set
         to true in the carbon-location above -->
         <a href="./#/search">
           <paper-button>Back to Search</paper-button>
@@ -147,7 +147,7 @@ http://polymer.github.io/PATENTS.txt
       },
 
       ready: function() {
-        // If we do not have an initial URL, we redirect tp /search
+        // If we do not have an initial URL, we redirect to /search
         this.async(function() {
           if (!this.route.path) {
             this.set('route.path', '/search');

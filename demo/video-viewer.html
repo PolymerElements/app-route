@@ -3,7 +3,7 @@
 <link rel="import" href="../../paper-styles/paper-styles.html">
 <link rel="import" href="../../paper-input/paper-input.html">
 <link rel="import" href="../../paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="../../paper-menu/paper-menu.html">
+<link rel="import" href="../../paper-listbox/paper-listbox.html">
 <link rel="import" href="../../paper-item/paper-item.html">
 
 <link rel="import" href="../carbon-route.html">
@@ -53,13 +53,13 @@
           value="{{route.queryParams.time}}">
       </paper-input>
       <paper-dropdown-menu id="state" label="State">
-        <paper-menu
+        <paper-listbox
             class="dropdown-content"
             selected="{{route.queryParams.state}}"
             attr-for-selected="state">
           <paper-item state="playing">playing</paper-item>
           <paper-item state="paused">paused</paper-item>
-        </paper-menu>
+        </paper-listbox>
       </paper-dropdown-menu>
     </div>
     <ul>

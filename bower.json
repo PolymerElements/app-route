@@ -28,8 +28,8 @@
     "iron-pages": "PolymerElements/iron-pages#^1.0.7",
     "paper-card": "PolymerElements/paper-card#^1.1.1",
     "google-youtube": "GoogleWebComponents/google-youtube#^1.2.1",
-    "paper-menu": "PolymerElements/paper-menu#^1.2.2",
-    "paper-item": "PolymerElements/paper-item#^1.1.4"
+    "paper-item": "PolymerElements/paper-item#^1.1.4",
+    "paper-listbox": "PolymerElements/paper-listbox#^1.1.2"
   },
   "dependencies": {
     "polymer": "polymer/polymer#^1.3.1",
