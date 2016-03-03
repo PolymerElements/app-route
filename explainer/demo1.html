@@ -1,0 +1,39 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../carbon-route.html">
+<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+<style is="custom-style" include="demo-pages-shared-styles">
+</style>
+
+<demo-snippet>
+  <template>
+    <demo-1></demo-1>
+    <dom-module id="demo-1">
+      <template>
+
+        <carbon-route route="{{route}}" match="{{pattern}}" active="{{active}}"></carbon-route>
+
+        <div>Route is <span hidden$="{{active}}">not</span> active.</div>
+        <paper-input label="Route path" value="{{route.path}}"></paper-input>
+        <paper-input label="Match pattern" value="{{pattern}}"></paper-input>
+
+      </template>
+      <script>
+        Polymer({
+          is: 'demo-1',
+          properties: {
+            pattern: {
+              value: '/store',
+            },
+            route: {
+              value: function() {
+                return {path: '/store/garden', prefix: '', queryParams: {}}
+              }
+            }
+          }
+        });
+      </script>
+    </dom-module>
+  </template>
+</demo-snippet>

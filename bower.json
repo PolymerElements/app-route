@@ -23,7 +23,8 @@
     "neon-animation": "polymerelements/neon-animation#^1.0.8",
     "web-component-tester": "polymer/web-component-tester#^4.0.0",
     "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
-    "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0"
+    "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0",
+    "iron-demo-helpers": "polymerelements/iron-demo-helpers#~1.1.0"
   },
   "dependencies": {
     "polymer": "polymer/polymer#^1.2.3"

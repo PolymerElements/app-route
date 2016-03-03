@@ -1,0 +1,103 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../paper-tabs/paper-tabs.html">
+<link rel="import" href="../../paper-tabs/paper-tab.html">
+<link rel="import" href="../../neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../neon-animation/neon-animatable.html">
+<link rel="import" href="../../neon-animation/animations/slide-from-left-animation.html">
+<link rel="import" href="../../neon-animation/animations/slide-right-animation.html">
+<link rel="import" href="../carbon-route.html">
+<link rel="import" href="../carbon-location.html">
+<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+<link rel="import" href="./url-bar.html">
+
+
+<style is="custom-style" include="demo-pages-shared-styles">
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  demo-snippet {
+    margin: 15px;
+    --paper-tabs-selection-bar-color: --paper-blue-a100;
+
+  }
+</style>
+
+<body>
+
+<url-bar></url-bar>
+
+<demo-snippet>
+  <template>
+    <demo-3></demo-3>
+    <dom-module id="demo-3">
+      <template>
+        <carbon-location use-hash-as-path route="{{route}}"></carbon-location>
+        <carbon-route route="{{route}}" match="/store/categories" tail="{{categoriesRoute}}"></carbon-route>
+
+        <categories-page route="{{categoriesRoute}}">
+        </categories-page>
+
+      </template>
+      <script>
+        Polymer({
+          is: 'demo-3',
+          properties: {
+            pattern: {
+              value: function() {
+                var pathname = window.location.pathname;
+                return pathname.substring(0, pathname.lastIndexOf('/'));
+              },
+            },
+          },
+          ready: function() {
+            this.async(function() {
+              if (!this.route.path) {
+                this.set('route.path', '/store/categories/home');
+              }
+            });
+          }
+        });
+      </script>
+    </dom-module>
+  </template>
+</demo-snippet>
+</body>
+
+<dom-module id="categories-page">
+  <template>
+    <style>
+      paper-tabs {
+        background-color: var(--paper-blue-a100);
+      }
+    </style>
+    <carbon-route route="{{route}}" match="/:category" data="{{data}}"></carbon-route>
+    <paper-tabs selected='{{data.category}}' attr-for-selected="name">
+      <paper-tab name='home'>Home</paper-tab>
+      <paper-tab name='garden'>Garden</paper-tab>
+      <paper-tab name='cats'>Adopt a cat!</paper-tab>
+    </paper-tabs>
+
+    <neon-animated-pages selected='{{data.category}}'
+                         entry-animation='slide-from-left-animation'
+                         exit-animation='slide-right-animation'
+                         attr-for-selected="name">
+      <neon-animatable name='home'>User Page!</neon-animatable>
+      <neon-animatable name='garden'>Store Page!</neon-animatable>
+      <neon-animatable name='cats'>Adorable cats page!</neon-animatable>
+    </neon-animated-pages>
+  </template>
+  <script>
+    Polymer({
+      is: 'categories-page',
+      properties: {
+        route: {
+          type: Object,
+          notify: true
+        }
+      }
+    })
+  </script>
+</dom-module>

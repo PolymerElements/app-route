@@ -54,6 +54,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         notify: true
       },
 
+      active: {
+        type: Boolean,
+        notify: true,
+        readOnly: true
+      },
+
       _skipMatch: {
         value: false
       },
@@ -79,6 +85,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var namedMatches = {};
 
       var clearProperties = function clearProperties() {
+        this._setActive(false);
         this._matched = null;
         // this.tail = null;
         // this.data = {};
@@ -124,11 +131,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           queryParams: this.route.queryParams
         };
       }
+      this._setActive(true);
       this._skipMatch = false;
     },
 
     __tailChanged: function(path) {
-      if (!this._matched || this._skipMatch) {
+      if (!this.active || this._skipMatch) {
         return;
       }
       var newPath = this._matched;
@@ -142,7 +150,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     },
 
     __updatePathOnDataChange: function() {
-      if (!this.route || this._skipMatch || !this._matched) {
+      if (!this.route || this._skipMatch || !this.active) {
         return;
       }
       this._skipMatch = true;
