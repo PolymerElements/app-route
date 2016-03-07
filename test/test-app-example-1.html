@@ -61,7 +61,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       expect(exampleApp.userRoute).to.be.deep.eq({
         prefix: null,
         path: null,
-        queryParams: null
+        queryParams: {}
       });
 
       // Navigate to /user
@@ -103,7 +103,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       exampleApp.set('userData.page', 'profile');
       expect(window.location.pathname).to.be.eq('/user/profile');
 
-
       // Data binding changes to the aunt of the current page.
       exampleApp.set('data.page', 'feed');
       expect(window.location.pathname).to.be.eq('/feed');
@@ -111,6 +110,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       setLocation('/user');
       exampleApp.set('userData.page', 'details');
       expect(window.location.pathname).to.be.eq('/user/details')
+
+      expect(window.location.search).to.be.eq('');
+      exampleApp.set('userRoute.queryParams.foo', 'bar');
+      expect(window.location.search).to.be.eq('?foo=bar');
+
+      window.interesting = true;
+      exampleApp.set('userRoute.queryParams', {bar: 'baz'});
+      expect(window.location.search).to.be.eq('?bar=baz');
     });
   });
 </script>
