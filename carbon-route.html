@@ -151,8 +151,8 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       }.bind(this);
 
       for (var i=0; i < patternPieces.length; i++) {
-        var matchPiece = patternPieces[i];
-        if (!matchPiece && matchPiece !== '') {
+        var patternPiece = patternPieces[i];
+        if (!patternPiece && patternPiece !== '') {
           break;
         }
         var pathPiece = remainingPieces.shift();
@@ -164,9 +164,9 @@ the `carbon-route` will update `route.path`. This in-turn will update the
         }
         matched.push(pathPiece);
 
-        if (matchPiece.charAt(0) == ':') {
-          namedMatches[matchPiece.slice(1)] = pathPiece;
-        } else if (matchPiece !== pathPiece) {
+        if (patternPiece.charAt(0) == ':') {
+          namedMatches[patternPiece.slice(1)] = pathPiece;
+        } else if (patternPiece !== pathPiece) {
           clearProperties();
           return;
         }
