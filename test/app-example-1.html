@@ -14,12 +14,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <carbon-location route='{{route}}'>
     </carbon-location>
-    <carbon-route route='{{route}}' match='/:page' data='{{data}}'>
+    <carbon-route route='{{route}}' pattern='/:page' data='{{data}}'>
     </carbon-route>
-    <carbon-route route='{{route}}' match='/user' tail='{{userRoute}}'>
+    <carbon-route route='{{route}}' pattern='/user' tail='{{userRoute}}'>
     </carbon-route>
 
-    <carbon-route route='{{userRoute}}' match='/:page' data='{{userData}}'>
+    <carbon-route route='{{userRoute}}' pattern='/:page' data='{{userData}}'>
     </carbon-route>
   </template>
   <script>

@@ -42,7 +42,8 @@ Example Usage:
         query-params="{{queryParams}}"
         route="{{route}}">
     </carbon-route-converter>
-    <carbon-route route='{{route}}' match='/:page' data='{{data}}'></carbon-route>
+    <carbon-route route='{{route}}' pattern='/:page' data='{{data}}'>
+    </carbon-route>
 
 This is a simplified implementation of the `carbon-location` element. Here the
 `iron-page-url` produces a path and a query, the `iron-query-params` consumes

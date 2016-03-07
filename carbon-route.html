@@ -15,7 +15,7 @@ for a web app.
 
 In its typical usage, a `carbon-route` element consumes an object that describes
 some state about the current route, via the `route` property. It then parses
-that state using the `match` property, and produces two artifacts: some `data`
+that state using the `pattern` property, and produces two artifacts: some `data`
 related to the `route`, and a `tail` that contains the rest of the `route` that
 did not match.
 
@@ -23,32 +23,32 @@ Here is a basic example, when used with `carbon-location`:
     <carbon-location route="{{route}}"></carbon-location>
     <carbon-route
         route="{{route}}"
-        match="/:page"
+        pattern="/:page"
         data="{{data}}"
         tail="{{tail}}">
     </carbon-route>
 
 In the above example, the `carbon-location` produces a `route` value. Then, the
-`route.path` property is matched by comparing it to the `match` property. If
-the `match` property matches `route.path`, the `carbon-route` will set or update
+`route.path` property is matched by comparing it to the `pattern` property. If
+the `pattern` property matches `route.path`, the `carbon-route` will set or update
 its `data` property with an object whose properties correspond to the parameters
-in `match`. So, in the above example, if `route.path` was `'/about'`, the value
+in `pattern`. So, in the above example, if `route.path` was `'/about'`, the value
 of `data` would be `{"page": "about"}`.
 
 The `tail` property represents the remaining part of the route state after the
-`match` has been applied to a matching `route`.
+`pattern` has been applied to a matching `route`.
 
 Here is another example, where `tail` is used:
     <carbon-location route="{{route}}"></carbon-location>
     <carbon-route
         route="{{route}}"
-        match="/:page"
+        pattern="/:page"
         data="{{routeData}}"
         tail="{{subroute}}">
     </carbon-route>
     <carbon-route
         route="{{subroute}}"
-        match="/:id"
+        pattern="/:id"
         data="{{subrouteData}}">
     </carbon-route>
 
@@ -97,13 +97,13 @@ the `carbon-route` will update `route.path`. This in-turn will update the
        * Path values like `:named` become pseudo-properties of the same name
        * on this element.
        */
-      match: {
+      pattern: {
         type: String
       },
 
       /**
        * The parameterized values that are extracted from the route as
-       * described by match.
+       * described by `pattern`.
        */
       data: {
         type: Object,
@@ -112,8 +112,7 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       },
 
       /**
-       * The part of `path` NOT consumed by `match`.
-       * Equivalent to `path.substring(matched.length + 1)`
+       * The part of `path` NOT consumed by `pattern`.
        */
       tail: {
         type: Object,
@@ -130,17 +129,17 @@ the `carbon-route` will update `route.path`. This in-turn will update the
     },
 
     observers: [
-      '__tryToMatch(route.path, match)',
+      '__tryToMatch(route.path, pattern)',
       '__updatePathOnDataChange(data.*)',
       '__tailChanged(tail.path)'
     ],
 
-    __tryToMatch: function(path, match) {
-      if (this._skipMatch || !path || !match) {
+    __tryToMatch: function(path, pattern) {
+      if (this._skipMatch || !path || !pattern) {
         return;
       }
       var remainingPieces = path.split('/');
-      var matchPieces = match.split('/');
+      var patternPieces = pattern.split('/');
 
       var matched = [];
       var namedMatches = {};
@@ -151,9 +150,9 @@ the `carbon-route` will update `route.path`. This in-turn will update the
         // this.data = {};
       }.bind(this);
 
-      for (var i=0; i < matchPieces.length; i++) {
-        var matchPiece = matchPieces[i];
-        if (!matchPiece && matchPiece !== '') {
+      for (var i=0; i < patternPieces.length; i++) {
+        var patternPiece = patternPieces[i];
+        if (!patternPiece && patternPiece !== '') {
           break;
         }
         var pathPiece = remainingPieces.shift();
@@ -165,9 +164,9 @@ the `carbon-route` will update `route.path`. This in-turn will update the
         }
         matched.push(pathPiece);
 
-        if (matchPiece.charAt(0) == ':') {
-          namedMatches[matchPiece.slice(1)] = pathPiece;
-        } else if (matchPiece !== pathPiece) {
+        if (patternPiece.charAt(0) == ':') {
+          namedMatches[patternPiece.slice(1)] = pathPiece;
+        } else if (patternPiece !== pathPiece) {
           clearProperties();
           return;
         }
@@ -226,8 +225,8 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       for (var key in overrideValues) {
         values[key] = overrideValues[key];
       }
-      var matchPieces = this.match.split('/');
-      var interp = matchPieces.map(function(value) {
+      var patternPieces = this.pattern.split('/');
+      var interp = patternPieces.map(function(value) {
         if (value[0] == ':') {
           value = values[value.slice(1)];
         }

@@ -20,7 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <body>
   <test-fixture id="BasicRoute">
     <template>
-      <carbon-route match='/user/:username'>
+      <carbon-route pattern='/user/:username'>
       </carbon-route>
     </template>
   </test-fixture>
@@ -60,7 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
     });
 
-    test('it creates data as described by match', function() {
+    test('it creates data as described by pattern', function() {
       var route = fixture('BasicRoute');
 
       route.route = {
@@ -70,7 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       expect(route.data).to.be.deep.equal({username: 'sans'});
 
-      route.match = '/user/:username/likes/:count';
+      route.pattern = '/user/:username/likes/:count';
 
       // At the moment, we don't reset data when we no longer match.
       expect(route.data).to.be.deep.equal({username: 'sans'});
