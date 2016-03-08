@@ -18,8 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </carbon-route>
     <carbon-route route='{{route}}' pattern='/user' tail='{{userRoute}}'>
     </carbon-route>
-
-    <carbon-route route='{{userRoute}}' pattern='/:page' data='{{userData}}'>
+    <carbon-route route='{{userRoute}}' pattern='/:page' data='{{userData}}' query-params="{{userQueryParams}}">
     </carbon-route>
   </template>
   <script>
