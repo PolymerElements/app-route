@@ -1,60 +1,45 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../iron-image/iron-image.html">
-<link rel="import" href="../../paper-styles/paper-styles.html">
-<link rel="import" href="../../paper-material/paper-material.html">
+<link rel="import" href="../../paper-styles/color.html">
+<link rel="import" href="../../paper-styles/typography.html">
 <link rel="import" href="../../paper-input/paper-input.html">
-<link rel="import" href="../../paper-button/paper-button.html">
 <link rel="import" href="../../iron-ajax/iron-ajax.html">
 
 <link rel="import" href="../carbon-route.html">
+<link rel="import" href="route-info.html">
 
 <dom-module id="youtube-search">
   <template>
     <style>
       :host {
-        --primary-color: var(--paper-red-500);
-        display: inline-block;
+        --primary-color: #fff;
+        --paper-input-container-color: #fff;
+        display: block;
         position: relative;
+        padding: 1em;
         @apply(--paper-font-common-base);
-        margin-bottom: 16px;
       }
 
-      paper-material {
-        box-sizing: border-box;
-        background-color: var(--paper-card-background-color, --primary-background-color);
-        border-radius: 2px;
-        padding: 16px;
-      }
-
-      paper-button {
-        color: var(--paper-red-500);
+      route-info {
+        color: #fff;
       }
     </style>
 
     <!-- This carbon-route consumes the route which was provided by the tail of
     a carbon-route in the host of this element -->
-    <carbon-route route="{{route}}" match="/:searchQuery" data="{{data}}">
+    <carbon-route route="{{route}}" pattern="/:searchQuery" data="{{data}}">
     </carbon-route>
 
     <paper-input label="Search Youtube" value="{{data.searchQuery}}"></paper-input>
 
-    <ul>
-      <li>Route prefix: {{route.prefix}}</li>
-      <li>Route path: {{route.path}}</li>
-      <li>QueryParams</li>
-      <ul>
-        <li>State: {{route.queryParams.state}}</li>
-        <li>Time: {{route.queryParams.time}}</li>
-      </ul>
-    </ul>
+    <route-info route="[[route]]"></route-info>
 
     <iron-ajax auto
         id="youtubeSearch"
         url="https://www.googleapis.com/youtube/v3/search"
         params="{{params}}"
         last-response="{{videoData}}">
-      </iron-ajax>
+    </iron-ajax>
   </template>
 
   <script>
@@ -105,7 +90,8 @@
           key: 'AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI',
           type: 'video'
         }
-      }
+      },
+
     });
   </script>
 </dom-module>

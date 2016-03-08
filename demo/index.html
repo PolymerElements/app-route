@@ -19,14 +19,21 @@ http://polymer.github.io/PATENTS.txt
 <link rel="import" href="../../polymer/polymer.html">
 
 <link rel="import" href="../../paper-styles/paper-styles.html">
-<link rel="import" href="../../paper-card/paper-card.html">
 <link rel="import" href="../../iron-pages/iron-pages.html">
 
 <link rel="import" href="../carbon-location.html">
 <link rel="import" href="../carbon-route.html">
 
 <link rel="import" href="youtube-search.html">
+<link rel="import" href="youtube-toolbar.html">
 <link rel="import" href="video-viewer.html">
+<link rel="import" href="search-results.html">
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+  }
+</style>
 </head>
 
 <body>
@@ -36,22 +43,31 @@ http://polymer.github.io/PATENTS.txt
 <dom-module id="carbon-router-demo">
   <template>
     <style>
+      :host {
+        display: block;
+        position: relative;
+        height: 100vh;
+      }
+
+      :host([video-page-active]) {
+        overflow: hidden;
+      }
+
+      :host([video-page-active]) iron-pages {
+        transform: translateY(-170px);
+      }
+
+      iron-pages {
+        transition: transform 0.3s;
+      }
+
       paper-button {
         @apply(--paper-font-common-base);
         color: var(--paper-red-500);
         margin-bottom: 16px;
       }
-
-      a {
-        color: black;
-        text-decoration: none;
-      }
-
-      paper-card {
-        max-width: 300px;
-        margin-bottom: 16px;
-      }
     </style>
+
 
     <!-- carbon-location binds with the URL and produces a route for
     carbon-route elements to consume. Since this demo is needs to run without
@@ -59,48 +75,29 @@ http://polymer.github.io/PATENTS.txt
     use the hash portion of the URL for our route paths. -->
     <carbon-location route={{route}} use-hash-as-path></carbon-location>
 
-    <!-- carbon-routes parse route paths based on the their `match` pattern.
+    <!-- carbon-routes parse route paths based on the their `pattern`.
     Parameters are extracted into the `data` object. The rest of the path that
-    comes after the `match` pattern is put into the `tail` object, which can be
+    comes after the `pattern` is put into the `tail` object, which can be
     passed to the `route` property of downstream carbon-routes. -->
-    <carbon-route route="{{route}}" match="/:page" data="{{data}}"></carbon-route>
-    <carbon-route route="{{route}}" match="/search" tail="{{searchTail}}"></carbon-route>
-    <carbon-route route="{{route}}" match="/video" tail="{{videoTail}}"></carbon-route>
+    <carbon-route route="{{route}}" pattern="/:page" data="{{data}}"></carbon-route>
+    <carbon-route route="{{route}}" pattern="/search" tail="{{searchTail}}"></carbon-route>
+    <carbon-route route="{{route}}" pattern="/video" tail="{{videoTail}}" active="{{videoPageActive}}"></carbon-route>
 
-    <iron-pages attr-for-selected="page" selected="{{data.page}}">
-      <div page="search">
-        <!-- The input-card has a carbon-route that consumes the tail of another
-        route -->
-        <youtube-search
-            route="{{searchTail}}"
-            video-data="{{videoData}}">
-        </youtube-search>
-        <div>
-          <template is="dom-repeat" items="{{videos}}" as="video">
-            <!-- The '#' is included because the use-hash-as-path property is
-            set to true in the carbon-location above -->
-            <a href="./#/video/{{video.id}}">
-              <paper-card image="{{video.thumbnail}}">
-                <div class="card-content">
-                  {{video.title}}
-                </div>
-              </paper-card>
-            </a>
-          </template>
-        </div>
-      </div>
+    <youtube-toolbar collapsed$="{{videoPageActive}}">
+      <!-- The youtube-search has a carbon-route that consumes the tail of
+      another route (`searchTail`) -->
+      <youtube-search
+          route="{{searchTail}}"
+          video-data="{{videoData}}">
+      </youtube-search>
+    </youtube-toolbar>
 
-      <div page="video">
-        <!-- The '#' is included because the use-hash-as-path property is set
-        to true in the carbon-location above -->
-        <a href="./#/search">
-          <paper-button>Back to Search</paper-button>
-        </a>
+    <iron-pages attr-for-selected="id" selected="{{data.page}}">
+      <search-results id="search" items="{{videos}}"></search-results>
 
-        <!-- The video-viewer has a carbon-route that consumes the tail of
-        another route -->
-        <video-viewer route="{{videoTail}}"></video-viewer>
-      </div>
+      <!-- The video-viewer has a carbon-route that consumes the tail of
+      another route -->
+      <video-viewer id="video" route="{{videoTail}}"></video-viewer>
     </iron-pages>
 
   </template>
@@ -117,6 +114,11 @@ http://polymer.github.io/PATENTS.txt
         videoData: {
           type: Object,
           observer: '_videoDataChanged'
+        },
+
+        videoPageActive: {
+          type: Boolean,
+          reflectToAttribute: true
         },
 
         searchTail: {

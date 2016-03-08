@@ -10,13 +10,24 @@ Note that this element is totally agnostic to routing!
 <dom-module id="youtube-lite">
   <template>
     <style>
+      :host {
+        display: block;
+        position: relative;
+        width: 100%;
+      }
+
+      google-youtube {
+        height: 100%;
+      }
     </style>
 
     <google-youtube
         id="player"
         video-id="{{videoId}}"
         state="{{__state}}"
-        currenttime="{{__currentTime}}">
+        currenttime="{{__currentTime}}"
+        width="100%"
+        height="100%">
     </google-youtube>
   </template>
 
@@ -52,7 +63,8 @@ Note that this element is totally agnostic to routing!
         },
 
         __currentTime: {
-          type: String
+          type: String,
+          observer: '_ytCurrentTimeChanged'
         },
 
         __pauseOnFirstSeek: {
@@ -90,11 +102,19 @@ Note that this element is totally agnostic to routing!
         this._seekTo(newTime);
       },
 
+      _ytCurrentTimeChanged: function(ytCurrentTime) {
+        if (this.__state === this.__apiStates.PAUSED) {
+          return;
+        }
+
+        this.currentTime = ytCurrentTime;
+      },
+
       _stateChanged: function(newState, oldState) {
         var newApiState = this.__readableStateToApiState(newState);
 
-        if (newApiState == this._state ||
-            this._state == this.__apiStates.UNSTARTED) {
+        if (newApiState == this.__state ||
+            this.__state == this.__apiStates.UNSTARTED) {
           return;
         }
 
