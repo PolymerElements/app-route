@@ -24,13 +24,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </carbon-route>
     </template>
   </test-fixture>
-
 <script>
   'use strict';
 
   suite('<carbon-route>', function () {
+    var route;
+
+    setup(function() {
+      route = fixture('BasicRoute');
+    });
+
     test('it parses a path', function() {
-      var route = fixture('BasicRoute');
       route.route = {
         prefix: '',
         path: '/user/papyrus/details',
@@ -43,7 +47,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     test('it bidirectionally maps changes between tail and route', function() {
-      var route = fixture('BasicRoute');
       route.route = {
         prefix: '',
         path: '/user/papyrus/details',
@@ -61,8 +64,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     test('it creates data as described by pattern', function() {
-      var route = fixture('BasicRoute');
-
       route.route = {
         prefix: '',
         path: '/user/sans'
@@ -88,8 +89,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     test('changing data changes the path', function() {
-      var route = fixture('BasicRoute');
-
       route.route = {
         prefix: '',
         path: '/user/asgore'
@@ -100,15 +99,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       expect(route.route.path).to.be.equal('/user/toriel');
     });
 
-    test('changing data on an inactive route won\'t change the path', function() {
-      var route = fixture('BasicRoute');
+    suite('when the pattern no longer matches', function() {
+      setup(function() {
+        route.route = {
+          prefix: '',
+          path: '/username/flowey'
+        };
 
-      route.route = {
-        prefix: '',
-        path: '/does/not/match'
-      };
-      route.data = {username: 'undyne'};
-      expect(route.route.path).to.be.equal('/does/not/match');
+        route.route = {
+          prefix: '',
+          path: '/does/not/match'
+        };
+      });
+
+      test('does not change path when data changes', function() {
+        route.data = {username: 'undyne'};
+        expect(route.route.path).to.be.equal('/does/not/match');
+      });
+
+      test('sets route to inactive', function() {
+        expect(route.active).to.be.equal(false);
+      });
+
+      test('resets tail', function() {
+        expect(route.tail).to.be.deep.equal({
+          path: null,
+          prefix: null,
+          queryParams: null
+        });
+      });
     });
   });
 </script>
