@@ -118,7 +118,8 @@ http://polymer.github.io/PATENTS.txt
 
         videoPageActive: {
           type: Boolean,
-          reflectToAttribute: true
+          reflectToAttribute: true,
+          observer: '_videoPageActiveChanged'
         },
 
         searchTail: {
@@ -173,6 +174,49 @@ http://polymer.github.io/PATENTS.txt
         });
 
         this.set('videos', allVideos);
+      },
+
+      _videoPageActiveChanged: function(videoPageActive, previousValue) {
+        // generic lerp equation from white to black and vice versa
+        var start;
+        var end;
+        if (videoPageActive) {
+          start = 255;
+          end = 0;
+        } else {
+          start = 0;
+          end = 255;
+        }
+
+        // set page to initial color on first page load
+        if (previousValue === undefined) {
+          document.body.style.backgroundColor = 'rgb(' + end + ',' + end + ','
+              + end + ')';
+          return;
+        }
+
+        var lerp = function(a,b,u) {
+          return (1-u) * a + u * b;
+        }
+
+        var duration = 100;
+        var interval = 1;
+        var steps = duration / interval;
+        var uStep = 1.0 / steps;
+        var u = 0.0;
+        var that = this;
+
+        var timer = setInterval(function(){
+          if (u >= 1.0){
+            clearInterval(timer)
+          }
+
+          var color = parseInt(lerp(start, end, u));
+          var colorname = 'rgb(' + color + ',' + color + ',' + color + ')';
+          document.body.style.backgroundColor = colorname;
+
+          u += uStep;
+        }, interval);
       }
     });
   </script>
