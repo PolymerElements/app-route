@@ -177,46 +177,25 @@ http://polymer.github.io/PATENTS.txt
       },
 
       _videoPageActiveChanged: function(videoPageActive, previousValue) {
-        // generic lerp equation from white to black and vice versa
-        var start;
-        var end;
+        // change color of page on page change
+        var newColor;
+
         if (videoPageActive) {
-          start = 255;
-          end = 0;
+          // black
+          newColor = 0;
         } else {
-          start = 0;
-          end = 255;
+          // white
+          newColor = 255;
         }
 
-        // set page to initial color on first page load
+        document.body.style.backgroundColor = 'rgb(' + newColor + ',' + newColor
+            + ','  + newColor + ')';
+
+        // on first load, set the color then allow color transition animations
         if (previousValue === undefined) {
-          document.body.style.backgroundColor = 'rgb(' + end + ',' + end + ','
-              + end + ')';
+          document.body.style.transition = 'background-color .2s linear';
           return;
         }
-
-        var lerp = function(a,b,u) {
-          return (1-u) * a + u * b;
-        }
-
-        var duration = 100;
-        var interval = 1;
-        var steps = duration / interval;
-        var uStep = 1.0 / steps;
-        var u = 0.0;
-        var that = this;
-
-        var timer = setInterval(function(){
-          if (u >= 1.0){
-            clearInterval(timer)
-          }
-
-          var color = parseInt(lerp(start, end, u));
-          var colorname = 'rgb(' + color + ',' + color + ',' + color + ')';
-          document.body.style.backgroundColor = colorname;
-
-          u += uStep;
-        }, interval);
       }
     });
   </script>
