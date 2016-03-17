@@ -40,14 +40,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(converter.route).to.be.deep.equal({
           prefix: '',
           path: '/a/b/c',
-          queryParams: queryParams
+          __queryParams: queryParams
         });
 
         converter.set('route.path', '/d/e/f');
         expect(converter.path).to.be.equal('/d/e/f');
 
         queryParams = {y: '11'};
-        converter.set('route.queryParams', queryParams);
+        converter.set('route.__queryParams', queryParams);
         expect(converter.queryParams).to.be.deep.equal(queryParams);
 
         queryParams['z'] = '12';

@@ -100,12 +100,12 @@ turn is consumed by the `carbon-route`.
     observers: [
       '_locationChanged(path, queryParams)',
       '_routeChanged(route.prefix, route.path)',
-      '_routeQueryParamsChanged(route.queryParams)'
+      '_routeQueryParamsChanged(route.__queryParams)'
     ],
 
     created: function() {
-      this.linkPaths('route.queryParams', 'queryParams');
-      this.linkPaths('queryParams', 'route.queryParams');
+      this.linkPaths('route.__queryParams', 'queryParams');
+      this.linkPaths('queryParams', 'route.__queryParams');
     },
 
     /**
@@ -119,7 +119,7 @@ turn is consumed by the `carbon-route`.
       this.route = {
         prefix: '',
         path: path,
-        queryParams: queryParams
+        __queryParams: queryParams
       };
     },
 

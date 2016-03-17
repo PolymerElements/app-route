@@ -84,13 +84,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         setup(function() {
           originalPath = carbonLocation.route.path;
-          originalQueryParams = assign({}, carbonLocation.route.queryParams);
+          originalQueryParams = assign({}, carbonLocation.route.__queryParams);
         });
 
         teardown(function() {
           carbonLocation.set('route.prefix', '');
           carbonLocation.set('route.path', originalPath);
-          carbonLocation.set('route.queryParams', originalQueryParams);
+          carbonLocation.set('route.__queryParams', originalQueryParams);
         });
 
         test('it reflects path to location.pathname', function() {
@@ -99,12 +99,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         test('it reflects queryParams values to location.search', function() {
-          carbonLocation.set('route.queryParams.foo', 1);
+          carbonLocation.set('route.__queryParams.foo', 1);
           expect(window.location.search).to.match(/foo=1/);
         });
 
         test('it reflects completely replaced queryParams', function() {
-          carbonLocation.set('route.queryParams', { bar: 1 });
+          carbonLocation.set('route.__queryParams', { bar: 1 });
           expect(window.location.search).to.be.equal('?bar=1');
         });
 
@@ -134,9 +134,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           expect(carbonLocation.route.path).to.be.equal('/fiz/buz');
         });
 
-        test('it reflects location.search to route.queryParams', function() {
+        test('it reflects location.search to route.__queryParams', function() {
           setLocation('?fiz=buz');
-          expect(carbonLocation.route.queryParams).to.be.eql({
+          expect(carbonLocation.route.__queryParams).to.be.eql({
             fiz: 'buz'
           });
         });

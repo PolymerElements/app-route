@@ -113,12 +113,20 @@ the `carbon-route` will update `route.path`. This in-turn will update the
         notify: true
       },
 
+      queryParams: {
+        type: Object,
+        value: function() {
+          return {};
+        },
+        notify: true
+      },
+
       /**
        * The part of `path` NOT consumed by `pattern`.
        */
       tail: {
         type: Object,
-        value: function() {return {path: null, prefix: null, queryParams: null};},
+        value: function() {return {path: null, prefix: null, __queryParams: null};},
         notify: true
       },
 
@@ -140,44 +148,67 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       '__tryToMatch(route.path, pattern)',
       '__updatePathOnDataChange(data.*)',
       '__tailPathChanged(tail.path)',
-      '__routeQueryParamsChanged(route.queryParams)',
-      '__tailQueryParamsChanged(tail.queryParams)'
+      '__routeQueryParamsChanged(route.__queryParams)',
+      '__tailQueryParamsChanged(tail.__queryParams)',
+      '__queryParamsChanged(queryParams.*)'
     ],
 
     created: function() {
-      this.linkPaths('route.queryParams', 'tail.queryParams');
-      this.linkPaths('tail.queryParams', 'route.queryParams');
+      this.linkPaths('route.__queryParams', 'tail.__queryParams');
+      this.linkPaths('tail.__queryParams', 'route.__queryParams');
     },
 
     // Deal with the query params object being assigned to wholesale
     __routeQueryParamsChanged: function(queryParams) {
       if (queryParams && this.tail) {
-        this.set('tail.queryParams', queryParams);
+        this.set('tail.__queryParams', queryParams);
+
+        if (!this.active || this._skipMatch) {
+          return;
+        }
+
+        this._skipMatch = true;
+        this.set('queryParams', Object.assign({}, queryParams));
+        this._skipMatch = false;
       }
     },
 
     __tailQueryParamsChanged: function(queryParams) {
       if (queryParams && this.route) {
-        this.set('route.queryParams', queryParams);
+        this.set('route.__queryParams', queryParams);
       }
     },
 
-    __tryToMatch: function(path, pattern) {
-      if (this._skipMatch || !path || !pattern) {
+    __queryParamsChanged: function(changes) {
+      if (!this.active || this._skipMatch) {
         return;
       }
+
+      this.set('route.__' + changes.path, changes.value);
+    },
+
+    __resetProperties: function() {
+      this._setActive(false);
+      this._matched = null;
+      //this.tail = { path: null, prefix: null, queryParams: null };
+      //this.data = {};
+    },
+
+    __tryToMatch: function(path, pattern) {
+      if (this._skipMatch || !pattern) {
+        return;
+      }
+
+      if (!path) {
+        this.__resetProperties();
+        return;
+      }
+
       var remainingPieces = path.split('/');
       var patternPieces = pattern.split('/');
 
       var matched = [];
       var namedMatches = {};
-
-      var clearProperties = function clearProperties() {
-        this._setActive(false);
-        this._matched = null;
-        // this.tail = null;
-        // this.data = {};
-      }.bind(this);
 
       for (var i=0; i < patternPieces.length; i++) {
         var patternPiece = patternPieces[i];
@@ -188,7 +219,7 @@ the `carbon-route` will update `route.path`. This in-turn will update the
 
         // We don't match this path.
         if (!pathPiece && pathPiece !== '') {
-          clearProperties();
+          this.__resetProperties();
           return;
         }
         matched.push(pathPiece);
@@ -196,7 +227,7 @@ the `carbon-route` will update `route.path`. This in-turn will update the
         if (patternPiece.charAt(0) == ':') {
           namedMatches[patternPiece.slice(1)] = pathPiece;
         } else if (patternPiece !== pathPiece) {
-          clearProperties();
+          this.__resetProperties();
           return;
         }
       }
@@ -216,7 +247,7 @@ the `carbon-route` will update `route.path`. This in-turn will update the
         this.tail = {
           prefix: tailPrefix,
           path: tailPath,
-          queryParams: this.route.queryParams
+          __queryParams: this.route.__queryParams
         };
       }
       this._setActive(true);

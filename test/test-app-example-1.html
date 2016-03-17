@@ -56,12 +56,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       expect(exampleApp.route).to.be.deep.eq({
         prefix: '',
         path: '/lol',
-        queryParams: {}
+        __queryParams: {}
       });
       expect(exampleApp.userRoute).to.be.deep.eq({
         prefix: null,
         path: null,
-        queryParams: {}
+        __queryParams: {}
       });
 
       // Navigate to /user
@@ -72,12 +72,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       expect(exampleApp.route).to.be.deep.eq({
         prefix: '',
         path: '/user',
-        queryParams: {}
+        __queryParams: {}
       });
       expect(exampleApp.userRoute).to.be.deep.eq({
         prefix: '/user',
         path: '',
-        queryParams: {}
+        __queryParams: {}
       });
 
       // Navigate to /user/details
@@ -91,12 +91,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       expect(exampleApp.route).to.be.deep.eq({
         prefix: '',
         path: '/user/details',
-        queryParams: {}
+        __queryParams: {}
       });
       expect(exampleApp.userRoute).to.be.deep.eq({
         prefix: '/user',
         path: '/details',
-        queryParams: {}
+        __queryParams: {}
       });
 
       // Data binding changes to a different user subpage.
@@ -107,16 +107,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       exampleApp.set('data.page', 'feed');
       expect(window.location.pathname).to.be.eq('/feed');
 
-      setLocation('/user');
+      setLocation('/user/etc');
       exampleApp.set('userData.page', 'details');
       expect(window.location.pathname).to.be.eq('/user/details')
 
       expect(window.location.search).to.be.eq('');
-      exampleApp.set('userRoute.queryParams.foo', 'bar');
+      exampleApp.set('userQueryParams.foo', 'bar');
       expect(window.location.search).to.be.eq('?foo=bar');
 
-      window.interesting = true;
-      exampleApp.set('userRoute.queryParams', {bar: 'baz'});
+      exampleApp.userQueryParams = {bar: 'baz'};
       expect(window.location.search).to.be.eq('?bar=baz');
     });
   });
