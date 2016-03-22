@@ -22,6 +22,8 @@
     "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0",
     "iron-pages": "PolymerElements/iron-pages#^1.0.7",
     "paper-card": "PolymerElements/paper-card#^1.1.1",
+    "paper-icon-button": "polymerelements/paper-icon-button#^v1.0.0",
+    "paper-toggle-button": "polymerelements/paper-toggle-button#^v1.0.0",
     "google-youtube": "GoogleWebComponents/google-youtube#^1.2.1"
   },
   "dependencies": {
