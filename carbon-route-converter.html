@@ -32,7 +32,7 @@ An example of a route element that describes
     }
 
 Example Usage:
-    <iron-page-url path="{{path}}" query="{{query}}"></iron-page-url>
+    <iron-location path="{{path}}" query="{{query}}"></iron-location>
     <iron-query-params
         params-string="{{query}}"
         params-object="{{queryParams}}">
@@ -46,7 +46,7 @@ Example Usage:
     </carbon-route>
 
 This is a simplified implementation of the `carbon-location` element. Here the
-`iron-page-url` produces a path and a query, the `iron-query-params` consumes
+`iron-location` produces a path and a query, the `iron-query-params` consumes
 the query and produces a queryParams object, and the `carbon-route-converter`
 consumes the path and the query params and converts it into a route which is in
 turn is consumed by the `carbon-route`.

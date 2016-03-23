@@ -14,12 +14,12 @@ http://polymer.github.io/PATENTS.txt
 <html>
 <head>
 
-  <title>iron-page-url</title>
+  <title>carbon-route Demo</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <link rel="import" href="../../iron-page-url/iron-page-url.html">
-  <link rel="import" href="../../iron-page-url/iron-query-params.html">
+  <link rel="import" href="../../iron-location/iron-location.html">
+  <link rel="import" href="../../iron-location/iron-query-params.html">
   <link rel="import" href="../../neon-animation/neon-animated-pages.html">
   <link rel="import" href="../../neon-animation/neon-animations.html">
   <link rel="import" href="../../neon-animation/neon-animatable.html">
@@ -48,8 +48,8 @@ http://polymer.github.io/PATENTS.txt
           --paper-tab-ink: var(--google-blue-500);
         }
       </style>
-      <iron-page-url hash='{{hash}}'>
-      </iron-page-url>
+      <iron-location hash='{{hash}}'>
+      </iron-location>
       <carbon-router path='{{hash}}' route='{{route}}'>
       </carbon-router>
       <carbon-route route='{{route}}' match='/:page' data='{{data}}'>
