@@ -52,7 +52,8 @@
     provides this route decides where this element lives in the URL space. In
     this case, the parent, which uses hashes, matches #/video and hence this
     element lives in <App serving point>?querParams#/video/:vid -->
-    <carbon-route route="{{route}}" pattern="/:vid" data="{{data}}"></carbon-route>
+    <carbon-route route="{{route}}" pattern="/:vid" data="{{data}}" query-params="{{queryParams}}">
+    </carbon-route>
 
     <!-- You can bind any element's state into the URL by binding their
     properties into the queryParams object. youtube-lite doesn't have any code
@@ -60,9 +61,9 @@
     <youtube-lite
         id="player"
         video-id="{{data.vid}}"
-        state="{{route.queryParams.state}}"
-        current-time="{{route.queryParams.time}}"
-        start-time="{{route.queryParams.time}}">
+        state="{{queryParams.state}}"
+        current-time="{{queryParams.time}}"
+        start-time="{{queryParams.time}}">
     </youtube-lite>
 
     <div id="controls">
@@ -72,9 +73,9 @@
             type="number"
             on-focus="pause"
             label="Time"
-            value="{{route.queryParams.time}}">
+            value="{{queryParams.time}}">
         </paper-input>
-        <paper-toggle-button id="state" active="{{playing}}">[[route.queryParams.state]]</paper-toggle-button>
+        <paper-toggle-button id="state" active="{{playing}}">[[queryParams.state]]</paper-toggle-button>
       </div>
       <route-info route="[[route]]"></route-info>
     </div>
@@ -96,20 +97,24 @@
 
         playing: {
           type: Boolean
+        },
+
+        queryParams: {
+          type: Object
         }
       },
 
       observers: [
         '_playingChanged(playing)',
-        '_stateChanged(route.queryParams.state)'
+        '_stateChanged(queryParams.state)'
       ],
 
       pause: function() {
-        this.set('route.queryParams.state', 'paused');
+        this.set('queryParams.state', 'paused');
       },
 
       _playingChanged: function(playing) {
-        this.set('route.queryParams.state', playing ? 'playing' : 'paused');
+        this.set('queryParams.state', playing ? 'playing' : 'paused');
       },
 
       _stateChanged: function(state) {
