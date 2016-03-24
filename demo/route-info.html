@@ -1,0 +1,38 @@
+<link rel="import" href="../../polymer/polymer.html">
+<dom-module id="route-info">
+  <template>
+    <style>
+      :host {
+        font-style: italic;
+        font-size: 0.85em;
+        font-weight: 200;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #fff;
+      }
+    </style>
+    <span>Route prefix: {{route.prefix}} &middot; Route path: {{route.path}} &middot; Query params: {{_stringifyQueryParams(route.queryParams.*)}}</span>
+  </template>
+  <script>
+    Polymer({
+      is: 'route-info',
+
+      properties: {
+        route: {
+          type: Object
+        }
+      },
+
+      _stringifyQueryParams: function() {
+        var params = [];
+        if (this.route && this.route.queryParams) {
+          for (var key in this.route.queryParams) {
+            params.push(key + ' = ' + this.route.queryParams[key]);
+          }
+        }
+        return params.join(', ');
+      }
+    })
+  </script>
+</dom-module>
