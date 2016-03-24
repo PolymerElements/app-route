@@ -70,7 +70,7 @@ http://polymer.github.io/PATENTS.txt
 
 
     <!-- carbon-location binds with the URL and produces a route for
-    carbon-route elements to consume. Since this demo is needs to run without
+    carbon-route elements to consume. Since this demo needs to run without
     server cooperation (e.g. with polyserve, in the elements catalog, etc) we'll
     use the hash portion of the URL for our route paths. -->
     <carbon-location route={{route}} use-hash-as-path></carbon-location>
@@ -150,8 +150,9 @@ http://polymer.github.io/PATENTS.txt
       },
 
       ready: function() {
-        // If we do not have an initial URL, we redirect to /search
+        // TODO: Remove this async https://github.com/PolymerElements/carbon-route/issues/44
         this.async(function() {
+          // If we do not have an initial URL, we redirect to /search
           if (!this.route.path) {
             this.set('route.path', '/search/');
           }
