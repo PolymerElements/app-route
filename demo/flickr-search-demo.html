@@ -58,21 +58,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         apiKey: {
           type: String,
         },
+
         params: {
           type: Object,
           computed: '_computeParams(apiKey, queryParams.search)'
         },
+
         selected: {
           type: Boolean,
           observer: '_selectedChanged'
         }
       },
+
       observers: [
         '_clearOldSearchResults(queryParams.search)'
       ],
+
       _clearOldSearchResults: function() {
         this.response = null;
       },
+
       _computeParams: function(apiKey, search) {
         return {
           method: 'flickr.photos.search',
@@ -83,16 +88,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           nojsoncallback: 1
         };
       },
+
       _computeSrc: function(photo) {
         if (!photo || !photo.farm) {
           return '';
         }
-        return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '.jpg';
+        return 'https://farm' + photo.farm + '.staticflickr.com/' +
+            photo.server + '/' + photo.id + '_' + photo.secret + '.jpg';
       },
+
       _computeLink: function(photo) {
-        return window.location.pathname + '#/image/' + photo.farm + '/' + photo.server + '/' +
-            photo.id + '/' + photo.secret;
+        return window.location.pathname + '#/image/' + photo.farm + '/' +
+            photo.server + '/' + photo.id + '/' + photo.secret;
       },
+
       _selectedChanged: function(newVal, oldVal) {
         this.async(function() {
           if (newVal && !this.queryParams.search) {
@@ -107,6 +116,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="flickr-image-page">
   <template>
     <style>
+      paper-spinner {
+        display: block;
+      }
       .tags span {
         display: inline-block;
         padding-right: 10px;
@@ -132,12 +144,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-spinner active="{{loading}}"></paper-spinner>
     <div>
       <h1>{{metadata.photo.title._content}}</h1>
-      <div class='tags'>
+      <div class="tags">
       <template is="dom-repeat" items="{{metadata.photo.tags.tag}}">
         <span>{{item.raw}}</span>
       </template>
       </div>
-      <div clas='urls'>
+      <div>
         <ul>
           <template is="dom-repeat" items="{{metadata.photo.urls.url}}">
             <li>
@@ -157,17 +169,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         apiKey: {
           type: String,
         },
+
         params: {
           type: Object,
           computed: '_computeParams(apiKey, data.id, data.secret)'
         }
+
       },
       observers: [
         '_clearOldMetadata(route.path)'
       ],
+
       _clearOldMetadata: function() {
         this.metadata = null;
       },
+
       _computeParams: function(apiKey, id, secret) {
         return {
           method: 'flickr.photos.getInfo',
@@ -178,6 +194,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           nojsoncallback: 1
         };
       },
+
       _computeSrc: function(photo) {
         if (!photo || !photo.farm) {
           return '';
@@ -207,7 +224,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <carbon-route route="{{route}}" pattern="/image" tail="{{imageRoute}}">
     </carbon-route>
 
-    <h1><a href='#/search/'>Public Domain Image Search</a></h1>
+    <h1><a href="#/search/">Public Domain Image Search</a></h1>
 
     <iron-pages attr-for-selected="id" selected="{{data.page}}" selected-attribute="selected">
       <flickr-search-page id="search" api-key="{{apiKey}}" route="{{searchRoute}}">
@@ -223,8 +240,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         apiKey: {
           type: String,
           value: '5358d9830b6865a13d251e5e1acb4c30'
-        },
+        }
       },
+
       attached: function() {
         this.async(function() {
           if (this.route.path === '') {
