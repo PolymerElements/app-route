@@ -26,7 +26,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <carbon-route pattern="/" route="{{route}}" query-params="{{queryParams}}">
     </carbon-route>
-    <paper-input autofocus value="{{queryParams.search}}" label="Search the public domain on Flickr">
+    <paper-input autofocus label="Search the public domain on Flickr"
+                 value="{{queryParams.search}}">
     </paper-input>
 
     <iron-ajax auto url="https://www.flickr.com/services/rest/"

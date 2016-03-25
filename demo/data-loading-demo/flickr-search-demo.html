@@ -37,8 +37,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <h1><a href="#/search/">Public Domain Image Search</a></h1>
 
-    <iron-pages attr-for-selected="id" selected="{{data.page}}" selected-attribute="selected">
-      <flickr-search-page id="search" api-key="{{apiKey}}" route="{{searchRoute}}">
+    <iron-pages attr-for-selected="id" selected="{{data.page}}"
+                selected-attribute="selected">
+      <flickr-search-page id="search" api-key="{{apiKey}}"
+                          route="{{searchRoute}}">
       </flickr-search-page>
       <flickr-image-page id="image" api-key="{{apiKey}}" route="{{imageRoute}}">
       </flickr-search-page>
