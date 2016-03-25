@@ -27,13 +27,16 @@ related to the `route`, and a `tail` that contains the rest of the `route` that
 did not match.
 
 Here is a basic example, when used with `carbon-location`:
-    <carbon-location route="{{route}}"></carbon-location>
-    <carbon-route
-        route="{{route}}"
-        pattern="/:page"
-        data="{{data}}"
-        tail="{{tail}}">
-    </carbon-route>
+
+```html
+<carbon-location route="{{route}}"></carbon-location>
+<carbon-route
+    route="{{route}}"
+    pattern="/:page"
+    data="{{data}}"
+    tail="{{tail}}">
+</carbon-route>
+```
 
 In the above example, the `carbon-location` produces a `route` value. Then, the
 `route.path` property is matched by comparing it to the `pattern` property. If
@@ -46,18 +49,21 @@ The `tail` property represents the remaining part of the route state after the
 `pattern` has been applied to a matching `route`.
 
 Here is another example, where `tail` is used:
-    <carbon-location route="{{route}}"></carbon-location>
-    <carbon-route
-        route="{{route}}"
-        pattern="/:page"
-        data="{{routeData}}"
-        tail="{{subroute}}">
-    </carbon-route>
-    <carbon-route
-        route="{{subroute}}"
-        pattern="/:id"
-        data="{{subrouteData}}">
-    </carbon-route>
+
+```html
+<carbon-location route="{{route}}"></carbon-location>
+<carbon-route
+    route="{{route}}"
+    pattern="/:page"
+    data="{{routeData}}"
+    tail="{{subroute}}">
+</carbon-route>
+<carbon-route
+    route="{{subroute}}"
+    pattern="/:id"
+    data="{{subrouteData}}">
+</carbon-route>
+```
 
 In the above example, there are two `carbon-route` elements. The first
 `carbon-route` consumes a `route`. When the `route` is matched, the first
@@ -92,14 +98,20 @@ elements.
 
 An example of a route object that describes the URL
 `https://elements.polymer-project.org/elements/carbon-route-converter?foo=bar&baz=qux`:
-    {
-      prefix: '',
-      path: '/elements/carbon-route-converter'
-    }
+
+```css
+{
+  prefix: '',
+  path: '/elements/carbon-route-converter'
+}
+```
 
 Example Usage:
-    <carbon-location route="{{route}}"></carbon-location>
-    <carbon-route route="{{route}}" pattern="/:page" data="{{data}}"></carbon-route>
+
+```html
+<carbon-location route="{{route}}"></carbon-location>
+<carbon-route route="{{route}}" pattern="/:page" data="{{data}}"></carbon-route>
+```
 
 As you can see above, the `carbon-location` element produces a `route` and that
 property is then bound into the `carbon-route` element. The bindings are two-
@@ -110,7 +122,10 @@ A `carbon-location` can be configured to use the hash part of a URL as the
 canonical source for path information.
 
 Example:
-    <carbon-location route="{{route}}" use-hash-as-path></carbon-location>
+
+```html
+<carbon-location route="{{route}}" use-hash-as-path></carbon-location>
+```
 
 
 
@@ -127,28 +142,34 @@ and [carbon-route](https://github.com/PolymerElements/carbon-route/blob/master/c
 
 An example of a route element that describes
 `https://elements.polymer-project.org/elements/carbon-route-converter?foo=bar&baz=qux`:
-    {
-      prefix: '',
-      path: '/elements/carbon-route-converter',
-      queryParams: {
-        foo: 'bar',
-        baz: 'qux'
-      }
-    }
+
+```css
+{
+  prefix: '',
+  path: '/elements/carbon-route-converter',
+  queryParams: {
+    foo: 'bar',
+    baz: 'qux'
+  }
+}
+```
 
 Example Usage:
-    <iron-location path="{{path}}" query="{{query}}"></iron-location>
-    <iron-query-params
-        params-string="{{query}}"
-        params-object="{{queryParams}}">
-    </iron-query-params>
-    <carbon-route-converter
-        path="{{path}}"
-        query-params="{{queryParams}}"
-        route="{{route}}">
-    </carbon-route-converter>
-    <carbon-route route='{{route}}' pattern='/:page' data='{{data}}'>
-    </carbon-route>
+
+```html
+<iron-location path="{{path}}" query="{{query}}"></iron-location>
+<iron-query-params
+    params-string="{{query}}"
+    params-object="{{queryParams}}">
+</iron-query-params>
+<carbon-route-converter
+    path="{{path}}"
+    query-params="{{queryParams}}"
+    route="{{route}}">
+</carbon-route-converter>
+<carbon-route route='{{route}}' pattern='/:page' data='{{data}}'>
+</carbon-route>
+```
 
 This is a simplified implementation of the `carbon-location` element. Here the
 `iron-location` produces a path and a query, the `iron-query-params` consumes
