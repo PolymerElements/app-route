@@ -14,6 +14,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 `carbon-route` is an element that enables declarative, self-describing routing
 for a web app.
 
+> *n.b. carbon-route is still in beta. We expect it will need some changes. We're counting on your feedback!*
+
 In its typical usage, a `carbon-route` element consumes an object that describes
 some state about the current route, via the `route` property. It then parses
 that state using the `pattern` property, and produces two artifacts: some `data`
@@ -96,8 +98,8 @@ the `carbon-route` will update `route.path`. This in-turn will update the
 
       /**
        * The pattern of slash-separated segments to match `path` against.
-       * 
-       * For example the pattern "/foo" will match "/foo" or "/foo/bar" 
+       *
+       * For example the pattern "/foo" will match "/foo" or "/foo/bar"
        * but not "/foobar".
        *
        * Path segments like `/:named` are mapped to properties on the `data` object.
