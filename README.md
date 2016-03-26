@@ -20,6 +20,8 @@ _[Demo and API docs](https://elements.polymer-project.org/elements/carbon-route)
 `carbon-route` is an element that enables declarative, self-describing routing
 for a web app.
 
+> *n.b. carbon-route is still in beta. We expect it will need some changes. We're counting on your feedback!*
+
 In its typical usage, a `carbon-route` element consumes an object that describes
 some state about the current route, via the `route` property. It then parses
 that state using the `pattern` property, and produces two artifacts: some `data`
@@ -135,7 +137,7 @@ Example:
 parameters into a route object and vice versa. This produced route object
 is to be fed into route-consuming elements such as `carbon-route`.
 
-NOTE: This element is intended to be a primitive of the routing system and for
+> n.b. This element is intended to be a primitive of the routing system and for
 creating bespoke routing solutions from scratch. To simply include routing in
 an app, please refer to [carbon-location](https://github.com/PolymerElements/carbon-route/blob/master/carbon-location.html)
 and [carbon-route](https://github.com/PolymerElements/carbon-route/blob/master/carbon-route.html).
