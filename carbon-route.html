@@ -118,6 +118,9 @@ the `carbon-route` will update `route.path`. This in-turn will update the
         notify: true
       },
 
+      /**
+       * @type {?Object}
+       */
       queryParams: {
         type: Object,
         value: function() {
@@ -142,9 +145,14 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       },
 
       _skipMatch: {
+        type: Boolean,
         value: false
       },
+      /**
+       * @type {?string}
+       */
       _matched: {
+        type: String,
         value: ''
       }
     },
@@ -237,7 +245,7 @@ the `carbon-route` will update `route.path`. This in-turn will update the
         }
       }
 
-      var matched = matched.join('/');
+      matched = matched.join('/');
       var tailPath = remainingPieces.join('/');
       if (remainingPieces.length > 0) {
         tailPath = '/' + tailPath;
