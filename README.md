@@ -12,6 +12,8 @@ thing! https://github.com/PolymerLabs/tedium/issues
 
 -->
 
+[![Build status](https://travis-ci.org/PolymerElements/carbon-route.svg?branch=master)](https://travis-ci.org/PolymerElements/carbon-route)
+
 _[Demo and API docs](https://elements.polymer-project.org/elements/carbon-route)_
 
 
