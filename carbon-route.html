@@ -171,6 +171,17 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       this.linkPaths('tail.__queryParams', 'route.__queryParams');
     },
 
+    // IE Object.assign polyfill
+    __assign: function(target, source) {
+      if (source != null) {
+        for (var key in source) {
+          target[key] = source[key];
+        }
+      }
+
+      return target;
+    },
+
     // Deal with the query params object being assigned to wholesale
     __routeQueryParamsChanged: function(queryParams) {
       if (queryParams && this.tail) {
@@ -181,7 +192,16 @@ the `carbon-route` will update `route.path`. This in-turn will update the
         }
 
         this._skipMatch = true;
-        this.set('queryParams', Object.assign({}, queryParams));
+
+        var qp;
+
+        if (Object.assign) {
+          qp = Object.assign({}, queryParams);
+        } else {
+          qp = this.__assign({}, queryParams);
+        }
+
+        this.set('queryParams', qp);
         this._skipMatch = false;
       }
     },
