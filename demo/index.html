@@ -110,101 +110,103 @@ http://polymer.github.io/PATENTS.txt
   </template>
 
   <script>
-    Polymer({
-      is: 'carbon-router-demo',
+    window.addEventListener('WebComponentsReady', function() {
+      Polymer({
+        is: 'carbon-router-demo',
 
-      properties: {
-        route: {
-          type: Object
+        properties: {
+          route: {
+            type: Object
+          },
+
+          videoData: {
+            type: Object,
+            observer: '_videoDataChanged'
+          },
+
+          videoPageActive: {
+            type: Boolean,
+            reflectToAttribute: true,
+            observer: '_videoPageActiveChanged'
+          },
+
+          searchTail: {
+            type: Object,
+            notify: true
+          },
+
+          videoTail: {
+            type: Object,
+            notify: true
+          },
+
+          newCategory: {
+            type: String
+          },
+
+          videos: {
+            type: Array,
+            value: []
+          },
+
+          data: {
+            type: Object,
+            value: {
+              page: '/search/'
+            }
+          }
         },
 
-        videoData: {
-          type: Object,
-          observer: '_videoDataChanged'
+        ready: function() {
+          // TODO: Remove this async https://github.com/PolymerElements/carbon-route/issues/44
+          this.async(function() {
+            // If we do not have an initial URL, we redirect to /search
+            if (!this.route.path) {
+              this.set('route.path', '/search/');
+            }
+          },1);
         },
 
-        videoPageActive: {
-          type: Boolean,
-          reflectToAttribute: true,
-          observer: '_videoPageActiveChanged'
+        _videoDataChanged: function(data) {
+          var allVideos = [];
+
+          var that = this;
+
+          data.items.forEach(function (videoItem) {
+            var youtubeVideo = {
+              id: videoItem.id.videoId,
+              title: videoItem.snippet.title,
+              thumbnail: videoItem.snippet.thumbnails.high.url
+            };
+
+            allVideos.push(youtubeVideo);
+          });
+
+          this.set('videos', allVideos);
         },
 
-        searchTail: {
-          type: Object,
-          notify: true
-        },
+        _videoPageActiveChanged: function(videoPageActive, previousValue) {
+          // change color of page on page change
+          var newColor;
 
-        videoTail: {
-          type: Object,
-          notify: true
-        },
+          if (videoPageActive) {
+            // black
+            newColor = 0;
+          } else {
+            // white
+            newColor = 255;
+          }
 
-        newCategory: {
-          type: String
-        },
+          document.body.style.backgroundColor = 'rgb(' + newColor + ',' + newColor
+              + ','  + newColor + ')';
 
-        videos: {
-          type: Array,
-          value: []
-        },
-
-        data: {
-          type: Object,
-          value: {
-            page: '/search/'
+          // on first load, set the color then allow color transition animations
+          if (previousValue === undefined) {
+            document.body.style.transition = 'background-color .2s linear';
+            return;
           }
         }
-      },
-
-      ready: function() {
-        // TODO: Remove this async https://github.com/PolymerElements/carbon-route/issues/44
-        this.async(function() {
-          // If we do not have an initial URL, we redirect to /search
-          if (!this.route.path) {
-            this.set('route.path', '/search/');
-          }
-        },1);
-      },
-
-      _videoDataChanged: function(data) {
-        var allVideos = [];
-
-        var that = this;
-
-        data.items.forEach(function (videoItem) {
-          var youtubeVideo = {
-            id: videoItem.id.videoId,
-            title: videoItem.snippet.title,
-            thumbnail: videoItem.snippet.thumbnails.high.url
-          };
-
-          allVideos.push(youtubeVideo);
-        });
-
-        this.set('videos', allVideos);
-      },
-
-      _videoPageActiveChanged: function(videoPageActive, previousValue) {
-        // change color of page on page change
-        var newColor;
-
-        if (videoPageActive) {
-          // black
-          newColor = 0;
-        } else {
-          // white
-          newColor = 255;
-        }
-
-        document.body.style.backgroundColor = 'rgb(' + newColor + ',' + newColor
-            + ','  + newColor + ')';
-
-        // on first load, set the color then allow color transition animations
-        if (previousValue === undefined) {
-          document.body.style.transition = 'background-color .2s linear';
-          return;
-        }
-      }
+      });
     });
   </script>
 </dom-module>
