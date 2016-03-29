@@ -173,7 +173,7 @@ the `carbon-route` will update `route.path`. This in-turn will update the
 
     // IE Object.assign polyfill
     __assign: function(target, source) {
-      if (source !== undefined || source !== null) {
+      if (source != null) {
         for (var key in source) {
           target[key] = source[key];
         }
