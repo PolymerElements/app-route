@@ -61,7 +61,7 @@ In the above example, there are two `carbon-route` elements. The first
 `carbon-route` consumes a `route`. When the `route` is matched, the first
 `carbon-route` also produces `routeData` from its `data`, and `subroute` from
 its `tail`. The second `carbon-route` consumes the `subroute`, and when it
-matches, it produces an object called `subrouteData` from its `tail`.
+matches, it produces an object called `subrouteData` from its `data`.
 
 So, when `route.path` is `'/about'`, the `routeData` object will look like
 this: `{ page: 'about' }`
