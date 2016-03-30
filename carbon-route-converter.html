@@ -33,16 +33,12 @@ and should be passed to other `carbon-route` elements:
       }
     }
 
-The private `__queryParams` property in the `route` object should be used only
-to pass information between carbon routing elements such as between
-`carbon-location` and `carbon-route` elements and between `carbon-route` and
-other `carbon-route` elements. A public queryParams object will also be produced
-in which you should perform data binding operations. An example:
-
-    {
-      foo: 'bar',
-      baz: 'qux'
-    }
+`__queryParams` is private to discourage directly data-binding to it. This is so
+that routing elements like `carbon-route` can intermediate changes to the query
+params and choose whether to propagate them upstream or not. `carbon-route` for
+example will not propagate changes to its `queryParams` property if it is not
+currently active. A public queryParams object will also be produced in which you
+should perform data-binding operations.
 
 Example Usage:
 
