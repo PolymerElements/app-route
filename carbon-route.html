@@ -96,8 +96,8 @@ the `carbon-route` will update `route.path`. This in-turn will update the
 
       /**
        * The pattern of slash-separated segments to match `path` against.
-       * 
-       * For example the pattern "/foo" will match "/foo" or "/foo/bar" 
+       *
+       * For example the pattern "/foo" will match "/foo" or "/foo/bar"
        * but not "/foobar".
        *
        * Path segments like `/:named` are mapped to properties on the `data` object.
@@ -243,8 +243,16 @@ the `carbon-route` will update `route.path`. This in-turn will update the
 
       this._skipMatch = true;
       this._matched = matched;
+      var expectedData = {};
+      for (var key in namedMatches) {
+        expectedData[key] = namedMatches[key];
+      }
+
       this.data = namedMatches;
       var tailPrefix = this.route.prefix + matched;
+
+      this._setActive(true);
+      this._skipMatch = false;
 
       if (!this.tail || this.tail.prefix !== tailPrefix || this.tail.path !== tailPath) {
         this.tail = {
@@ -253,8 +261,17 @@ the `carbon-route` will update `route.path`. This in-turn will update the
           __queryParams: this.route.__queryParams
         };
       }
-      this._setActive(true);
-      this._skipMatch = false;
+
+      // Look for changes that we may have ignored while _skipMatch was true.
+      var weIgnoredDataChanges = false;
+      for (var key in namedMatches) {
+        if (expectedData[key] !== namedMatches[key]) {
+          weIgnoredDataChanges = true;
+        }
+      }
+      if (weIgnoredDataChanges) {
+        this.__updatePathOnDataChange();
+      }
     },
 
     __tailPathChanged: function(path) {
@@ -277,8 +294,8 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       }
       this._skipMatch = true;
       this.tail = {path: null, prefix: null, queryParams: null};
-      this.set('route.path', this.__getLink({}));
       this._skipMatch = false;
+      this.set('route.path', this.__getLink({}));
     },
 
     __getLink: function(overrideValues) {
@@ -297,7 +314,11 @@ the `carbon-route` will update `route.path`. This in-turn will update the
         return value;
       }, this);
       if (values.tail && values.tail.path) {
-        interp.push(values.tail.path);
+        if (interp.length > 0 && values.tail.path.charAt(0) === '/') {
+          interp.push(values.tail.path.slice(1));
+        } else {
+          interp.push(values.tail.path);
+        }
       }
       return interp.join('/');
     }

@@ -35,6 +35,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         userData: {
 
         }
+      },
+      observers: [
+        'pageChanged(data.page)',
+        'userPathChanged(userRoute.path)',
+      ],
+      pageChanged: function(page) {
+        if (page === 'redirectToUser') {
+          this.set('data.page', 'user');
+        }
+      },
+      userPathChanged: function(path) {
+        // Redirect from /user/ and /user to /user/view
+        if (path === '/' || path === '') {
+          this.set('userRoute.path', '/view');
+        }
       }
     })
   </script>
