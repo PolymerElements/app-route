@@ -100,7 +100,7 @@ occur, `carbon-location` produces and updates an object called `route`. This
 `route` object is suitable for passing into a `carbon-route`, and other similar
 elements.
 
-An example of a route object that describes the URL
+An example of the public API of a route object that describes the URL
 `https://elements.polymer-project.org/elements/carbon-route-converter?foo=bar&baz=qux`:
 
 ```css
@@ -144,19 +144,27 @@ creating bespoke routing solutions from scratch. To simply include routing in
 an app, please refer to [carbon-location](https://github.com/PolymerElements/carbon-route/blob/master/carbon-location.html)
 and [carbon-route](https://github.com/PolymerElements/carbon-route/blob/master/carbon-route.html).
 
-An example of a route element that describes
-`https://elements.polymer-project.org/elements/carbon-route-converter?foo=bar&baz=qux`:
+An example of a route object that describes
+`https://elements.polymer-project.org/elements/carbon-route-converter?foo=bar&baz=qux`
+and should be passed to other `carbon-route` elements:
 
 ```css
 {
   prefix: '',
   path: '/elements/carbon-route-converter',
-  queryParams: {
+  __queryParams: {
     foo: 'bar',
     baz: 'qux'
   }
 }
 ```
+
+`__queryParams` is private to discourage directly data-binding to it. This is so
+that routing elements like `carbon-route` can intermediate changes to the query
+params and choose whether to propagate them upstream or not. `carbon-route` for
+example will not propagate changes to its `queryParams` property if it is not
+currently active. A public queryParams object will also be produced in which you
+should perform data-binding operations.
 
 Example Usage:
 
