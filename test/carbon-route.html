@@ -47,6 +47,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           route="{{fooRoute}}"
           data="{{bazData}}">
       </carbon-route>
+
+      <carbon-route
+          pattern="/:page"
+          route="{{fooRoute}}"
+          data="{{pageData}}">
+      </carbon-route>
     </template>
   </test-fixture>
 
@@ -71,7 +77,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     return {
       foo: routes[0],
       bar: routes[1],
-      baz: routes[2]
+      baz: routes[2],
+      page: routes[3]
     };
   }
 
@@ -112,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       route.set('route.path', '/user/toriel');
       expect(route.tail).to.be.deep.equal({
         prefix: '/user/toriel',
-        path: '',
+        path: '/',
         __queryParams: {}
       });
     });
@@ -215,6 +222,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           routes.bar.set('data.bar', 'cba');
           expect(routes.foo.route.path).to.be.eql('/foo/123/baz/zyx');
         });
+
+        suite('updates when path could be matched', function() {
+          test('with literal part', function() {
+            var routes = fixtureChainedRoutes({ path: '/foo/123/bar/' });
+
+            expect(routes.bar.active).to.be.eql(true);
+            routes.bar.set('data.bar', 'zyx');
+            expect(routes.foo.route.path).to.be.eql('/foo/123/bar/zyx');
+          });
+
+          test('with only match', function() {
+            var routes = fixtureChainedRoutes({ path: '/foo/123' });
+
+            expect(routes.page.active).to.be.eql(true);
+            routes.page.set('data.page', 'page1');
+            expect(routes.foo.route.path).to.be.eql('/foo/123/page1');
+          });
+
+          test('correctly sets tail', function() {
+            var routes = fixtureChainedRoutes({ path: '/foo/' });
+            routes.foo.set('data.foo', '123');
+            expect(routes.page.route.path).to.be.eql('/');
+          });
+
+          test('with only match and trailing slash', function() {
+            var routes = fixtureChainedRoutes({ path: '/foo/123/' });
+
+            expect(routes.page.active).to.be.eql(true);
+            routes.page.set('data.page', 'page1');
+            expect(routes.foo.route.path).to.be.eql('/foo/123/page1');
+          });
+
+          test('nested does not become active when empty path', function() {
+            var routes = fixtureChainedRoutes({ path: '/foo/' });
+
+            expect(routes.page.active).to.be.eql(false);
+            expect(routes.foo.data.foo).to.be.eql('');
+          });
+        });
       });
     });
 
@@ -311,7 +357,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(window.location.pathname).to.be.equal('/bar');
         expect(r.data).to.be.deep.equal({page: 'bar'});
         expect(r.route.path).to.be.equal('/bar');
-        expect(r.tail.path).to.be.equal('');
+        expect(r.tail.path).to.be.equal('/');
       });
 
       test('changing a data piece in response to path changing', function() {
@@ -324,7 +370,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(window.location.pathname).to.be.equal('/bar');
         expect(r.data).to.be.deep.equal({page: 'bar'});
         expect(r.route.path).to.be.equal('/bar');
-        expect(r.tail.path).to.be.equal('');
+        expect(r.tail.path).to.be.equal('/');
       });
 
       test('changing the tail in response to path changing', function() {
@@ -354,7 +400,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(window.location.pathname).to.be.equal('/bar');
         expect(r.data).to.be.deep.equal({page: 'bar'});
         expect(r.route.path).to.be.equal('/bar');
-        expect(r.tail.path).to.be.equal('');
+        expect(r.tail.path).to.be.equal('/');
       });
 
       test('changing data in response to data changing', function() {
@@ -366,7 +412,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(window.location.pathname).to.be.equal('/bar');
         expect(r.data).to.be.deep.equal({page: 'bar'});
         expect(r.route.path).to.be.equal('/bar');
-        expect(r.tail.path).to.be.equal('');
+        expect(r.tail.path).to.be.equal('/');
       });
 
       test('changing the data object wholesale in response to data changing', function() {
@@ -380,7 +426,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(window.location.pathname).to.be.equal('/bar');
         expect(r.data).to.be.deep.equal({page: 'bar'});
         expect(r.route.path).to.be.equal('/bar');
-        expect(r.tail.path).to.be.equal('');
+        expect(r.tail.path).to.be.equal('/');
       });
 
       test('changing the tail in response to data changing', function() {
@@ -418,7 +464,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(window.location.pathname).to.be.equal('/baz');
         expect(r.data).to.be.deep.equal({page: 'baz'});
         expect(r.route.path).to.be.equal('/baz');
-        expect(r.tail.path).to.be.equal('');
+        expect(r.tail.path).to.be.equal('/');
       });
 
       test('changing the data object wholesale in response to tail changing', function() {
@@ -431,7 +477,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(window.location.pathname).to.be.equal('/baz');
         expect(r.data).to.be.deep.equal({page: 'baz'});
         expect(r.route.path).to.be.equal('/baz');
-        expect(r.tail.path).to.be.equal('');
+        expect(r.tail.path).to.be.equal('/');
       });
 
       test('changing the tail in response to tail changing', function() {
