@@ -148,8 +148,8 @@ Example:
         }
       },
 
-      __computeRoutePath: function(path, hash, useHashAsPath) {
-        return useHashAsPath ? hash : path;
+      __computeRoutePath: function() {
+        return this.useHashAsPath ? this.__hash : this.__path;
       },
 
       __onPathChanged: function(event) {
