@@ -68,9 +68,7 @@ turn is consumed by the `carbon-route`.
 <script>
   'use strict';
 
-  Polymer({
-    is: 'carbon-route-converter',
-
+  Polymer.CarbonRouteConverterBehavior = {
     properties: {
       /**
        * A model representing the deserialized path through the route tree, as
@@ -83,7 +81,6 @@ turn is consumed by the `carbon-route`.
        */
       route: {
         type: Object,
-        value: null,
         notify: true
       },
 
@@ -95,7 +92,6 @@ turn is consumed by the `carbon-route`.
        */
       queryParams: {
         type: Object,
-        value: null,
         notify: true
       },
 
@@ -107,7 +103,6 @@ turn is consumed by the `carbon-route`.
       path: {
         type: String,
         notify: true,
-        value: ''
       }
     },
 
@@ -164,5 +159,12 @@ turn is consumed by the `carbon-route`.
       }
       this.queryParams = queryParams;
     }
+  }
+
+  Polymer({
+    is: 'carbon-route-converter',
+
+    behaviors: [Polymer.CarbonRouteConverterBehavior]
   });
+
 </script>

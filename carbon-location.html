@@ -9,7 +9,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-location/iron-location.html">
-<link rel="import" href="../iron-location/iron-query-params.html">
 <link rel="import" href="carbon-route-converter.html">
 
 <!--
@@ -52,21 +51,10 @@ Example:
 <dom-module id="carbon-location">
   <template>
     <iron-location
-        path="{{__path}}"
-        query="{{__query}}"
-        hash="{{__hash}}"
+        path="{{path}}"
+        query="{{__paramsString}}"
         url-space-regex={{urlSpaceRegex}}>
     </iron-location>
-    <iron-query-params
-        params-string="{{__query}}"
-        params-object="{{__queryParams}}">
-    </iron-query-params>
-    <carbon-route-converter
-        on-path-changed="__onPathChanged"
-        path="[[__computeRoutePath(__path, __hash, useHashAsPath)]]"
-        query-params="{{__queryParams}}"
-        route="{{route}}">
-    </carbon-route-converter>
   </template>
   <script>
     'use strict';
@@ -74,6 +62,7 @@ Example:
     Polymer({
       is: 'carbon-location',
 
+      behaviors: [Polymer.CarbonRouteConverterBehavior],
       properties: {
         /**
          * A model representing the deserialized path through the route tree, as
@@ -82,22 +71,6 @@ Example:
         route: {
           type: Object,
           notify: true
-        },
-
-        /**
-         * In many scenarios, it is convenient to treat the `hash` as a stand-in
-         * alternative to the `path`. For example, if deploying an app to a static
-         * web server (e.g., Github Pages) - where one does not have control over
-         * server-side routing - it is usually a better experience to use the hash
-         * to represent paths through one's app.
-         *
-         * When this property is set to true, the `hash` will be used in place of
-
-         * the `path` for generating a `route`.
-         */
-        useHashAsPath: {
-          type: Boolean,
-          value: false
         },
 
         /**
@@ -118,48 +91,52 @@ Example:
           notify: true
         },
 
-        /**
-         * A set of key/value pairs that are universally accessible to branches
-         * of the route tree.
-         */
-        __queryParams: {
-          type: Object
-        },
-
-        /**
-         * The pathname component of the current URL.
-         */
-        __path: {
-          type: String
-        },
-
-        /**
-         * The query string portion of the current URL.
-         */
-        __query: {
-          type: String
-        },
-
-        /**
-         * The hash portion of the current URL.
-         */
-        __hash: {
-          type: String
+        __paramsString: {
+          observer: '__paramsStringChanged',
         }
       },
+      observers: [
+        '__queryParamsChanged(queryParams.*)'
+      ],
 
-      __computeRoutePath: function(path, hash, useHashAsPath) {
-        return useHashAsPath ? hash : path;
+      __paramsStringChanged: function() {
+        this._dontReact = true;
+        this.queryParams = this._decodeParams(this.__paramsString);
+        this._dontReact = false;
       },
-
-      __onPathChanged: function(event) {
-        var path = event.detail.value;
-
-        if (this.useHashAsPath) {
-          this.__hash = path;
-        } else {
-          this.__path = path;
+      __queryParamsChanged: function() {
+        if (this._dontReact) {
+          return;
         }
+        this.__paramsString = this._encodeParams(this.queryParams);
+      },
+      _encodeParams: function(params) {
+        var encodedParams = [];
+        for (var key in params) {
+          var value = params[key];
+          if (value === '') {
+            encodedParams.push(encodeURIComponent(key));
+          } else if (value) {
+            encodedParams.push(
+                encodeURIComponent(key) +
+                '=' +
+                encodeURIComponent(value.toString())
+            );
+          }
+        }
+        return encodedParams.join('&');
+      },
+      _decodeParams: function(paramString) {
+        var params = {};
+        var paramList = (paramString || '').split('&');
+        for (var i = 0; i < paramList.length; i++) {
+          var param = paramList[i].split('=');
+          if (param[0]) {
+            params[decodeURIComponent(param[0])] =
+                decodeURIComponent(param[1] || '');
+          }
+        }
+        return params;
       }
     });
   </script>
