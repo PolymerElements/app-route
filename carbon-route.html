@@ -182,7 +182,10 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       return target;
     },
 
-    // Deal with the query params object being assigned to wholesale
+    /**
+     * Deal with the query params object being assigned to wholesale.
+     * @export
+     */
     __routeQueryParamsChanged: function(queryParams) {
       if (queryParams && this.tail) {
         this.set('tail.__queryParams', queryParams);
@@ -206,12 +209,18 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       }
     },
 
+    /**
+     * @export
+     */
     __tailQueryParamsChanged: function(queryParams) {
       if (queryParams && this.route) {
         this.set('route.__queryParams', queryParams);
       }
     },
 
+    /**
+     * @export
+     */
     __queryParamsChanged: function(changes) {
       if (!this.active || this._skipMatch) {
         return;
@@ -227,6 +236,9 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       //this.data = {};
     },
 
+    /**
+     * @export
+     */
     __tryToMatch: function(path, pattern) {
       if (this._skipMatch || !pattern) {
         return;
@@ -287,6 +299,9 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       this._skipMatch = false;
     },
 
+    /**
+     * @export
+     */
     __tailPathChanged: function(path) {
       if (!this.active || this._skipMatch) {
         return;
@@ -301,6 +316,9 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       this.set('route.path', newPath);
     },
 
+    /**
+     * @export
+     */
     __updatePathOnDataChange: function() {
       if (!this.route || this._skipMatch || !this.active) {
         return;
