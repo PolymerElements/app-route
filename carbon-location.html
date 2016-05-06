@@ -153,6 +153,9 @@ Example:
       },
 
       __onPathChanged: function(event) {
+        if (!this._readied) {
+          return;
+        }
         var path = event.detail.value;
 
         if (this.useHashAsPath) {
