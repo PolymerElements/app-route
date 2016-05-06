@@ -46,14 +46,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer.Base.fire('location-changed', {}, { node: window });
     }
 
-    // iron-location listens for the click, if it matches the url space
-    // configuration, then it prevents default.
-    function setLocationClick(url) {
-      var clickableLink = fixture('ClickableLink');
-      clickableLink.setAttribute('href', url);
-      MockInteractions.tap(clickableLink);
-    }
-
     function assign(a, b) {
       if (Object.assign) {
         return Object.assign.apply(Object, arguments);
@@ -139,48 +131,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           expect(carbonLocation.route.__queryParams).to.be.eql({
             fiz: 'buz'
           });
-        });
-      });
-
-      suite('manipulating the urlSpace', function() {
-        var pageUrl;
-        var originalLocation;
-
-        setup(function() {
-          pageUrl = carbonLocation.$$('iron-location');
-          originalLocation = window.location.toString();
-        });
-
-        teardown(function() {
-          setLocation(originalLocation);
-        });
-
-        test('changing the urlSpace pattern and testing paths', function() {
-          setLocationClick('/test');
-
-          carbonLocation.urlSpaceRegex = '/foo';
-
-          expect(carbonLocation.route.path).to.be.equal('/test');
-
-          setLocationClick('/foo');
-          expect(carbonLocation.route.path).to.be.equal('/foo');
-
-          setLocationClick('/foo/bar');
-          expect(carbonLocation.route.path).to.be.equal('/foo/bar');
-
-          setLocationClick('/bar');
-          expect(carbonLocation.route.path).to.be.equal('/foo/bar');
-
-          carbonLocation.urlSpaceRegex = '/foo/[0-9]+';
-
-          setLocationClick('/foo/123');
-          expect(carbonLocation.route.path).to.be.equal('/foo/123');
-
-          setLocationClick('/foo/');
-          expect(carbonLocation.route.path).to.be.equal('/foo/123');
-
-          setLocationClick('/foo/456');
-          expect(carbonLocation.route.path).to.be.equal('/foo/456');
         });
       });
     });
