@@ -11,7 +11,7 @@
 <!-- Example: The page turns pink. -->
 
 ### Live Demo
-<!-- Example: https://jsbin.com/cagaye/edit?html,output -->
+<!-- Example: https://jsbin.com/hirore/edit?html,output -->
 
 ### Steps to reproduce
 
