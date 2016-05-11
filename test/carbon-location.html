@@ -59,106 +59,109 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     suite('<carbon-location>', function () {
-      var carbonLocation;
+      var initialUrl;
 
       setup(function() {
-        carbonLocation = fixture('BasicLocation');
-      });
-
-      test('it automatically exposes the current route', function() {
-        expect(carbonLocation.route).to.be.ok;
-        expect(carbonLocation.route.path).to.be.equal(window.location.pathname);
-      });
-
-      suite('manipulating the route', function() {
-        var originalPath;
-        var originalQueryParams;
-
-        setup(function() {
-          originalPath = carbonLocation.route.path;
-          originalQueryParams = assign({}, carbonLocation.route.__queryParams);
-        });
-
-        teardown(function() {
-          carbonLocation.set('route.prefix', '');
-          carbonLocation.set('route.path', originalPath);
-          carbonLocation.set('route.__queryParams', originalQueryParams);
-        });
-
-        test('it reflects path to location.pathname', function() {
-          carbonLocation.set('route.path', '/foo/bar');
-          expect(window.location.pathname).to.be.equal('/foo/bar');
-        });
-
-        test('it reflects queryParams values to location.search', function() {
-          carbonLocation.set('route.__queryParams.foo', 1);
-          expect(window.location.search).to.match(/foo=1/);
-        });
-
-        test('it reflects completely replaced queryParams', function() {
-          carbonLocation.set('route.__queryParams', { bar: 1 });
-          expect(window.location.search).to.be.equal('?bar=1');
-        });
-
-        test('it reflects the prefix to location.pathname', function() {
-          carbonLocation.set('route.prefix', '/fiz');
-          expect(window.location.pathname).to.be.equal('/fiz' + originalPath);
-        });
-      });
-
-      /**
-       * NOTE: For a more thorough spec describing this behavior, please refer
-       * to the `iron-location` component.
-       */
-      suite('manipulating the history state', function() {
-        var originalLocation;
-
-        setup(function() {
-          originalLocation = window.location.toString();
-        });
-
-        teardown(function() {
-          setLocation(originalLocation);
-        });
-
-        test('it reflects location.pathname to route.path', function() {
-          setLocation('/fiz/buz');
-          expect(carbonLocation.route.path).to.be.equal('/fiz/buz');
-        });
-
-        test('it reflects location.search to route.__queryParams', function() {
-          setLocation('?fiz=buz');
-          expect(carbonLocation.route.__queryParams).to.be.eql({
-            fiz: 'buz'
-          });
-        });
-      });
-    });
-
-    suite('using the hash as the route path', function() {
-      var carbonLocation;
-      var originalLocation;
-
-      setup(function() {
-        originalLocation = window.location.toString();
+        initialUrl = window.location.href;
       });
 
       teardown(function() {
-        setLocation(originalLocation);
+        window.history.replaceState({}, '', initialUrl);
       });
 
-      setup(function() {
-        carbonLocation = fixture('LocationViaHash');
+      suite('in the default configuration', function() {
+        var carbonLocation;
+
+        setup(function() {
+          carbonLocation = fixture('BasicLocation');
+        });
+
+        test('it automatically exposes the current route', function() {
+          expect(carbonLocation.route).to.be.ok;
+          expect(carbonLocation.route.path).to.be.equal(window.location.pathname);
+        });
+
+        suite('manipulating the route', function() {
+          var originalPath;
+          var originalQueryParams;
+
+          setup(function() {
+            originalPath = carbonLocation.route.path;
+            originalQueryParams = assign({}, carbonLocation.route.__queryParams);
+          });
+
+          teardown(function() {
+            carbonLocation.set('route.prefix', '');
+            carbonLocation.set('route.path', originalPath);
+            carbonLocation.set('route.__queryParams', originalQueryParams);
+          });
+
+          test('it reflects path to location.pathname', function() {
+            carbonLocation.set('route.path', '/foo/bar');
+            expect(window.location.pathname).to.be.equal('/foo/bar');
+          });
+
+          test('it reflects queryParams values to location.search', function() {
+            carbonLocation.set('route.__queryParams.foo', 1);
+            expect(window.location.search).to.match(/foo=1/);
+          });
+
+          test('it reflects completely replaced queryParams', function() {
+            carbonLocation.set('route.__queryParams', { bar: 1 });
+            expect(window.location.search).to.be.equal('?bar=1');
+          });
+
+          test('it reflects the prefix to location.pathname', function() {
+            carbonLocation.set('route.prefix', '/fiz');
+            expect(window.location.pathname).to.be.equal('/fiz' + originalPath);
+          });
+        });
+
+        /**
+         * NOTE: For a more thorough spec describing this behavior, please refer
+         * to the `iron-location` component.
+         */
+        suite('manipulating the history state', function() {
+          var originalLocation;
+
+          setup(function() {
+            originalLocation = window.location.toString();
+          });
+
+          teardown(function() {
+            setLocation(originalLocation);
+          });
+
+          test('it reflects location.pathname to route.path', function() {
+            setLocation('/fiz/buz');
+            expect(carbonLocation.route.path).to.be.equal('/fiz/buz');
+          });
+
+          test('it reflects location.search to route.__queryParams', function() {
+            setLocation('?fiz=buz');
+            expect(carbonLocation.route.__queryParams).to.be.eql({
+              fiz: 'buz'
+            });
+          });
+        });
       });
 
-      test('it reflects location.hash to route.path', function() {
-        setLocation('#/fiz/buz');
-        expect(carbonLocation.route.path).to.be.equal('/fiz/buz');
-      });
+      suite('using the hash as the route path', function() {
+        var carbonLocation;
 
-      test('it reflects route.path to location.hash', function() {
-        carbonLocation.set('route.path', '/foo/bar');
-        expect(window.location.hash).to.be.equal('#/foo/bar');
+        setup(function() {
+          carbonLocation = fixture('LocationViaHash');
+        });
+
+        test('it reflects location.hash to route.path', function() {
+          setLocation('#/fiz/buz');
+          expect(carbonLocation.route.path).to.be.equal('/fiz/buz');
+        });
+
+        test('it reflects route.path to location.hash', function() {
+          carbonLocation.set('route.path', '/foo/bar');
+          expect(window.location.hash).to.be.equal('#/foo/bar');
+        });
       });
     });
   </script>

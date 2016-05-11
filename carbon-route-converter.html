@@ -126,11 +126,16 @@ turn is consumed by the `carbon-route`.
      * @param  {Object} queryParams A set of key/value pairs that are
      * universally accessible to branches of the route tree.
      */
-    _locationChanged: function(path, queryParams) {
+    _locationChanged: function() {
+      if (this.route &&
+          this.route.path === this.path &&
+          this.queryParams === this.route.__queryParams) {
+        return;
+      }
       this.route = {
         prefix: '',
-        path: path,
-        __queryParams: queryParams
+        path: this.path,
+        __queryParams: this.queryParams
       };
     },
 
@@ -141,12 +146,12 @@ turn is consumed by the `carbon-route`.
      * path.
      * @param  {!string} path The serialized path through the route tree.
      */
-    _routeChanged: function(prefix, path) {
+    _routeChanged: function() {
       if (!this.route) {
         return;
       }
 
-      this.path = prefix + path;
+      this.path = this.route.prefix + this.route.path;
     },
 
     /**

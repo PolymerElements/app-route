@@ -17,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <link rel="import" href="../../polymer/polymer.html">
   <link rel="import" href="../carbon-route.html">
+  <link rel="import" href="./redirection.html">
 </head>
 <body>
   <test-fixture id="BasicRoute">
@@ -48,6 +49,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </carbon-route>
     </template>
   </test-fixture>
+
+  <test-fixture id="Redirection">
+    <template>
+      <redirect-carbon-route></redirect-carbon-route>
+    </template>
+  </test-fixture>
+
 <script>
   'use strict';
 
@@ -87,7 +95,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         path: '/user/papyrus/details',
         __queryParams: {}
       }
-
       expect(route.tail.prefix).to.be.equal('/user/papyrus');
       expect(route.tail.path).to.be.equal('/details');
       expect(route.data.username).to.be.equal('papyrus');
@@ -267,6 +274,177 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           expect(routes.bar.queryParams).to.be.eql({ qux: 'zot' });
           expect(routes.baz.queryParams).to.be.eql({ qux: 'quux' });
         });
+      });
+    });
+
+    suite('handles reentrent changes to its properties', function() {
+      var initialUrl;
+      setup(function() {
+        initialUrl = window.location.href;
+      });
+
+      teardown(function() {
+        window.history.replaceState({}, '', initialUrl);
+      });
+
+      test('changing path in response to path changing', function() {
+        var r = fixture('Redirection');
+        r.addEventListener('route-changed', function() {
+          r.set('route.path', '/bar/baz');
+        });
+        r.set('route.path', '/foo');
+        expect(window.location.pathname).to.be.equal('/bar/baz');
+        expect(r.data).to.be.deep.equal({page: 'bar'});
+        expect(r.route.path).to.be.equal('/bar/baz');
+        expect(r.tail.path).to.be.equal('/baz');
+      });
+
+      test('changing data wholesale in response to path changing', function() {
+        var r = fixture('Redirection');
+        r.set('data.page', 'bar');
+        r.addEventListener('route-changed', function(e) {
+          if (e.detail.path === 'route.path' && r.route.path === '/foo/baz') {
+            r.data = {page: 'bar'};
+          }
+        });
+        r.set('route.path', '/foo/baz');
+        expect(window.location.pathname).to.be.equal('/bar');
+        expect(r.data).to.be.deep.equal({page: 'bar'});
+        expect(r.route.path).to.be.equal('/bar');
+        expect(r.tail.path).to.be.equal('');
+      });
+
+      test('changing a data piece in response to path changing', function() {
+        var r = fixture('Redirection');
+        r.set('data.page', 'bar');
+        r.addEventListener('route-changed', function(e) {
+          r.set('data.page', 'bar');
+        });
+        r.set('route.path', '/foo/baz');
+        expect(window.location.pathname).to.be.equal('/bar');
+        expect(r.data).to.be.deep.equal({page: 'bar'});
+        expect(r.route.path).to.be.equal('/bar');
+        expect(r.tail.path).to.be.equal('');
+      });
+
+      test('changing the tail in response to path changing', function() {
+        var r = fixture('Redirection');
+        r.addEventListener('route-changed', function() {
+          r.set('tail.path', '/bar');
+        });
+        r.set('route.path', '/foo');
+        expect(window.location.pathname).to.be.equal('/foo/bar');
+        expect(r.data).to.be.deep.equal({page: 'foo'});
+        expect(r.route.path).to.be.equal('/foo/bar');
+        expect(r.tail.path).to.be.equal('/bar');
+
+        r.set('route.path', '/foo/baz');
+        expect(window.location.pathname).to.be.equal('/foo/bar');
+        expect(r.data).to.be.deep.equal({page: 'foo'});
+        expect(r.route.path).to.be.equal('/foo/bar');
+        expect(r.tail.path).to.be.equal('/bar');
+      });
+
+      test('changing the path in response to data changing', function() {
+        var r = fixture('Redirection');
+        r.addEventListener('data-changed', function() {
+          r.set('route.path', '/bar');
+        });
+        r.set('data', {page: 'foo'});
+        expect(window.location.pathname).to.be.equal('/bar');
+        expect(r.data).to.be.deep.equal({page: 'bar'});
+        expect(r.route.path).to.be.equal('/bar');
+        expect(r.tail.path).to.be.equal('');
+      });
+
+      test('changing data in response to data changing', function() {
+        var r = fixture('Redirection');
+        r.addEventListener('data-changed', function() {
+          r.set('data.page', 'bar');
+        });
+        r.set('data', {page: 'foo'});
+        expect(window.location.pathname).to.be.equal('/bar');
+        expect(r.data).to.be.deep.equal({page: 'bar'});
+        expect(r.route.path).to.be.equal('/bar');
+        expect(r.tail.path).to.be.equal('');
+      });
+
+      test('changing the data object wholesale in response to data changing', function() {
+        var r = fixture('Redirection');
+        r.addEventListener('data-changed', function() {
+          if (r.data.page == 'foo') {
+            r.set('data', {page: 'bar'});
+          }
+        });
+        r.set('data', {page: 'foo'});
+        expect(window.location.pathname).to.be.equal('/bar');
+        expect(r.data).to.be.deep.equal({page: 'bar'});
+        expect(r.route.path).to.be.equal('/bar');
+        expect(r.tail.path).to.be.equal('');
+      });
+
+      test('changing the tail in response to data changing', function() {
+        var r = fixture('Redirection');
+        r.addEventListener('data-changed', function() {
+          r.set('tail.path', '/bar');
+        });
+        r.set('data', {page: 'foo'});
+        expect(window.location.pathname).to.be.equal('/foo/bar');
+        expect(r.data).to.be.deep.equal({page: 'foo'});
+        expect(r.route.path).to.be.equal('/foo/bar');
+        expect(r.tail.path).to.be.equal('/bar');
+      });
+
+      test('changing the path in response to tail changing', function() {
+        var r = fixture('Redirection');
+        r.set('route.path', '/foo/');
+        r.addEventListener('tail-changed', function() {
+          r.set('route.path', '/baz' + r.tail.path);
+        });
+        r.set('tail.path', '/bar');
+        expect(window.location.pathname).to.be.equal('/baz/bar');
+        expect(r.data).to.be.deep.equal({page: 'baz'});
+        expect(r.route.path).to.be.equal('/baz/bar');
+        expect(r.tail.path).to.be.equal('/bar');
+      });
+
+      test('changing the data in response to tail changing', function() {
+        var r = fixture('Redirection');
+        r.set('route.path', '/foo/');
+        r.addEventListener('tail-changed', function() {
+          r.set('data.page', 'baz');
+        });
+        r.set('tail.path', '/bar');
+        expect(window.location.pathname).to.be.equal('/baz');
+        expect(r.data).to.be.deep.equal({page: 'baz'});
+        expect(r.route.path).to.be.equal('/baz');
+        expect(r.tail.path).to.be.equal('');
+      });
+
+      test('changing the data object wholesale in response to tail changing', function() {
+        var r = fixture('Redirection');
+        r.set('route.path', '/foo/');
+        r.addEventListener('tail-changed', function() {
+          r.set('data', {page: 'baz'});
+        });
+        r.set('tail.path', '/bar');
+        expect(window.location.pathname).to.be.equal('/baz');
+        expect(r.data).to.be.deep.equal({page: 'baz'});
+        expect(r.route.path).to.be.equal('/baz');
+        expect(r.tail.path).to.be.equal('');
+      });
+
+      test('changing the tail in response to tail changing', function() {
+        var r = fixture('Redirection');
+        r.set('route.path', '/foo/');
+        r.addEventListener('tail-changed', function() {
+          r.set('tail.path', '/baz');
+        });
+        r.set('tail.path', '/bar');
+        expect(window.location.pathname).to.be.equal('/foo/baz');
+        expect(r.data).to.be.deep.equal({page: 'foo'});
+        expect(r.route.path).to.be.equal('/foo/baz');
+        expect(r.tail.path).to.be.equal('/baz');
       });
     });
   });
