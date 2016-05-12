@@ -13,15 +13,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="carbon-route-converter-behavior.html">
 
 <!--
-`carbon-location` is an element that provides synchronization between the
-browser location bar and the state of an app. When created, `carbon-location`
-elements will automatically watch the global location for changes. As changes
-occur, `carbon-location` produces and updates an object called `route`. This
-`route` object is suitable for passing into a `carbon-route`, and other similar
-elements.
+`carbon-hash-location` is an element that provides synchronization between the
+browser location bar and the state of an app. When created,
+`carbon-hash-location` elements will automatically watch the global location
+for changes. As changes occur, `carbon-hash-location` produces and updates an
+object called `route`. This `route` object is suitable for passing into a
+`carbon-route`, and other similar elements.
+
+`carbon-hash-location` differs from `carbon-location` by using window.hash
+rather window.pathname for the routing path, requiring less server cooperation.
 
 An example of the public API of a route object that describes the URL
-`https://elements.polymer-project.org/elements/carbon-route-converter?foo=bar&baz=qux`:
+`https://elements.polymer-project.org/?foo=bar&baz=qux#/elements/carbon-route-converter`:
 
     {
       prefix: '',
@@ -30,22 +33,22 @@ An example of the public API of a route object that describes the URL
 
 Example Usage:
 
-    <carbon-location route="{{route}}"></carbon-location>
+    <carbon-hash-location route="{{route}}"></carbon-hash-location>
     <carbon-route route="{{route}}" pattern="/:page" data="{{data}}"></carbon-route>
 
-As you can see above, the `carbon-location` element produces a `route` and that
+As you can see above, the `carbon-hash-location` element produces a `route` and that
 property is then bound into the `carbon-route` element. The bindings are two-
 directional, so when changes to the `route` object occur within `carbon-route`,
 they automatically reflect back to the global location.
 
-@element carbon-location
+@element carbon-hash-location
 @demo demo/index.html
 -->
-<dom-module id="carbon-location">
+<dom-module id="carbon-hash-location">
   <template>
     <iron-location
-        path="{{path}}"
         query="{{__query}}"
+        hash="{{path}}"
         url-space-regex={{urlSpaceRegex}}>
     </iron-location>
     <iron-query-params
@@ -57,7 +60,7 @@ they automatically reflect back to the global location.
     'use strict';
 
     Polymer({
-      is: 'carbon-location',
+      is: 'carbon-hash-location',
 
       properties: {
         /**
@@ -96,15 +99,14 @@ they automatically reflect back to the global location.
         },
 
         /**
-         * The query string portion of the current URL.
+         * The hash portion of the current URL.
          */
-        __query: {
+        __hash: {
           type: String
         },
       },
 
-      behaviors: [Polymer.CarbonRouteConverterBehavior],
-
+      behaviors: [Polymer.CarbonRouteConverterBehavior]
     });
   </script>
 </dom-module>
