@@ -1,3 +1,4 @@
+<link rel="import" href="../polymer/polymer.html">
 <script>
   'use strict';
 
@@ -55,7 +56,6 @@
 
     created: function() {
       this.linkPaths('route.__queryParams', 'queryParams');
-      this.linkPaths('queryParams', 'route.__queryParams');
     },
 
     /**
