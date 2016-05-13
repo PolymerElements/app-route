@@ -10,25 +10,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <html>
 <head>
-  <title>carbon-location</title>
+  <title>app-location</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
 
   <link rel="import" href="../../polymer/polymer.html">
   <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
-  <link rel="import" href="../carbon-location.html">
+  <link rel="import" href="../app-location.html">
 </head>
 <body>
   <test-fixture id="BasicLocation">
     <template>
-      <carbon-location></carbon-location>
+      <app-location></app-location>
     </template>
   </test-fixture>
 
   <test-fixture id="LocationViaHash">
     <template>
-      <carbon-location use-hash-as-path></carbon-location>
+      <app-location use-hash-as-path></app-location>
     </template>
   </test-fixture>
 
@@ -58,7 +58,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       return a;
     }
 
-    suite('<carbon-location>', function () {
+    suite('<app-location>', function () {
       var initialUrl;
 
       setup(function() {
@@ -70,15 +70,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
 
       suite('in the default configuration', function() {
-        var carbonLocation;
+        var appLocation;
 
         setup(function() {
-          carbonLocation = fixture('BasicLocation');
+          appLocation = fixture('BasicLocation');
         });
 
         test('it automatically exposes the current route', function() {
-          expect(carbonLocation.route).to.be.ok;
-          expect(carbonLocation.route.path).to.be.equal(window.location.pathname);
+          expect(appLocation.route).to.be.ok;
+          expect(appLocation.route.path).to.be.equal(window.location.pathname);
         });
 
         suite('manipulating the route', function() {
@@ -86,33 +86,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var originalQueryParams;
 
           setup(function() {
-            originalPath = carbonLocation.route.path;
-            originalQueryParams = assign({}, carbonLocation.route.__queryParams);
+            originalPath = appLocation.route.path;
+            originalQueryParams = assign({}, appLocation.route.__queryParams);
           });
 
           teardown(function() {
-            carbonLocation.set('route.prefix', '');
-            carbonLocation.set('route.path', originalPath);
-            carbonLocation.set('route.__queryParams', originalQueryParams);
+            appLocation.set('route.prefix', '');
+            appLocation.set('route.path', originalPath);
+            appLocation.set('route.__queryParams', originalQueryParams);
           });
 
           test('it reflects path to location.pathname', function() {
-            carbonLocation.set('route.path', '/foo/bar');
+            appLocation.set('route.path', '/foo/bar');
             expect(window.location.pathname).to.be.equal('/foo/bar');
           });
 
           test('it reflects queryParams values to location.search', function() {
-            carbonLocation.set('route.__queryParams.foo', 1);
+            appLocation.set('route.__queryParams.foo', 1);
             expect(window.location.search).to.match(/foo=1/);
           });
 
           test('it reflects completely replaced queryParams', function() {
-            carbonLocation.set('route.__queryParams', { bar: 1 });
+            appLocation.set('route.__queryParams', { bar: 1 });
             expect(window.location.search).to.be.equal('?bar=1');
           });
 
           test('it reflects the prefix to location.pathname', function() {
-            carbonLocation.set('route.prefix', '/fiz');
+            appLocation.set('route.prefix', '/fiz');
             expect(window.location.pathname).to.be.equal('/fiz' + originalPath);
           });
         });
@@ -134,12 +134,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           test('it reflects location.pathname to route.path', function() {
             setLocation('/fiz/buz');
-            expect(carbonLocation.route.path).to.be.equal('/fiz/buz');
+            expect(appLocation.route.path).to.be.equal('/fiz/buz');
           });
 
           test('it reflects location.search to route.__queryParams', function() {
             setLocation('?fiz=buz');
-            expect(carbonLocation.route.__queryParams).to.be.eql({
+            expect(appLocation.route.__queryParams).to.be.eql({
               fiz: 'buz'
             });
           });
@@ -147,19 +147,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       });
 
       suite('using the hash as the route path', function() {
-        var carbonLocation;
+        var appLocation;
 
         setup(function() {
-          carbonLocation = fixture('LocationViaHash');
+          appLocation = fixture('LocationViaHash');
         });
 
         test('it reflects location.hash to route.path', function() {
           setLocation('#/fiz/buz');
-          expect(carbonLocation.route.path).to.be.equal('/fiz/buz');
+          expect(appLocation.route.path).to.be.equal('/fiz/buz');
         });
 
         test('it reflects route.path to location.hash', function() {
-          carbonLocation.set('route.path', '/foo/bar');
+          appLocation.set('route.path', '/foo/bar');
           expect(window.location.hash).to.be.equal('#/foo/bar');
         });
       });

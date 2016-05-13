@@ -14,7 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../paper-input/paper-input.html">
 <link rel="import" href="../../iron-ajax/iron-ajax.html">
 
-<link rel="import" href="../carbon-route.html">
+<link rel="import" href="../app-route.html">
 <link rel="import" href="route-info.html">
 
 <dom-module id="youtube-search">
@@ -34,10 +34,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <!-- This carbon-route consumes the route which was provided by the tail of
-    a carbon-route in the host of this element -->
-    <carbon-route route="{{route}}" pattern="/:searchQuery" data="{{data}}">
-    </carbon-route>
+    <!-- This app-route consumes the route which was provided by the tail of
+    a app-route in the host of this element -->
+    <app-route route="{{route}}" pattern="/:searchQuery" data="{{data}}">
+    </app-route>
 
     <paper-input label="Search Youtube" value="{{data.searchQuery}}"></paper-input>
 

@@ -2,7 +2,7 @@
 <!---
 
 This README is automatically generated from the comments in these files:
-carbon-location.html  carbon-route-converter-behavior.html  carbon-route-converter.html  carbon-route.html
+app-location.html  app-route-converter.html  app-route.html
 
 Edit those files, and our readme bot will duplicate them over here!
 Edit this file, and the bot will squash your changes :)
@@ -12,39 +12,39 @@ thing! https://github.com/PolymerLabs/tedium/issues
 
 -->
 
-[![Build status](https://travis-ci.org/PolymerElements/carbon-route.svg?branch=master)](https://travis-ci.org/PolymerElements/carbon-route)
+[![Build status](https://travis-ci.org/PolymerElements/app-route.svg?branch=master)](https://travis-ci.org/PolymerElements/app-route)
 
-_[Demo and API docs](https://elements.polymer-project.org/elements/carbon-route)_
+_[Demo and API docs](https://elements.polymer-project.org/elements/app-route)_
 
 
-##&lt;carbon-route&gt;
+##&lt;app-route&gt;
 
-`carbon-route` is an element that enables declarative, self-describing routing
+`app-route` is an element that enables declarative, self-describing routing
 for a web app.
 
-> *n.b. carbon-route is still in beta. We expect it will need some changes. We're counting on your feedback!*
+> *n.b. app-route is still in beta. We expect it will need some changes. We're counting on your feedback!*
 
-In its typical usage, a `carbon-route` element consumes an object that describes
+In its typical usage, a `app-route` element consumes an object that describes
 some state about the current route, via the `route` property. It then parses
 that state using the `pattern` property, and produces two artifacts: some `data`
 related to the `route`, and a `tail` that contains the rest of the `route` that
 did not match.
 
-Here is a basic example, when used with `carbon-location`:
+Here is a basic example, when used with `app-location`:
 
 ```html
-<carbon-location route="{{route}}"></carbon-location>
-<carbon-route
+<app-location route="{{route}}"></app-location>
+<app-route
     route="{{route}}"
     pattern="/:page"
     data="{{data}}"
     tail="{{tail}}">
-</carbon-route>
+</app-route>
 ```
 
-In the above example, the `carbon-location` produces a `route` value. Then, the
+In the above example, the `app-location` produces a `route` value. Then, the
 `route.path` property is matched by comparing it to the `pattern` property. If
-the `pattern` property matches `route.path`, the `carbon-route` will set or update
+the `pattern` property matches `route.path`, the `app-route` will set or update
 its `data` property with an object whose properties correspond to the parameters
 in `pattern`. So, in the above example, if `route.path` was `'/about'`, the value
 of `data` would be `{"page": "about"}`.
@@ -55,24 +55,24 @@ The `tail` property represents the remaining part of the route state after the
 Here is another example, where `tail` is used:
 
 ```html
-<carbon-location route="{{route}}"></carbon-location>
-<carbon-route
+<app-location route="{{route}}"></app-location>
+<app-route
     route="{{route}}"
     pattern="/:page"
     data="{{routeData}}"
     tail="{{subroute}}">
-</carbon-route>
-<carbon-route
+</app-route>
+<app-route
     route="{{subroute}}"
     pattern="/:id"
     data="{{subrouteData}}">
-</carbon-route>
+</app-route>
 ```
 
-In the above example, there are two `carbon-route` elements. The first
-`carbon-route` consumes a `route`. When the `route` is matched, the first
-`carbon-route` also produces `routeData` from its `data`, and `subroute` from
-its `tail`. The second `carbon-route` consumes the `subroute`, and when it
+In the above example, there are two `app-route` elements. The first
+`app-route` consumes a `route`. When the `route` is matched, the first
+`app-route` also produces `routeData` from its `data`, and `subroute` from
+its `tail`. The second `app-route` consumes the `subroute`, and when it
 matches, it produces an object called `subrouteData` from its `data`.
 
 So, when `route.path` is `'/about'`, the `routeData` object will look like
@@ -84,74 +84,74 @@ And `subrouteData` will be null. However, if `route.path` changes to
 
 And the `subrouteData` will look like this: `{ id: '123' }`
 
-`carbon-route` is responsive to bi-directional changes to the `data` objects
+`app-route` is responsive to bi-directional changes to the `data` objects
 they produce. So, if `routeData.page` changed from `'article'` to `'about'`,
-the `carbon-route` will update `route.path`. This in-turn will update the
-`carbon-location`, and cause the global location bar to change its value.
+the `app-route` will update `route.path`. This in-turn will update the
+`app-location`, and cause the global location bar to change its value.
 
 
 
-##&lt;carbon-location&gt;
+##&lt;app-location&gt;
 
-`carbon-location` is an element that provides synchronization between the
-browser location bar and the state of an app. When created, `carbon-location`
+`app-location` is an element that provides synchronization between the
+browser location bar and the state of an app. When created, `app-location`
 elements will automatically watch the global location for changes. As changes
-occur, `carbon-location` produces and updates an object called `route`. This
-`route` object is suitable for passing into a `carbon-route`, and other similar
+occur, `app-location` produces and updates an object called `route`. This
+`route` object is suitable for passing into a `app-route`, and other similar
 elements.
 
 An example of the public API of a route object that describes the URL
-`https://elements.polymer-project.org/elements/carbon-route-converter?foo=bar&baz=qux`:
+`https://elements.polymer-project.org/elements/app-route-converter?foo=bar&baz=qux`:
 
 ```css
 {
   prefix: '',
-  path: '/elements/carbon-route-converter'
+  path: '/elements/app-route-converter'
 }
 ```
 
 Example Usage:
 
 ```html
-<carbon-location route="{{route}}"></carbon-location>
-<carbon-route route="{{route}}" pattern="/:page" data="{{data}}"></carbon-route>
+<app-location route="{{route}}"></app-location>
+<app-route route="{{route}}" pattern="/:page" data="{{data}}"></app-route>
 ```
 
-As you can see above, the `carbon-location` element produces a `route` and that
-property is then bound into the `carbon-route` element. The bindings are two-
-directional, so when changes to the `route` object occur within `carbon-route`,
+As you can see above, the `app-location` element produces a `route` and that
+property is then bound into the `app-route` element. The bindings are two-
+directional, so when changes to the `route` object occur within `app-route`,
 they automatically reflect back to the global location.
 
-A `carbon-location` can be configured to use the hash part of a URL as the
+A `app-location` can be configured to use the hash part of a URL as the
 canonical source for path information.
 
 Example:
 
 ```html
-<carbon-location route="{{route}}" use-hash-as-path></carbon-location>
+<app-location route="{{route}}" use-hash-as-path></app-location>
 ```
 
 
 
-##&lt;carbon-route-converter&gt;
+##&lt;app-route-converter&gt;
 
-`carbon-route-converter` provides a means to convert a path and query
+`app-route-converter` provides a means to convert a path and query
 parameters into a route object and vice versa. This produced route object
-is to be fed into route-consuming elements such as `carbon-route`.
+is to be fed into route-consuming elements such as `app-route`.
 
 > n.b. This element is intended to be a primitive of the routing system and for
 creating bespoke routing solutions from scratch. To simply include routing in
-an app, please refer to [carbon-location](https://github.com/PolymerElements/carbon-route/blob/master/carbon-location.html)
-and [carbon-route](https://github.com/PolymerElements/carbon-route/blob/master/carbon-route.html).
+an app, please refer to [app-location](https://github.com/PolymerElements/app-route/blob/master/app-location.html)
+and [app-route](https://github.com/PolymerElements/app-route/blob/master/app-route.html).
 
 An example of a route object that describes
-`https://elements.polymer-project.org/elements/carbon-route-converter?foo=bar&baz=qux`
-and should be passed to other `carbon-route` elements:
+`https://elements.polymer-project.org/elements/app-route-converter?foo=bar&baz=qux`
+and should be passed to other `app-route` elements:
 
 ```css
 {
   prefix: '',
-  path: '/elements/carbon-route-converter',
+  path: '/elements/app-route-converter',
   __queryParams: {
     foo: 'bar',
     baz: 'qux'
@@ -160,8 +160,8 @@ and should be passed to other `carbon-route` elements:
 ```
 
 `__queryParams` is private to discourage directly data-binding to it. This is so
-that routing elements like `carbon-route` can intermediate changes to the query
-params and choose whether to propagate them upstream or not. `carbon-route` for
+that routing elements like `app-route` can intermediate changes to the query
+params and choose whether to propagate them upstream or not. `app-route` for
 example will not propagate changes to its `queryParams` property if it is not
 currently active. A public queryParams object will also be produced in which you
 should perform data-binding operations.
@@ -174,28 +174,26 @@ Example Usage:
     params-string="{{query}}"
     params-object="{{queryParams}}">
 </iron-query-params>
-<carbon-route-converter
+<app-route-converter
     path="{{path}}"
     query-params="{{queryParams}}"
     route="{{route}}">
-</carbon-route-converter>
-<carbon-route route='{{route}}' pattern='/:page' data='{{data}}'>
-</carbon-route>
+</app-route-converter>
+<app-route route='{{route}}' pattern='/:page' data='{{data}}'>
+</app-route>
 ```
 
-This is a simplified implementation of the `carbon-location` element. Here the
+This is a simplified implementation of the `app-location` element. Here the
 `iron-location` produces a path and a query, the `iron-query-params` consumes
-the query and produces a queryParams object, and the `carbon-route-converter`
+the query and produces a queryParams object, and the `app-route-converter`
 consumes the path and the query params and converts it into a route which is in
-turn is consumed by the `carbon-route`.
+turn is consumed by the `app-route`.
 
 
 
-##Polymer.CarbonRouteConverterBehavior
+##Polymer.AppRouteConverterBehavior
 
 Provides bidirectional mapping between `path` and `queryParams` and a
-carbon-route compatible `route` object.
+app-route compatible `route` object.
 
-For more information, see the docs for `carbon-route-converter`.
-
-
+For more information, see the docs for `app-route-converter`.

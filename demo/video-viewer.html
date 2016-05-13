@@ -13,7 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../paper-input/paper-input.html">
 <link rel="import" href="../../paper-toggle-button/paper-toggle-button.html">
 
-<link rel="import" href="../carbon-route.html">
+<link rel="import" href="../app-route.html">
 
 <link rel="import" href="youtube-lite.html">
 <link rel="import" href="route-info.html">
@@ -56,13 +56,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <!-- This carbon-route consumes the route which was provided by the tail of
-    a carbon-route in the host of this element. This means that the parent that
+    <!-- This app-route consumes the route which was provided by the tail of
+    a app-route in the host of this element. This means that the parent that
     provides this route decides where this element lives in the URL space. In
     this case, the parent, which uses hashes, matches #/video and hence this
     element lives in <App serving point>?querParams#/video/:vid -->
-    <carbon-route route="{{route}}" pattern="/:vid" data="{{data}}" query-params="{{queryParams}}">
-    </carbon-route>
+    <app-route route="{{route}}" pattern="/:vid" data="{{data}}" query-params="{{queryParams}}">
+    </app-route>
 
     <!-- You can bind any element's state into the URL by binding their
     properties into the queryParams object. youtube-lite doesn't have any code
