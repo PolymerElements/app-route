@@ -2,7 +2,7 @@
 <!---
 
 This README is automatically generated from the comments in these files:
-carbon-location.html  carbon-route-converter.html  carbon-route.html
+carbon-location.html  carbon-route-converter-behavior.html  carbon-route-converter.html  carbon-route.html
 
 Edit those files, and our readme bot will duplicate them over here!
 Edit this file, and the bot will squash your changes :)
@@ -188,5 +188,14 @@ This is a simplified implementation of the `carbon-location` element. Here the
 the query and produces a queryParams object, and the `carbon-route-converter`
 consumes the path and the query params and converts it into a route which is in
 turn is consumed by the `carbon-route`.
+
+
+
+##Polymer.CarbonRouteConverterBehavior
+
+Provides bidirectional mapping between `path` and `queryParams` and a
+carbon-route compatible `route` object.
+
+For more information, see the docs for `carbon-route-converter`.
 
 
