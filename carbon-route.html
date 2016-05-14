@@ -226,7 +226,7 @@ the `carbon-route` will update `route.path`. This in-turn will update the
     __resetProperties: function() {
       this._setActive(false);
       this._matched = null;
-      //this.tail = { path: null, prefix: null, queryParams: null };
+      //this.tail = { path: null, prefix: null, __queryParams: null };
       //this.data = {};
     },
 
@@ -275,7 +275,6 @@ the `carbon-route` will update `route.path`. This in-turn will update the
           return;
         }
       }
-
       this._matched = matched.join('/');
 
       // Properties that must be updated atomically.
@@ -289,6 +288,9 @@ the `carbon-route` will update `route.path`. This in-turn will update the
       var tailPath = remainingPieces.join('/');
       if (remainingPieces.length > 0) {
         tailPath = '/' + tailPath;
+      // To prevent a sub-route to become active but the last match was only empty
+      } else if (matched[matched.length - 1] !== '') {
+        tailPath = '/';
       }
       if (!this.tail ||
           this.tail.prefix !== tailPrefix ||
@@ -325,7 +327,9 @@ the `carbon-route` will update `route.path`. This in-turn will update the
         }
         newPath += tailPath;
       }
-      this.set('route.path', newPath);
+      if (tailPath !== '/') {
+        this.set('route.path', newPath);
+      }
     },
 
     /**
