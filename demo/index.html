@@ -16,15 +16,15 @@ http://polymer.github.io/PATENTS.txt
 <head>
 <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-<title>carbon-route Demo</title>
+<title>app-route Demo</title>
 <link rel="import" href="../../polymer/polymer.html">
 
 <link rel="import" href="../../paper-styles/paper-styles.html">
 <link rel="import" href="../../iron-demo-helpers/url-bar.html">
 <link rel="import" href="../../iron-pages/iron-pages.html">
 
-<link rel="import" href="../carbon-location.html">
-<link rel="import" href="../carbon-route.html">
+<link rel="import" href="../app-location.html">
+<link rel="import" href="../app-route.html">
 
 <link rel="import" href="youtube-search.html">
 <link rel="import" href="youtube-toolbar.html">
@@ -45,9 +45,9 @@ http://polymer.github.io/PATENTS.txt
 
 <url-bar></url-bar>
 
-<carbon-router-demo></carbon-router-demo>
+<app-router-demo></app-router-demo>
 
-<dom-module id="carbon-router-demo">
+<dom-module id="app-router-demo">
   <template>
     <style>
       :host {
@@ -76,22 +76,22 @@ http://polymer.github.io/PATENTS.txt
     </style>
 
 
-    <!-- carbon-location binds with the URL and produces a route for
-    carbon-route elements to consume. Since this demo needs to run without
+    <!-- app-location binds with the URL and produces a route for
+    app-route elements to consume. Since this demo needs to run without
     server cooperation (e.g. with polyserve, in the elements catalog, etc) we'll
     use the hash portion of the URL for our route paths. -->
-    <carbon-location route="{{route}}" use-hash-as-path></carbon-location>
+    <app-location route="{{route}}" use-hash-as-path></app-location>
 
-    <!-- carbon-routes parse route paths based on the their `pattern`.
+    <!-- app-routes parse route paths based on the their `pattern`.
     Parameters are extracted into the `data` object. The rest of the path that
     comes after the `pattern` is put into the `tail` object, which can be
-    passed to the `route` property of downstream carbon-routes. -->
-    <carbon-route route="{{route}}" pattern="/:page" data="{{data}}"></carbon-route>
-    <carbon-route route="{{route}}" pattern="/search" tail="{{searchTail}}"></carbon-route>
-    <carbon-route route="{{route}}" pattern="/video" tail="{{videoTail}}" active="{{videoPageActive}}"></carbon-route>
+    passed to the `route` property of downstream app-routes. -->
+    <app-route route="{{route}}" pattern="/:page" data="{{data}}"></app-route>
+    <app-route route="{{route}}" pattern="/search" tail="{{searchTail}}"></app-route>
+    <app-route route="{{route}}" pattern="/video" tail="{{videoTail}}" active="{{videoPageActive}}"></app-route>
 
     <youtube-toolbar collapsed$="{{videoPageActive}}">
-      <!-- The youtube-search has a carbon-route that consumes the tail of
+      <!-- The youtube-search has a app-route that consumes the tail of
       another route (`searchTail`) -->
       <youtube-search
           route="{{searchTail}}"
@@ -102,7 +102,7 @@ http://polymer.github.io/PATENTS.txt
     <iron-pages attr-for-selected="id" selected="{{data.page}}">
       <search-results id="search" items="{{videos}}"></search-results>
 
-      <!-- The video-viewer has a carbon-route that consumes the tail of
+      <!-- The video-viewer has a app-route that consumes the tail of
       another route -->
       <video-viewer id="video" route="{{videoTail}}"></video-viewer>
     </iron-pages>
@@ -112,7 +112,7 @@ http://polymer.github.io/PATENTS.txt
   <script>
     window.addEventListener('WebComponentsReady', function() {
       Polymer({
-        is: 'carbon-router-demo',
+        is: 'app-router-demo',
 
         properties: {
           route: {

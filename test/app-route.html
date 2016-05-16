@@ -10,49 +10,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <html>
 <head>
-  <title>carbon-route</title>
+  <title>app-route</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
 
   <link rel="import" href="../../polymer/polymer.html">
-  <link rel="import" href="../carbon-route.html">
+  <link rel="import" href="../app-route.html">
   <link rel="import" href="./redirection.html">
 </head>
 <body>
   <test-fixture id="BasicRoute">
     <template>
-      <carbon-route pattern='/user/:username'>
-      </carbon-route>
+      <app-route pattern='/user/:username'>
+      </app-route>
     </template>
   </test-fixture>
 
   <test-fixture id="ChainedRoutes">
     <template is="dom-template">
-      <carbon-route
+      <app-route
           pattern="/foo/:foo"
           route="{{numberOneTopRoute}}"
           data="{{fooData}}"
           tail="{{fooRoute}}">
-      </carbon-route>
+      </app-route>
 
-      <carbon-route
+      <app-route
           pattern="/bar/:bar"
           route="{{fooRoute}}"
           data="{{barData}}">
-      </carbon-route>
+      </app-route>
 
-      <carbon-route
+      <app-route
           pattern="/baz/:baz"
           route="{{fooRoute}}"
           data="{{bazData}}">
-      </carbon-route>
+      </app-route>
     </template>
   </test-fixture>
 
   <test-fixture id="Redirection">
     <template>
-      <redirect-carbon-route></redirect-carbon-route>
+      <redirect-app-route></redirect-app-route>
     </template>
   </test-fixture>
 
@@ -75,14 +75,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     };
   }
 
-  suite('<carbon-route>', function () {
+  suite('<app-route>', function () {
     var route;
 
     setup(function() {
       route = fixture('BasicRoute');
 
       // This works around a bug in `dom-template` that is somehow
-      // exaserbated by the `carbon-route` implementation. A reduced test case
+      // exaserbated by the `app-route` implementation. A reduced test case
       // is hard to come by. Track polymerelements/test-fixture#31 and remove
       // this when that has been resolved:
       var tmpl = document.querySelector('#ChainedRoutes').fixtureTemplates[0];

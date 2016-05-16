@@ -9,24 +9,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../carbon-location.html">
-<link rel="import" href="../carbon-route.html">
+<link rel="import" href="../app-location.html">
+<link rel="import" href="../app-route.html">
 
 <!--
  There are three relevant factors to route.path, and when any one of them
  changes we want to support synchronously updating any of the others.
 -->
 
-<dom-module id='redirect-carbon-route'>
+<dom-module id='redirect-app-route'>
   <template>
-    <carbon-location route='{{route}}'>
-    </carbon-location>
-    <carbon-route route='{{route}}' pattern="/:page" data="{{data}}" tail="{{tail}}">
-    </carbon-route>
+    <app-location route='{{route}}'>
+    </app-location>
+    <app-route route='{{route}}' pattern="/:page" data="{{data}}" tail="{{tail}}">
+    </app-route>
   </template>
   <script>
     Polymer({
-      is: 'redirect-carbon-route',
+      is: 'redirect-app-route',
       properties: {
         route: {
           notify: true

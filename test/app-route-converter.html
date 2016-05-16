@@ -10,26 +10,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <html>
 <head>
-  <title>carbon-route-converter</title>
+  <title>app-route-converter</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
 
   <link rel="import" href="../../polymer/polymer.html">
-  <link rel="import" href="../carbon-route-converter.html">
+  <link rel="import" href="../app-route-converter.html">
 </head>
 <body>
   <test-fixture id="BasicRouteConversion">
     <template>
-      <carbon-route-converter>
-      </carbon-route-converter>
+      <app-route-converter>
+      </app-route-converter>
     </template>
   </test-fixture>
 
   <script>
     'use strict';
 
-    suite('<carbon-route-converter>', function() {
+    suite('<app-route-converter>', function() {
       test('it bidirectionally maps path and queryParams to route', function() {
         var converter = fixture('BasicRouteConversion');
 

@@ -10,45 +10,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-location/iron-location.html">
 <link rel="import" href="../iron-location/iron-query-params.html">
-<link rel="import" href="carbon-route-converter-behavior.html">
+<link rel="import" href="app-route-converter-behavior.html">
 
 <!--
-`carbon-location` is an element that provides synchronization between the
-browser location bar and the state of an app. When created, `carbon-location`
+`app-location` is an element that provides synchronization between the
+browser location bar and the state of an app. When created, `app-location`
 elements will automatically watch the global location for changes. As changes
-occur, `carbon-location` produces and updates an object called `route`. This
-`route` object is suitable for passing into a `carbon-route`, and other similar
+occur, `app-location` produces and updates an object called `route`. This
+`route` object is suitable for passing into a `app-route`, and other similar
 elements.
 
 An example of the public API of a route object that describes the URL
-`https://elements.polymer-project.org/elements/carbon-route-converter?foo=bar&baz=qux`:
+`https://elements.polymer-project.org/elements/app-route-converter?foo=bar&baz=qux`:
 
     {
       prefix: '',
-      path: '/elements/carbon-route-converter'
+      path: '/elements/app-route-converter'
     }
 
 Example Usage:
 
-    <carbon-location route="{{route}}"></carbon-location>
-    <carbon-route route="{{route}}" pattern="/:page" data="{{data}}"></carbon-route>
+    <app-location route="{{route}}"></app-location>
+    <app-route route="{{route}}" pattern="/:page" data="{{data}}"></app-route>
 
-As you can see above, the `carbon-location` element produces a `route` and that
-property is then bound into the `carbon-route` element. The bindings are two-
-directional, so when changes to the `route` object occur within `carbon-route`,
+As you can see above, the `app-location` element produces a `route` and that
+property is then bound into the `app-route` element. The bindings are two-
+directional, so when changes to the `route` object occur within `app-route`,
 they automatically reflect back to the global location.
 
-A `carbon-location` can be configured to use the hash part of a URL as the
+A `app-location` can be configured to use the hash part of a URL as the
 canonical source for path information.
 
 Example:
 
-    <carbon-location route="{{route}}" use-hash-as-path></carbon-location>
+    <app-location route="{{route}}" use-hash-as-path></app-location>
 
-@element carbon-location
+@element app-location
 @demo demo/index.html
 -->
-<dom-module id="carbon-location">
+<dom-module id="app-location">
   <template>
     <iron-location
         path="{{__path}}"
@@ -65,7 +65,7 @@ Example:
     'use strict';
 
     Polymer({
-      is: 'carbon-location',
+      is: 'app-location',
 
       properties: {
         /**
@@ -150,7 +150,7 @@ Example:
         }
       },
 
-      behaviors: [Polymer.CarbonRouteConverterBehavior],
+      behaviors: [Polymer.AppRouteConverterBehavior],
 
       observers: [
         '__computeRoutePath(useHashAsPath, __hash, __path)'
