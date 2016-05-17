@@ -282,7 +282,9 @@ the `app-route` will update `route.path`. This in-turn will update the
       var propertyUpdates = {};
 
       //this.active
-      propertyUpdates.active = true;
+      if (!this.active) {
+        propertyUpdates.active = true;
+      }
 
       // this.tail
       var tailPrefix = this.route.prefix + this._matched;
