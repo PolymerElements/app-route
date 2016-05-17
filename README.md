@@ -2,7 +2,7 @@
 <!---
 
 This README is automatically generated from the comments in these files:
-app-location.html  app-route-converter.html  app-route.html
+app-location.html  app-route-converter-behavior.html  app-route-converter.html  app-route.html
 
 Edit those files, and our readme bot will duplicate them over here!
 Edit this file, and the bot will squash your changes :)
@@ -13,8 +13,6 @@ thing! https://github.com/PolymerLabs/tedium/issues
 -->
 
 [![Build status](https://travis-ci.org/PolymerElements/app-route.svg?branch=master)](https://travis-ci.org/PolymerElements/app-route)
-
-_[Demo and API docs](https://elements.polymer-project.org/elements/app-route)_
 
 
 ##&lt;app-route&gt;
@@ -197,3 +195,5 @@ Provides bidirectional mapping between `path` and `queryParams` and a
 app-route compatible `route` object.
 
 For more information, see the docs for `app-route-converter`.
+
+
