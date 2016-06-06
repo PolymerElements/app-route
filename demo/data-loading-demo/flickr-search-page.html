@@ -24,7 +24,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         max-height: 200px;
       }
     </style>
-    <app-route pattern="/" route="{{route}}" query-params="{{queryParams}}">
+    <app-route pattern="/" route="{{route}}" query-params="{{queryParams}}"
+               active="{{active}}">
     </app-route>
     <paper-input autofocus label="Search the public domain on Flickr"
                  value="{{queryParams.search}}">
@@ -61,15 +62,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object,
           computed: '_computeParams(apiKey, queryParams.search)'
         },
-
-        selected: {
-          type: Boolean,
-          observer: '_selectedChanged'
-        }
       },
 
       observers: [
-        '_clearOldSearchResults(queryParams.search)'
+        '_clearOldSearchResults(queryParams.search)',
+        '_setDefaultSearch(active)'
       ],
 
       _clearOldSearchResults: function() {
@@ -100,8 +97,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             photo.server + '/' + photo.id + '/' + photo.secret;
       },
 
-      _selectedChanged: function(newVal, oldVal) {
-        if (newVal && !this.queryParams.search) {
+      _setDefaultSearch: function(active) {
+        if (active && !this.queryParams.search) {
           this.set('queryParams.search', 'spaceship')
         }
       }
