@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../polymer/polymer.html">
 <link rel="import" href="../../../iron-ajax/iron-ajax.html">
 <link rel="import" href="../../../paper-spinner/paper-spinner.html">
-<link rel="import" href="../../carbon-route.html">
+<link rel="import" href="../../app-route.html">
 
 <dom-module id="flickr-image-page">
   <template>
@@ -31,8 +31,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         content: '';
       }
     </style>
-    <carbon-route route="{{route}}" pattern="/:farm/:server/:id/:secret" data="{{data}}">
-    </carbon-route>
+    <app-route route="{{route}}" pattern="/:farm/:server/:id/:secret" data="{{data}}">
+    </app-route>
     <img src="{{_computeSrc(data)}}">
     <iron-ajax auto url="https://www.flickr.com/services/rest/"
                handle-as="json"

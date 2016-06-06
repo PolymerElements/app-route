@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../polymer/polymer.html">
 <link rel="import" href="../../../paper-spinner/paper-spinner.html">
 <link rel="import" href="../../../paper-input/paper-input.html">
-<link rel="import" href="../../carbon-route.html">
+<link rel="import" href="../../app-route.html">
 
 <dom-module id="flickr-search-page">
   <template>
@@ -24,8 +24,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         max-height: 200px;
       }
     </style>
-    <carbon-route pattern="/" route="{{route}}" query-params="{{queryParams}}">
-    </carbon-route>
+    <app-route pattern="/" route="{{route}}" query-params="{{queryParams}}">
+    </app-route>
     <paper-input autofocus label="Search the public domain on Flickr"
                  value="{{queryParams.search}}">
     </paper-input>
