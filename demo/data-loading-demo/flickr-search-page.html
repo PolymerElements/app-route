@@ -101,11 +101,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _selectedChanged: function(newVal, oldVal) {
-        this.async(function() {
-          if (newVal && !this.queryParams.search) {
-            this.set('queryParams.search', 'spaceship')
-          }
-        });
+        if (newVal && !this.queryParams.search) {
+          this.set('queryParams.search', 'spaceship')
+        }
       }
     })
   </script>

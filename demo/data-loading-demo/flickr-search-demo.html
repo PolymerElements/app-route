@@ -57,11 +57,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       attached: function() {
-        this.async(function() {
-          if (this.route.path === '') {
-            this.set('route.path', '/search/');
-          }
-        });
+        if (this.route.path === '') {
+          this.set('route.path', '/search/');
+        }
       }
     });
   </script>
