@@ -1,7 +1,7 @@
 language: node_js
 node_js: stable
 addons:
-  firefox: latest
+  firefox: '46.0'
   sauce_connect: true
   apt:
     sources:
