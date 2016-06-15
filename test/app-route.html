@@ -274,6 +274,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           expect(routes.bar.queryParams).to.be.eql({ qux: 'zot' });
           expect(routes.baz.queryParams).to.be.eql({ qux: 'quux' });
         });
+
+        test('doesn\'t generate excess query-params-changed events', function() {
+          var routes = fixtureChainedRoutes({});
+          var appRoutes = [routes.foo, routes.bar, routes.baz];
+          var numChanges = 0;
+          for (var i = 0; i < appRoutes.length; i++) {
+            appRoutes[i].addEventListener('query-params-changed', function() {
+              numChanges++;
+            });
+          }
+
+          // Messing with paths but not query params shouldn't generate any
+          // change events.
+          expect(numChanges).to.be.equal(0);
+          routes.foo.set('route.path', '/foo/123/bar/456');
+          expect(numChanges).to.be.equal(0);
+          routes.foo.set('route.path', '/foo/456/baz/789');
+          expect(numChanges).to.be.equal(0);
+
+          // Changing queryParams here should update foo and baz
+          routes.foo.set('route.__queryParams', {key: 'value'});
+          expect(numChanges).to.be.equal(2);
+          // Then this should update bar
+          routes.foo.set('route.path', '/foo/123/bar/456');
+          expect(numChanges).to.be.equal(3);
+
+          // Changing back to baz shouldn't generate a change event.
+          routes.foo.set('route.path', '/foo/456/baz/789');
+          expect(numChanges).to.be.equal(3);
+
+          routes.foo.set('route.__queryParams', {});
+          expect(numChanges).to.be.equal(5);
+          routes.foo.set('route.path', '/foo/123/bar/456');
+          expect(numChanges).to.be.equal(6);
+
+        });
       });
     });
 
