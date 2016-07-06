@@ -5,19 +5,19 @@ addons:
   sauce_connect: true
   apt:
     sources:
-      - google-chrome
+    - google-chrome
     packages:
-      - google-chrome-stable
+    - google-chrome-stable
 before_script:
-  - npm install -g bower polylint web-component-tester
-  - bower install
-  - polylint
+- npm install -g bower polylint web-component-tester
+- bower install
+- polylint
 script:
-  - xvfb-run wct
-  - "if [ \"${TRAVIS_PULL_REQUEST}\" = \"false\" ]; then wct -s 'default'; fi"
+- xvfb-run wct
+- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct -s 'default'; fi
 env:
   global:
-    - secure: fWYqxcZ31A3bT/qXPkoIr3AIOD/p+4zjtrn0D++YCgKByA0iVDEgkXzqKPkVXJay8QMTZSBv2WwzruEECfJONQQjq6Dq6ghtCTwYYbJz3Pp8tP0mAeJTUlxtlBrpVw4Sr5r3vVef4r9u8QBzBhXonUyMSVGwYtD1r/gTEcbGiArcm4y+rDFptoGbmrdoiZJ+36IeoKJsNR7Mc6+W338EL1o1nxF3jboYguhnd4bMYcY4LGEsuDIpFVoqTod2oWJRKkTXz8UIzqnG1BT7rUpVDf62oF0dJOfSHwcwrS/PxuJlYurd0Ep4tAOTqLsNfEO1y1+2GjSr4nB8XPZ+PAPpFOHBFyOH1FwYrYnFuH40EWtY7Wb376vLQFSmsnBMcQkFhWBrqenCgWTDGIUhecyaKNf1o1tXr64ATLcPdXJTzjh8K4hvgKwgBaYYXakZJKujMKMitcPvbbxydXe7ZU1AFyPKkasXdIJH0g+767eqEL7KhJicnGLdEQq4ABJRKSEl5Fj4M7BMyOKCyOkUKWielN4MC2b24SROiPIVp3HEQZH/TqZj5pZJhuRopg4PsQtoN+mLhbaOOiAZ5riRG+Rr8nJanfJCBzPogpFz4CTZcrofdSZEV4pn/j81ahUQx7GO2wI9JmAk2qTTx+9eyyPBfasV3waF+GqwawdfR0hIHFs=
-    - secure: DU/KiwHNln8R8NRF86qBMhinoC+dnZNIqj0ySoMgva5BuFrJcf01vyBQvGVxGrMrkVdksONtaz3UjBWh1q4NHZZ3oLjHtSnQAGb1D+x/bdAn4MQvQepz/CtstOH4eLghDtTqUUuxyRsAMApcdTQuPD9j1qmgZ8uTAMlyrtI/yMTrjdabsDz4DVUe8p020YGsrpFxgRSidpq+aNZ70cnxGcU20pgFdnyNj/4xRAxztL9ViDU+gJX/adDxVQpoZQNhqGev7OkFVbN/1CYcqLR7ZdhGXB0iFm6feVbnWPJUntrQeNkncw7LZiV7BIXfqGxKC8hN5+cBlLXzIJHzSoOuEF6yUyJ24a7V4DcZXqwJsPz8sX+qK/fAqFDKg9vB5fuqaJXk8DE2rCOIGgFAFKlIL09YJcocFXDXGmjAnVUuWKvt2no8zLjPbMEYF+p/27dH1zb/yq57VBz2ol4h4gPi8JC6950bTYquJsqk1/Bo8gDy5IlRBxJuNihj0NEFRwjkWi6cCtHZsSYCUAEsSNwvTkdg+Ubw90DkMjao/GHh9sAyObFNDIK8AxbVobgXNmsLs6i9oJoauu9MmaUrTPzlmmV+4XI7dVcV6duw2xVlR8AA7yTZEI5hHkw3f0AkXCzxAMSIGXDVJf0PNSOUfnTFCbaBdQes56GgE/Np6iZv8qQ=
+  - secure: WdFRmsbFi5zjdD/yaGR0HITPFsjSWeVYj8JcLE95nUN0fkkJuNh/A0/cDHDcDpxzY4xCNdc/IwPTtE4+awCGavot71OXlpEYD8aZUdVw9VcYVTc1IG2B/hgFcdYhXHYOLbs7JlOA/H6/RSiOensRv7QESNY2cMGzRsccav9jdAbLJqHNPI5orMRBT6/H5roZvXXEn5XmIemjCMwtGlqUeRd3nHM2n0PsQKETb+8Y04fTFuqggSEVt/SgU/UdNNm2T2mVFUDWChvjAM36l4FvgUKZm8gh2CYrXc0rHOVt7BCJN5OzZSwCmxxauhUe+7QOgZO3UE5l+M+MX9CjnSdy/HJRauMJy2eCSr9RDoChPKZOC14QrZff06L9WhDnVEHkz8PN2mwP73/uDVYyJC9Szs+4MSKK+WEIIiywEnxCp2Nq9eBNoWNDySOaud+9WxLosh01bTvytVZrd3Lqkf3MUm2sJ+v17e4JagW13zwBXjxnLP1V+H+IP/imrRRV9x5gdvK+9iL3ZYsIQmcEkqNlWrqHe3eZTgpkc/HhewfZCu49ClM6pnoJiC/7/YM3CarwkfMhGJKDU5iXfJiQABIfZ3XhTKG7nltz6VRpm8eFwxInpxNAIBghkz6PGeESHgtmsoQKtGqAg7+cRfjTS9uLMVomYHWPz0brCIQloAjSKc8=
+  - secure: k6zYpUF0NdxNqVyfCbEztJ25Z229mpcvSdHfkOF8YqFse+1CkSR1M83Dts1K34eK43Yov375YJ/Op/MXEA0wrbnyEDg/AvwqBv5XZTslIvOjA1WvZJDGBiaZ6lvqs6tEhLfB79eZvTHP8DSDlLabklDAPaio1VC+Q6zyLIlsTIr6fH1VK1gX/uHkvSGKl8C9bfeGHgFlXaWmShN+FvLwW4PiRw2MwzXeq/qQqfS0Nn3gtuGN2kNNBpKVJwcDkYDOcJ2+49ojF8RAdbt8hsZkjGq21hpY6eKhbte66guN7lRTKY5+g2aLkg1CrBp9ZHZ4kAlfbhibhiLt/W1UbXUL/nnTFkrotuJ6vdU6gLN0EhjZN3bMAtKqHC+Bl2223ClNMs17iXReSqqOSc9D3gL9b3FYqQElS4bQIa+0L76TbkMM/H6ilQjSIvVnUXLszMIeyliIVpnI0ClTUbqe5Et51urk+KjJrOE95wyxkiL2bzKxcXCLzdvSy0nxwwcu7DnBQPG0Fg6/JVRMHM17PDhjgQLSvKr8wXtO042xzAosoZuDVOHHgpA5v9iKI/xPUseu3utfBT5ZGcyjKKuxI9Dsjoi4Go0B6uQ4rY/XUp+k4aa1Ucg3Ngx8zYgzJlFGiZq7OnG+quSTpZ32hpQqDmtYKNMxf5p/YRhxWSeuBWheLeQ=
 dist: trusty
 sudo: required
