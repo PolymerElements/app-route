@@ -399,14 +399,7 @@ the `app-route` will update `route.path`. This in-turn will update the
 
         for (var property in setObj) {
           this._pathEffector(property, this[property]);
-          var rootName = this._modelForPath(property);
-          var dashCaseName = Polymer.CaseMap.camelToDashCase(rootName);
-          var eventName = dashCaseName + this._EVENT_CHANGED;
-          // use a cached event here (_useCache: true) for efficiency
-          this.fire(eventName, {
-            value: this[property]
-          }, {bubbles: false});
-
+          this._notifyChange(property);
         }
       }
     });
