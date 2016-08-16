@@ -22,7 +22,7 @@ for a web app.
 
 > *n.b. app-route is still in beta. We expect it will need some changes. We're counting on your feedback!*
 
-In its typical usage, an `app-route` element consumes an object that describes
+In its typical usage, a `app-route` element consumes an object that describes
 some state about the current route, via the `route` property. It then parses
 that state using the `pattern` property, and produces two artifacts: some `data`
 related to the `route`, and a `tail` that contains the rest of the `route` that
@@ -200,7 +200,7 @@ turn is consumed by the `app-route`.
 
 ##Polymer.AppRouteConverterBehavior
 
-Provides bidirectional mapping between `path` and `queryParams` and an
+Provides bidirectional mapping between `path` and `queryParams` and a
 app-route compatible `route` object.
 
 For more information, see the docs for `app-route-converter`.
