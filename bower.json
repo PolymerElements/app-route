@@ -15,7 +15,7 @@
   "private": true,
   "ignore": [],
   "devDependencies": {
-    "paper-styles": "polymerelements/paper-styles#^1.0.13",
+    "paper-styles": "git@github.com:notwaldorf/paper-styles#2.0-preview",
     "paper-input": "polymerelements/paper-input#^1.1.2",
     "web-component-tester": "^4.0.0",
     "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
@@ -25,7 +25,7 @@
     "paper-icon-button": "polymerelements/paper-icon-button#^v1.0.0",
     "paper-toggle-button": "polymerelements/paper-toggle-button#^v1.0.0",
     "google-youtube": "GoogleWebComponents/google-youtube#^1.2.1",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.2.0",
+    "iron-demo-helpers": "git@github.com:notwaldorf/iron-demo-helpers",
     "paper-spinner": "PolymerElements/paper-spinner#^1.1.1",
     "test-fixture": "polymerelements/test-fixture#custom-elements-v1"
   },
@@ -37,6 +37,8 @@
     "polymer": "master",
     "iron-location": "2.0-preview",
     "webcomponentsjs": "v1-polymer-edits",
-    "test-fixture": "custom-elements-v1"
+    "test-fixture": "custom-elements-v1",
+    "paper-styles": "2.0-preview",
+    "iron-flex-layout": "2.0-preview"
   }
 }
