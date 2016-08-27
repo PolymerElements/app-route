@@ -27,26 +27,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
 
-  <test-fixture id="ChainedRoutes">
-    <template is="dom-template">
+  <dom-module id="chained-routes">
+    <template>
       <app-route
+          id="foo"
           pattern="/foo/:foo"
           route="{{numberOneTopRoute}}"
           data="{{fooData}}"
           tail="{{fooRoute}}">
-      </app-route>
+        </app-route>
 
-      <app-route
-          pattern="/bar/:bar"
-          route="{{fooRoute}}"
-          data="{{barData}}">
-      </app-route>
+        <app-route
+            id="bar"
+            pattern="/bar/:bar"
+            route="{{fooRoute}}"
+            data="{{barData}}">
+        </app-route>
 
-      <app-route
-          pattern="/baz/:baz"
-          route="{{fooRoute}}"
-          data="{{bazData}}">
-      </app-route>
+        <app-route
+            id="baz"
+            pattern="/baz/:baz"
+            route="{{fooRoute}}"
+            data="{{bazData}}">
+        </app-route>
+    </template>
+    <script>
+      Polymer({
+        is: 'chained-routes'
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="ChainedRoutes">
+    <template>
+      <chained-routes></chained-routes>
     </template>
   </test-fixture>
 
@@ -60,18 +74,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   'use strict';
 
   function fixtureChainedRoutes(route) {
-    var routes = fixture('ChainedRoutes', {
-      numberOneTopRoute: {
-        path: route.path || '',
-        prefix: route.prefix || '',
-        __queryParams: route.__queryParams || {}
-      }
-    });
+    var chainedRoutes = fixture('ChainedRoutes');
+    chainedRoutes.$.foo.route = {
+      path: route.path || '',
+      prefix: route.prefix || '',
+      __queryParams: route.__queryParams || {}
+    };
 
     return {
-      foo: routes[0],
-      bar: routes[1],
-      baz: routes[2]
+      foo: chainedRoutes.$.foo,
+      bar: chainedRoutes.$.bar,
+      baz: chainedRoutes.$.baz
     };
   }
 
@@ -338,11 +351,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('changing data wholesale in response to path changing', function() {
         var r = fixture('Redirection');
         r.set('data.page', 'bar');
-        r.addEventListener('route-changed', function(e) {
-          if (e.detail.path === 'route.path' && r.route.path === '/foo/baz') {
+        r.routeChanged = function() {
+          if (r.route.path === '/foo/baz') {
             r.data = {page: 'bar'};
           }
-        });
+        };
         r.set('route.path', '/foo/baz');
         expect(window.location.pathname).to.be.equal('/bar');
         expect(r.data).to.be.deep.equal({page: 'bar'});
@@ -353,9 +366,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('changing a data piece in response to path changing', function() {
         var r = fixture('Redirection');
         r.set('data.page', 'bar');
-        r.addEventListener('route-changed', function(e) {
+        r.routeChanged = function() {
           r.set('data.page', 'bar');
-        });
+        };
         r.set('route.path', '/foo/baz');
         expect(window.location.pathname).to.be.equal('/bar');
         expect(r.data).to.be.deep.equal({page: 'bar'});
@@ -365,9 +378,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       test('changing the tail in response to path changing', function() {
         var r = fixture('Redirection');
-        r.addEventListener('route-changed', function() {
+        r.routeChanged = function() {
           r.set('tail.path', '/bar');
-        });
+        };
         r.set('route.path', '/foo');
         expect(window.location.pathname).to.be.equal('/foo/bar');
         expect(r.data).to.be.deep.equal({page: 'foo'});
@@ -383,9 +396,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       test('changing the path in response to data changing', function() {
         var r = fixture('Redirection');
-        r.addEventListener('data-changed', function() {
+        r.dataChanged = function() {
           r.set('route.path', '/bar');
-        });
+        };
         r.set('data', {page: 'foo'});
         expect(window.location.pathname).to.be.equal('/bar');
         expect(r.data).to.be.deep.equal({page: 'bar'});
@@ -395,9 +408,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       test('changing data in response to data changing', function() {
         var r = fixture('Redirection');
-        r.addEventListener('data-changed', function() {
+        r.dataChanged = function() {
           r.set('data.page', 'bar');
-        });
+        };
         r.set('data', {page: 'foo'});
         expect(window.location.pathname).to.be.equal('/bar');
         expect(r.data).to.be.deep.equal({page: 'bar'});
@@ -407,11 +420,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       test('changing the data object wholesale in response to data changing', function() {
         var r = fixture('Redirection');
-        r.addEventListener('data-changed', function() {
+        r.dataChanged = function() {
           if (r.data.page == 'foo') {
             r.set('data', {page: 'bar'});
           }
-        });
+        };
         r.set('data', {page: 'foo'});
         expect(window.location.pathname).to.be.equal('/bar');
         expect(r.data).to.be.deep.equal({page: 'bar'});
@@ -421,9 +434,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       test('changing the tail in response to data changing', function() {
         var r = fixture('Redirection');
-        r.addEventListener('data-changed', function() {
+        r.dataChanged = function() {
           r.set('tail.path', '/bar');
-        });
+        };
         r.set('data', {page: 'foo'});
         expect(window.location.pathname).to.be.equal('/foo/bar');
         expect(r.data).to.be.deep.equal({page: 'foo'});
@@ -434,9 +447,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('changing the path in response to tail changing', function() {
         var r = fixture('Redirection');
         r.set('route.path', '/foo/');
-        r.addEventListener('tail-changed', function() {
+        r.tailChanged = function() {
           r.set('route.path', '/baz' + r.tail.path);
-        });
+        };
         r.set('tail.path', '/bar');
         expect(window.location.pathname).to.be.equal('/baz/bar');
         expect(r.data).to.be.deep.equal({page: 'baz'});
@@ -447,9 +460,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('changing the data in response to tail changing', function() {
         var r = fixture('Redirection');
         r.set('route.path', '/foo/');
-        r.addEventListener('tail-changed', function() {
+        r.tailChanged = function() {
           r.set('data.page', 'baz');
-        });
+        };
         r.set('tail.path', '/bar');
         expect(window.location.pathname).to.be.equal('/baz');
         expect(r.data).to.be.deep.equal({page: 'baz'});
@@ -460,9 +473,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('changing the data object wholesale in response to tail changing', function() {
         var r = fixture('Redirection');
         r.set('route.path', '/foo/');
-        r.addEventListener('tail-changed', function() {
+        r.tailChanged = function() {
           r.set('data', {page: 'baz'});
-        });
+        };
         r.set('tail.path', '/bar');
         expect(window.location.pathname).to.be.equal('/baz');
         expect(r.data).to.be.deep.equal({page: 'baz'});
@@ -473,9 +486,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       test('changing the tail in response to tail changing', function() {
         var r = fixture('Redirection');
         r.set('route.path', '/foo/');
-        r.addEventListener('tail-changed', function() {
+        r.tailChanged = function() {
           r.set('tail.path', '/baz');
-        });
+        };
         r.set('tail.path', '/bar');
         expect(window.location.pathname).to.be.equal('/foo/baz');
         expect(r.data).to.be.deep.equal({page: 'foo'});
