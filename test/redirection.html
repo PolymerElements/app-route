@@ -19,9 +19,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id='redirect-app-route'>
   <template>
-    <app-location route='{{route}}'>
+    <app-location id="a" route='{{route}}'>
     </app-location>
-    <app-route route='{{route}}' pattern="/:page" data="{{data}}" tail="{{tail}}">
+    <app-route id="b" route='{{route}}' pattern="/:page" data="{{data}}" tail="{{tail}}">
     </app-route>
   </template>
   <script>
@@ -29,16 +29,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'redirect-app-route',
       properties: {
         route: {
-          notify: true
+          notify: true,
+          observer: '_routeChanged'
         },
         data: {
           type: Object,
-          notify: true
+          notify: true,
+          observer: '_dataChanged'
         },
         tail: {
-          notify: true
+          notify: true,
+          observer: '_tailChanged'
         },
+        routeChanged: Function,
+        dataChanged: Function,
+        tailChanged: Function
       },
+
+      _routeChanged: function() {
+        if (this.routeChanged) {
+          this.routeChanged();
+        }
+      },
+
+      _dataChanged: function() {
+        if (this.dataChanged) {
+          this.dataChanged();
+        }
+      },
+
+      _tailChanged: function() {
+        if (this.tailChanged) {
+          this.tailChanged();
+        }
+      }
     });
   </script>
 </dom-module>
