@@ -161,6 +161,11 @@ the `app-route` will update `route.path`. This in-turn will update the
         _matched: {
           type: String,
           value: ''
+        },
+
+        _isDirtyCheck: {
+          type: Boolean,
+          value: false
         }
       },
 
@@ -184,7 +189,9 @@ the `app-route` will update `route.path`. This in-turn will update the
        */
       __routeQueryParamsChanged: function(queryParams) {
         if (queryParams && this.tail) {
-          this.set('tail.__queryParams', queryParams);
+          if (this.tail.__queryParams != queryParams) {
+            this.set('tail.__queryParams', queryParams);
+          }
 
           if (!this.active || this._queryParamsUpdating) {
             return;
@@ -223,7 +230,8 @@ the `app-route` will update `route.path`. This in-turn will update the
        * @export
        */
       __tailQueryParamsChanged: function(queryParams) {
-        if (queryParams && this.route) {
+        if (queryParams && this.route && !this._isDirtyCheck
+            && this.route.__queryParams != queryParams) {
           this.set('route.__queryParams', queryParams);
         }
       },
@@ -236,14 +244,14 @@ the `app-route` will update `route.path`. This in-turn will update the
           return;
         }
 
-        this.set('route.__' + changes.path, changes.value);
+        // TODO(emarquez): figure out why this is necessary to trigger the observer
+        // in <iron-query-params>.paramsObjectChanged
+        this.set('route.__queryParams', this.queryParams);
       },
 
       __resetProperties: function() {
         this._setActive(false);
         this._matched = null;
-        //this.tail = { path: null, prefix: null, queryParams: null };
-        //this.data = {};
       },
 
       /**
@@ -253,8 +261,10 @@ the `app-route` will update `route.path`. This in-turn will update the
         if (!this.route) {
           return;
         }
+
         var path = this.route.path;
         var pattern = this.pattern;
+
         if (!pattern) {
           return;
         }
@@ -296,6 +306,9 @@ the `app-route` will update `route.path`. This in-turn will update the
 
         // Properties that must be updated atomically.
         var propertyUpdates = {};
+        propertyUpdates.active = this.active;
+        propertyUpdates.tail = this.tail;
+        propertyUpdates.data = this.data;
 
         //this.active
         if (!this.active) {
@@ -325,7 +338,43 @@ the `app-route` will update `route.path`. This in-turn will update the
           this._dataInUrl[key] = namedMatches[key];
         }
 
-        this.__setMulti(propertyUpdates);
+        // "atmoic" update
+        this._isDirtyCheck = true;
+
+        // set active
+        var shouldActiveNotify = this.active != propertyUpdates.active;
+        this._setActive(propertyUpdates.active);
+
+        // set tail
+        var shouldTailNotify = false;
+        for (var key in propertyUpdates.tail) {
+          if (this.tail[key] != propertyUpdates.tail[key]) {
+            shouldTailNotify = true;
+            this.set('tail.' + key, propertyUpdates.tail[key]);
+          }
+        }
+
+        // set data
+        var shouldDataNotify
+        for (var key in propertyUpdates.data) {
+          if (this.data[key] != propertyUpdates.data[key]) {
+            shouldDataNotify = true;
+            this.set('data.' + key, propertyUpdates.data[key]);
+          }
+        }
+
+        this._isDirtyCheck = false;
+
+        // non-dirty check
+        if (shouldActiveNotify) {
+          this.notifyPath('active', this.active);
+        }
+        if (shouldTailNotify) {
+          this.notifyPath('tail', this.tail);
+        }
+        if (shouldDataNotify) {
+          this.notifyPath('data', this.data);
+        }
       },
 
       /**
@@ -350,7 +399,7 @@ the `app-route` will update `route.path`. This in-turn will update the
        * @export
        */
       __updatePathOnDataChange: function() {
-        if (!this.route || !this.active) {
+        if (!this.route || !this.active || this._isDirtyCheck) {
           return;
         }
         var newPath = this.__getLink({});
@@ -414,7 +463,6 @@ the `app-route` will update `route.path`. This in-turn will update the
           this._pathEffector('tail', this.tail);
           this._notifyChange('tail');
         }
-
       }
     });
   })();
