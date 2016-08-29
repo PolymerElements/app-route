@@ -29,38 +29,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'redirect-app-route',
       properties: {
         route: {
-          notify: true,
-          observer: '_routeChanged'
+          notify: true
         },
         data: {
           type: Object,
-          notify: true,
-          observer: '_dataChanged'
+          notify: true
         },
         tail: {
-          notify: true,
-          observer: '_tailChanged'
-        },
-        routeChanged: Function,
-        dataChanged: Function,
-        tailChanged: Function
-      },
-
-      _routeChanged: function() {
-        if (this.routeChanged) {
-          this.routeChanged();
-        }
-      },
-
-      _dataChanged: function() {
-        if (this.dataChanged) {
-          this.dataChanged();
-        }
-      },
-
-      _tailChanged: function() {
-        if (this.tailChanged) {
-          this.tailChanged();
+          notify: true
         }
       }
     });
