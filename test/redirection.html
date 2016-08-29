@@ -19,9 +19,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id='redirect-app-route'>
   <template>
-    <app-location id="a" route='{{route}}'>
+    <app-location route='{{route}}'>
     </app-location>
-    <app-route id="b" route='{{route}}' pattern="/:page" data="{{data}}" tail="{{tail}}">
+    <app-route route='{{route}}' pattern="/:page" data="{{data}}" tail="{{tail}}">
     </app-route>
   </template>
   <script>
