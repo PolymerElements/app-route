@@ -234,9 +234,7 @@ the `app-route` will update `route.path`. This in-turn will update the
           return;
         }
 
-        // TODO(emarquez): figure out why this is necessary to trigger the observer
-        // in <iron-query-params>.paramsObjectChanged
-        this.set('route.__queryParams', this.queryParams);
+        this.set('route.__' + changes.path, changes.value);
       },
 
       __resetProperties: function() {
