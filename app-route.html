@@ -161,11 +161,6 @@ the `app-route` will update `route.path`. This in-turn will update the
         _matched: {
           type: String,
           value: ''
-        },
-
-        _isDirtyCheck: {
-          type: Boolean,
-          value: false
         }
       },
 
@@ -230,8 +225,7 @@ the `app-route` will update `route.path`. This in-turn will update the
        * @export
        */
       __tailQueryParamsChanged: function(queryParams) {
-        if (queryParams && this.route && !this._isDirtyCheck
-            && this.route.__queryParams != queryParams) {
+        if (queryParams && this.route && this.route.__queryParams != queryParams) {
           this.set('route.__queryParams', queryParams);
         }
       },
@@ -305,14 +299,12 @@ the `app-route` will update `route.path`. This in-turn will update the
         this._matched = matched.join('/');
 
         // Properties that must be updated atomically.
-        var propertyUpdates = {};
-        propertyUpdates.active = this.active;
-        propertyUpdates.tail = this.tail;
-        propertyUpdates.data = this.data;
+        var newTail = this.tail;
+        var newData = this.data;
 
         //this.active
         if (!this.active) {
-          propertyUpdates.active = true;
+          this._setActive(true);
         }
 
         // this.tail
@@ -324,7 +316,7 @@ the `app-route` will update `route.path`. This in-turn will update the
         if (!this.tail ||
             this.tail.prefix !== tailPrefix ||
             this.tail.path !== tailPath) {
-          propertyUpdates.tail = {
+          newTail = {
             prefix: tailPrefix,
             path: tailPath,
             __queryParams: this.route.__queryParams
@@ -332,49 +324,17 @@ the `app-route` will update `route.path`. This in-turn will update the
         }
 
         // this.data
-        propertyUpdates.data = namedMatches;
+        var newData = namedMatches;
         this._dataInUrl = {};
         for (var key in namedMatches) {
           this._dataInUrl[key] = namedMatches[key];
         }
 
-        // "atmoic" update
-        this._isDirtyCheck = true;
-
-        // set active
-        var shouldActiveNotify = this.active != propertyUpdates.active;
-        this._setActive(propertyUpdates.active);
-
-        // set tail
-        var shouldTailNotify = false;
-        for (var key in propertyUpdates.tail) {
-          if (this.tail[key] != propertyUpdates.tail[key]) {
-            shouldTailNotify = true;
-            this.set('tail.' + key, propertyUpdates.tail[key]);
-          }
-        }
-
-        // set data
-        var shouldDataNotify
-        for (var key in propertyUpdates.data) {
-          if (this.data[key] != propertyUpdates.data[key]) {
-            shouldDataNotify = true;
-            this.set('data.' + key, propertyUpdates.data[key]);
-          }
-        }
-
-        this._isDirtyCheck = false;
-
-        // non-dirty check
-        if (shouldActiveNotify) {
-          this.notifyPath('active', this.active);
-        }
-        if (shouldTailNotify) {
-          this.notifyPath('tail', this.tail);
-        }
-        if (shouldDataNotify) {
-          this.notifyPath('data', this.data);
-        }
+        // atomic update
+        this.setProperties({
+          'data': newData,
+          'tail': newTail
+        });
       },
 
       /**
@@ -399,7 +359,7 @@ the `app-route` will update `route.path`. This in-turn will update the
        * @export
        */
       __updatePathOnDataChange: function() {
-        if (!this.route || !this.active || this._isDirtyCheck) {
+        if (!this.route || !this.active) {
           return;
         }
         var newPath = this.__getLink({});
