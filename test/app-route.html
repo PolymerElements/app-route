@@ -178,6 +178,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(routes.baz.data).to.be.eql({});
       });
 
+      test('it becomes inactive if parent became inactive', function() {
+        var routes = fixtureChainedRoutes({ path: '/foo/123/baz/abc/qux' });
+
+        expect(routes.baz.active).to.be.eql(true);
+        routes.foo.set('route.path', '/qux');
+        expect(routes.baz.active).to.be.eql(false);
+      });
+
+      test('it preserves data when route becomes inactive', function() {
+        var routes = fixtureChainedRoutes({ path: '/foo/123/baz/abc/qux' });
+
+        routes.foo.set('route.path', '/qux');
+
+        expect(routes.baz.active).to.be.eql(false);
+        expect(routes.baz.data.baz).to.be.eql('abc');
+      });
+
       test('chained route state is untouched when deactivated', function() {
         var routes = fixtureChainedRoutes({ path: '/foo/123/bar/abc' });
 

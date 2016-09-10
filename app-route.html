@@ -237,8 +237,11 @@ the `app-route` will update `route.path`. This in-turn will update the
       __resetProperties: function() {
         this._setActive(false);
         this._matched = null;
-        //this.tail = { path: null, prefix: null, queryParams: null };
-        //this.data = {};
+        this.tail = {
+          path: null,
+          prefix: null,
+          __queryParams: this.tail.__queryParams
+        };
       },
 
       /**
