@@ -15,30 +15,30 @@
   "private": true,
   "ignore": [],
   "devDependencies": {
-    "paper-styles": "git@github.com:notwaldorf/paper-styles#2.0-preview",
+    "paper-styles": "PolymerElements/paper-styles#2.0-preview",
     "paper-input": "polymerelements/paper-input#^1.1.2",
     "web-component-tester": "^4.0.0",
     "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
-    "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0",
-    "iron-pages": "PolymerElements/iron-pages#^1.0.7",
+    "iron-test-helpers": "polymerelements/iron-test-helpers#2.0-preview",
+    "iron-pages": "PolymerElements/iron-pages#2.0-preview",
     "paper-card": "PolymerElements/paper-card#^1.1.1",
     "paper-icon-button": "polymerelements/paper-icon-button#^v1.0.0",
     "paper-toggle-button": "polymerelements/paper-toggle-button#^v1.0.0",
     "google-youtube": "GoogleWebComponents/google-youtube#^1.2.1",
-    "iron-demo-helpers": "git@github.com:notwaldorf/iron-demo-helpers",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
     "paper-spinner": "PolymerElements/paper-spinner#^1.1.1",
     "test-fixture": "polymerelements/test-fixture#custom-elements-v1"
   },
   "dependencies": {
-    "polymer": "git@github.com:PolymerLabs/alacarte.git",
-    "iron-location": "git@github.com:notwaldorf/iron-location#2.0-preview"
+    "polymer": "Polymer/polymer#2.0-preview",
+    "iron-location": "PolymerElements/iron-location#2.0-preview"
   },
   "resolutions": {
-    "polymer": "master",
-    "iron-location": "2.0-preview",
-    "webcomponentsjs": "v1-polymer-edits",
-    "test-fixture": "custom-elements-v1",
     "paper-styles": "2.0-preview",
-    "iron-flex-layout": "2.0-preview"
+    "test-fixture": "custom-elements-v1",
+    "polymer": "2.0-preview",
+    "iron-flex-layout": "2.0-preview",
+    "iron-selector": "2.0-preview",
+    "webcomponentsjs": "v1"
   }
 }
