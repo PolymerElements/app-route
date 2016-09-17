@@ -328,11 +328,16 @@ the `app-route` will update `route.path`. This in-turn will update the
           this._dataInUrl[key] = namedMatches[key];
         }
 
-        // atomic update
-        this.setProperties({
-          'data': newData,
-          'tail': newTail
-        });
+        var newValues = {};
+        newValues.data = newData;
+        newValues.tail = newTail;
+
+        if (this.setProperties) {
+          // atomic update
+          this.setProperties(newValues);
+        } else {
+          this.__setMulti(newValues);
+        }
       },
 
       /**
