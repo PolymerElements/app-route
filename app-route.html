@@ -297,12 +297,11 @@ the `app-route` will update `route.path`. This in-turn will update the
         this._matched = matched.join('/');
 
         // Properties that must be updated atomically.
-        var newTail = this.tail;
-        var newData = this.data;
+         var propertyUpdates = {};
 
         //this.active
         if (!this.active) {
-          this._setActive(true);
+          propertyUpdates.active = true;
         }
 
         // this.tail
@@ -314,7 +313,7 @@ the `app-route` will update `route.path`. This in-turn will update the
         if (!this.tail ||
             this.tail.prefix !== tailPrefix ||
             this.tail.path !== tailPath) {
-          newTail = {
+          propertyUpdates.tail = {
             prefix: tailPrefix,
             path: tailPath,
             __queryParams: this.route.__queryParams
@@ -322,21 +321,20 @@ the `app-route` will update `route.path`. This in-turn will update the
         }
 
         // this.data
-        var newData = namedMatches;
+        propertyUpdates.data = namedMatches;
         this._dataInUrl = {};
         for (var key in namedMatches) {
           this._dataInUrl[key] = namedMatches[key];
         }
 
-        var newValues = {};
-        newValues.data = newData;
-        newValues.tail = newTail;
-
         if (this.setProperties) {
+          if (!this.active) {
+            this._setActive(true);
+          }
           // atomic update
-          this.setProperties(newValues);
+          this.setProperties(propertyUpdates);
         } else {
-          this.__setMulti(newValues);
+          this.__setMulti(propertyUpdates);
         }
       },
 
