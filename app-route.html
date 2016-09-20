@@ -321,6 +321,12 @@ the `app-route` will update `route.path`. This in-turn will update the
         }
 
         this.__setMulti(propertyUpdates);
+        
+        // Fire events.
+        this.fire('app-route-changed');
+        if( this.active ) {
+          this.fire('app-route-matched');
+        }
       },
 
       /**
