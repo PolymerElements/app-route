@@ -69,7 +69,7 @@ firing a `location-changed` event on `window`. i.e.
     <iron-location
         path="{{__path}}"
         query="{{__query}}"
-        hash="{{__hash}}"
+        hash="{{hash}}"
         url-space-regex={{urlSpaceRegex}}>
     </iron-location>
     <iron-query-params
@@ -153,8 +153,9 @@ firing a `location-changed` event on `window`. i.e.
           /**
            * The hash portion of the current URL.
            */
-          __hash: {
-            type: String
+          hash: {
+            type: String,
+            notify: true
           },
 
           /**
@@ -170,11 +171,11 @@ firing a `location-changed` event on `window`. i.e.
         behaviors: [Polymer.AppRouteConverterBehavior],
 
         observers: [
-          '__computeRoutePath(useHashAsPath, __hash, __path)'
+          '__computeRoutePath(useHashAsPath, hash, __path)'
         ],
 
         __computeRoutePath: function() {
-          this.path = this.useHashAsPath ? this.__hash : this.__path;
+          this.path = this.useHashAsPath ? this.hash : this.__path;
         },
 
         __onPathChanged: function() {
@@ -183,7 +184,7 @@ firing a `location-changed` event on `window`. i.e.
           }
 
           if (this.useHashAsPath) {
-            this.__hash = this.path;
+            this.hash = this.path;
           } else {
             this.__path = this.path;
           }
