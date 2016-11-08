@@ -327,11 +327,11 @@ the `app-route` will update `route.path`. This in-turn will update the
       /**
        * @export
        */
-      __tailPathChanged: function() {
+      __tailPathChanged: function(path) {
         if (!this.active) {
           return;
         }
-        var tailPath = this.tail.path;
+        var tailPath = path;
         var newPath = this._matched;
         if (tailPath) {
           if (tailPath.charAt(0) !== '/') {
@@ -397,11 +397,20 @@ the `app-route` will update `route.path`. This in-turn will update the
         for (var property in setObj) {
           this._propertySetter(property, setObj[property]);
         }
-
-        for (var property in setObj) {
-          this._pathEffector(property, this[property]);
-          this._notifyPathUp(property, this[property]);
+        //notify in a specific order
+        if (setObj.data !== undefined) {
+          this._pathEffector('data', this.data);
+          this._notifyChange('data');
         }
+        if (setObj.active !== undefined) {
+          this._pathEffector('active', this.active);
+          this._notifyChange('active');
+        }
+        if (setObj.tail !== undefined) {
+          this._pathEffector('tail', this.tail);
+          this._notifyChange('tail');
+        }
+
       }
     });
   })();
