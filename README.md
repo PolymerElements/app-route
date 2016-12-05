@@ -139,7 +139,7 @@ location. It also listens for that same event, and re-reads the URL when it's
 fired. This makes it very easy to interop with other routing code.
 
 So for example if you want to navigate to `/new_path` imperatively you could
-call `window.history.pushState` or `window.history.replaceState` followed by
+call `window.location.pushState` or `window.location.replaceState` followed by
 firing a `location-changed` event on `window`. i.e.
 
 ```javascript
