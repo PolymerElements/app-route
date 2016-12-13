@@ -52,8 +52,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-route>
     </template>
     <script>
-      Polymer({
-        is: 'chained-routes'
+      window.addEventListener('WebComponentsReady', function() {
+        Polymer({
+          is: 'chained-routes'
+        });
       });
     </script>
   </dom-module>
