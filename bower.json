@@ -15,7 +15,7 @@
   "private": true,
   "ignore": [],
   "dependencies": {
-    "polymer": "Polymer/polymer#2.0-data-updates",
+    "polymer": "Polymer/polymer#2.0-preview",
     "iron-location": "PolymerElements/iron-location#2.0-preview"
   },
   "devDependencies": {
@@ -56,7 +56,7 @@
     }
   },
   "resolutions": {
-    "polymer": "2.0-data-updates",
+    "polymer": "2.0-preview",
     "test-fixture": "custom-elements-v1",
     "webcomponentsjs": "v1"
   }
