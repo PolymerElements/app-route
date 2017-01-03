@@ -20,6 +20,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="./redirection.html">
 </head>
 <body>
+  <div id='safari-cooldown' hidden>
+    <div>Danger: URL overheating.</div>
+    <div>
+      Safari requires a cooldown period before we call
+      pushState/replaceState any more.
+    </div>
+    <div>Testing will resume after 30 seconds.</div>
+    <div>
+      <a href="https://forums.developer.apple.com/thread/36650">More info</a>
+    </div>
+  </div>
   <test-fixture id="BasicRoute">
     <template>
       <app-route pattern='/user/:username'>
@@ -74,6 +85,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <script>
   'use strict';
+
+  var cooldownFunction = function() {};
+  if (/^Apple/.test(navigator.vendor)) {
+    cooldownFunction = function(done) {
+      var cooldownPeriod = 30 * 1000;
+      this.timeout(cooldownPeriod + 5000);
+      var cooldownMessage = document.querySelector('#safari-cooldown');
+      cooldownMessage.removeAttribute('hidden');
+      setTimeout(function() {
+        done();
+        cooldownMessage.setAttribute('hidden', 'hidden');
+      }, cooldownPeriod);
+    };
+  }
 
   function fixtureChainedRoutes(route) {
     var chainedRoutes = fixture('ChainedRoutes');
@@ -330,6 +355,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     suite('handles reentrent changes to its properties', function() {
       var initialUrl;
+      
+      suiteTeardown(cooldownFunction);
+
       setup(function() {
         initialUrl = window.location.href;
       });
