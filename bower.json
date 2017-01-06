@@ -28,7 +28,7 @@
     "paper-card": "PolymerElements/paper-card#2.0-preview",
     "paper-icon-button": "polymerelements/paper-icon-button#2.0-preview",
     "paper-toggle-button": "polymerelements/paper-toggle-button#2.0-preview",
-    "google-youtube": "GoogleWebComponents/google-youtube#^1.2.1",
+    "google-youtube": "e111077/google-youtube#2.0-preview",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
     "paper-spinner": "PolymerElements/paper-spinner#2.0-preview",
     "test-fixture": "polymerelements/test-fixture#custom-elements-v1"
