@@ -31,7 +31,7 @@
     "google-youtube": "e111077/google-youtube#2.0-preview",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
     "paper-spinner": "PolymerElements/paper-spinner#2.0-preview",
-    "test-fixture": "polymerelements/test-fixture#custom-elements-v1"
+    "test-fixture": "PolymerElements/test-fixture#^2.0.0"
   },
   "variants": {
     "1.x": {
@@ -57,7 +57,7 @@
   },
   "resolutions": {
     "polymer": "2.0-preview",
-    "test-fixture": "custom-elements-v1",
+    "test-fixture": "^2.0.0",
     "webcomponentsjs": "v1"
   }
 }
