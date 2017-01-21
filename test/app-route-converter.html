@@ -40,7 +40,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(converter.route).to.be.deep.equal({
           prefix: '',
           path: '/a/b/c',
-          __queryParams: queryParams
+          __queryParams: queryParams,
+          active: true
         });
 
         converter.set('route.path', '/d/e/f');

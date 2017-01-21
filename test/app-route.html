@@ -45,7 +45,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-route
           pattern="/baz/:baz"
           route="{{fooRoute}}"
+          tail="{{bazTail}}"
           data="{{bazData}}">
+      </app-route>
+
+      <app-route
+          pattern="/:bay"
+          route="{{bazTail}}"
+          data="{{bayData}}">
+      </app-route>
+
+      <app-route
+          pattern="/:page"
+          route="{{fooRoute}}"
+          data="{{pageData}}">
       </app-route>
     </template>
   </test-fixture>
@@ -64,14 +77,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       numberOneTopRoute: {
         path: route.path || '',
         prefix: route.prefix || '',
-        __queryParams: route.__queryParams || {}
+        __queryParams: route.__queryParams || {},
+        active: route.active !== undefined ? route.active : true
       }
     });
 
     return {
       foo: routes[0],
       bar: routes[1],
-      baz: routes[2]
+      baz: routes[2],
+      bay: routes[3],
+      page: routes[4]
     };
   }
 
@@ -93,7 +109,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       route.route = {
         prefix: '',
         path: '/user/papyrus/details',
-        __queryParams: {}
+        __queryParams: {},
+        active: true
       }
       expect(route.tail.prefix).to.be.equal('/user/papyrus');
       expect(route.tail.path).to.be.equal('/details');
@@ -104,7 +121,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       route.route = {
         prefix: '',
         path: '/user/papyrus/details',
-        __queryParams: {}
+        __queryParams: {},
+        active: true
       };
 
       route.set('tail.path', '/messages');
@@ -113,14 +131,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       expect(route.tail).to.be.deep.equal({
         prefix: '/user/toriel',
         path: '',
-        __queryParams: {}
+        __queryParams: {},
+        active: true
       });
     });
 
     test('it creates data as described by pattern', function() {
       route.route = {
         prefix: '',
-        path: '/user/sans'
+        path: '/user/sans',
+        active: true
       };
 
       expect(route.data).to.be.deep.equal({username: 'sans'});
@@ -145,12 +165,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     test('changing data changes the path', function() {
       route.route = {
         prefix: '',
-        path: '/user/asgore'
+        path: '/user/asgore',
+        active: true
       };
 
       expect(route.data).to.be.deep.equal({username: 'asgore'});
       route.data = {username: 'toriel'};
       expect(route.route.path).to.be.equal('/user/toriel');
+    });
+
+    test('it becomes inactive if parent became inactive', function() {
+      var routes = fixtureChainedRoutes({ path: '/foo/123/baz/abc/bay' });
+
+      expect(routes.bay.active).to.be.eql(true);
+      routes.foo.set('route.path', '/foo/123/bar/abc');
+      expect(routes.bay.active).to.be.eql(false);
+    });
+
+    test('it becomes active again after parent got active', function() {
+      var routes = fixtureChainedRoutes({ path: '/foo/123/baz/abc/bay' });
+
+      routes.foo.set('route.path', '/foo/123/bar/abc');
+      routes.foo.set('route.path', '/foo/123/baz/abc/bay');
+      expect(routes.bay.active).to.be.eql(true);
     });
 
     suite('propagating data', function() {
@@ -200,27 +237,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         test('ignores changes when the route is inactive', function() {
           var routes = fixtureChainedRoutes({ path: '/foo/123/bar/abc' });
 
-          expect(routes.baz.active).to.be.eql(false);
-          routes.baz.set('data.baz', 'cba');
+          expect(routes.bay.active).to.be.eql(false);
+          routes.bay.set('data.bay', 'cba');
           expect(routes.foo.route.path).to.be.eql('/foo/123/bar/abc');
         });
 
-        test('ignores changes after a route deactives', function() {
-          var routes = fixtureChainedRoutes({ path: '/foo/123/bar/abc' });
+        suite('updates when path could be matched', function() {
+          test('with literal part', function() {
+            var routes = fixtureChainedRoutes({ path: '/foo/123/bar/' });
+            expect(routes.bar.active).to.be.eql(true);
+            routes.bar.set('data.bar', 'zyx');
+            expect(routes.foo.route.path).to.be.eql('/foo/123/bar/zyx');
+          });
 
-          routes.foo.set('route.path', '/foo/123/baz/zyx');
+          test('correctly sets tail', function() {
+            var routes = fixtureChainedRoutes({ path: '/foo/' });
+            routes.foo.set('data.foo', '123');
+            expect(routes.page.route).to.be.eql({
+              prefix: '/foo/123',
+              path: '',
+              __queryParams: {},
+              active: true
+            });
+          });
 
-          expect(routes.bar.active).to.be.eql(false);
-          expect(routes.baz.active).to.be.eql(true);
-          routes.bar.set('data.bar', 'cba');
-          expect(routes.foo.route.path).to.be.eql('/foo/123/baz/zyx');
+          test('with only match and trailing slash', function() {
+            var routes = fixtureChainedRoutes({ path: '/foo/123/' });
+            expect(routes.page.active).to.be.eql(true);
+            routes.page.set('data.page', 'page1');
+            expect(routes.foo.route.path).to.be.eql('/foo/123/page1');
+          });
+
+          test('nested does not become active when empty path', function() {
+            var routes = fixtureChainedRoutes({ path: '/foo/' });
+            expect(routes.page.active).to.be.eql(false);
+            expect(routes.foo.data.foo).to.be.eql('');
+          });
         });
       });
     });
 
     suite('propagating query params', function() {
       test('query params are empty if no routes match', function() {
-        var routes = fixtureChainedRoutes({ path: '', __queryParams: {
+        var routes = fixtureChainedRoutes({ path: '', active: false, __queryParams: {
           qux: 'zot'
         }});
         expect(routes.foo.queryParams).to.be.eql({});
