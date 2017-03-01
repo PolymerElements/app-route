@@ -30,8 +30,7 @@
     "paper-spinner": "PolymerElements/paper-spinner#2.0-preview",
     "paper-styles": "PolymerElements/paper-styles#2.0-preview",
     "paper-toggle-button": "polymerelements/paper-toggle-button#2.0-preview",
-    "test-fixture": "PolymerElements/test-fixture#^2.0.0",
-    "web-component-tester": "v6.0.0-prerelease.5"
+    "web-component-tester": "^6.0.0-prerelease.6"
   },
   "variants": {
     "1.x": {
@@ -54,10 +53,5 @@
         "web-component-tester": "^4.0.0"
       }
     }
-  },
-  "resolutions": {
-    "polymer": "2.0-preview",
-    "test-fixture": "^2.0.0",
-    "webcomponentsjs": "v1"
   }
 }
