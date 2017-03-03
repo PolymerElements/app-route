@@ -30,7 +30,8 @@
     "paper-spinner": "PolymerElements/paper-spinner#2.0-preview",
     "paper-styles": "PolymerElements/paper-styles#2.0-preview",
     "paper-toggle-button": "polymerelements/paper-toggle-button#2.0-preview",
-    "web-component-tester": "^6.0.0-prerelease.6"
+    "web-component-tester": "^6.0.0-prerelease.6",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0-rc.1"
   },
   "variants": {
     "1.x": {
