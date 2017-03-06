@@ -469,7 +469,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         r.addEventListener('data-changed', function() {
           r.set('tail.path', '/bar');
         });
-        r.set('data', {page: 'foo'});
+        r.set('data.page', 'foo');
         expect(window.location.pathname).to.be.equal('/foo/bar');
         expect(r.data).to.be.deep.equal({page: 'foo'});
         expect(r.route.path).to.be.equal('/foo/bar');
