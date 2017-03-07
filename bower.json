@@ -16,7 +16,7 @@
   "ignore": [],
   "dependencies": {
     "iron-location": "PolymerElements/iron-location#2.0-preview",
-    "polymer": "Polymer/polymer#2.0-preview"
+    "polymer": "Polymer/polymer#^2.0.0-rc.1"
   },
   "devDependencies": {
     "google-youtube": "e111077/google-youtube#2.0-preview",
