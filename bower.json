@@ -58,5 +58,8 @@
         "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
       }
     }
+  },
+  "resolutions": {
+    "polymer": "^2.0.0-rc.1"
   }
 }
