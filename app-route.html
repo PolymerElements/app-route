@@ -253,14 +253,9 @@ the `app-route` will update `route.path`. This in-turn will update the
         if (!this.route) {
           return;
         }
-        var path = this.route.path;
+        var path = this.route.path || "";
         var pattern = this.pattern;
         if (!pattern) {
-          return;
-        }
-
-        if (!path) {
-          this.__resetProperties();
           return;
         }
 
@@ -276,17 +271,25 @@ the `app-route` will update `route.path`. This in-turn will update the
             break;
           }
           var pathPiece = remainingPieces.shift();
+          var patternPieceOptional = false;
 
-          // We don't match this path.
-          if (!pathPiece && pathPiece !== '') {
+          if (patternPiece.slice(-1) == '?') {
+            // Optional parameter.
+            patternPiece = patternPiece.slice(0, -1);
+            patternPieceOptional = true;
+          } else if (!pathPiece && pathPiece !== '') {
+            // No optional parameter and we don't match this path.
             this.__resetProperties();
             return;
           }
-          matched.push(pathPiece);
+
+          if (pathPiece !== undefined) {
+            matched.push(pathPiece);
+          }
 
           if (patternPiece.charAt(0) == ':') {
             namedMatches[patternPiece.slice(1)] = pathPiece;
-          } else if (patternPiece !== pathPiece) {
+          } else if (patternPiece !== pathPiece && !patternPieceOptional) {
             this.__resetProperties();
             return;
           }
