@@ -1,0 +1,214 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <title>app-route-optional-params</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../../polymer/polymer.html">
+    <link rel="import" href="../app-route.html">
+  </head>
+
+  <body>
+
+    <test-fixture id="SimpleRoute">
+      <template>
+        <app-route 
+          pattern="/:id?"></app-route>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="ComplexRoute">
+      <template>
+        <app-route 
+          pattern="/client/:id/:action?/:view?"></app-route>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="NoParametersRoute">
+      <template>
+        <app-route 
+          pattern="/client/list?"></app-route>
+      </template>
+    </test-fixture>
+
+    <script>
+      'use strict';
+
+      suite('simple optional parameter', function () {
+        var route;
+
+        setup(function() {
+          route = fixture('SimpleRoute');
+        });
+
+        test('active route with undefined optional parameter', function() {
+          route.route = {
+            prefix: '/client',
+            path: '',
+            __queryParams: {}
+          };
+
+          expect(route.active).to.be.equal(true);
+          expect(route.data).to.be.deep.equal({
+            id: undefined
+          });
+          expect(route.tail).to.be.deep.equal({
+            prefix: '/client',
+            path: '',
+            __queryParams: {}
+          });
+        });
+
+        test('active route with filled optional parameter', function() {
+          route.route = {
+            prefix: '/client',
+            path: '/c123',
+            __queryParams: {}
+          };
+
+          expect(route.active).to.be.equal(true);
+          expect(route.data).to.be.deep.equal({
+            id: 'c123'
+          });
+          expect(route.tail).to.be.deep.equal({
+            prefix: '/client/c123',
+            path: '',
+            __queryParams: {}
+          });
+        });
+
+      });
+
+      suite('complex optional parameter', function () {
+        var route;
+
+        setup(function() {
+          route = fixture('ComplexRoute');
+        });
+
+        test('path doesn\'t match the route because id parameter is required', function() {
+          route.route = {
+            prefix: '',
+            path: '/client',
+            __queryParams: {}
+          };
+
+          expect(route.active).to.be.equal(false);
+          expect(route.data).to.be.deep.equal({});
+        });
+
+        test('path matches the route because third and fourth parameters are optionals', function() {
+          route.route = {
+            prefix: '',
+            path: '/client/c123',
+            __queryParams: {}
+          };
+
+          expect(route.active).to.be.equal(true);
+          expect(route.data).to.be.deep.equal({
+            id: 'c123',
+            action: undefined,
+            view: undefined
+          });
+          expect(route.tail).to.be.deep.equal({
+            prefix: '/client/c123',
+            path: '',
+            __queryParams: {}
+          });
+        });
+
+        test('path matches the route because fourth parameters is optional', function() {
+          route.route = {
+            prefix: '',
+            path: '/client/c123/overview',
+            __queryParams: {}
+          };
+
+          expect(route.active).to.be.equal(true);
+          expect(route.data).to.be.deep.equal({
+            id: 'c123',
+            action: 'overview',
+            view: undefined
+          });
+          expect(route.tail).to.be.deep.equal({
+            prefix: '/client/c123/overview',
+            path: '',
+            __queryParams: {}
+          });
+        });
+
+      });
+
+      suite('no parameters router', function () {
+        var route;
+
+        setup(function() {
+          route = fixture('NoParametersRoute');
+        });
+
+        test('path match the route because \'list\' in second part of the path is optional', function() {
+          route.route = {
+            prefix: '',
+            path: '/client',
+            __queryParams: {}
+          };
+
+          expect(route.active).to.be.equal(true);
+          expect(route.data).to.be.deep.equal({});
+          expect(route.tail).to.be.deep.equal({
+            prefix: '/client',
+            path: '',
+            __queryParams: {}
+          });
+        });
+
+        test('path matches the route because second parameter is filled, although it is optional', function() {
+          route.route = {
+            prefix: '',
+            path: '/client/list',
+            __queryParams: {}
+          };
+
+          expect(route.active).to.be.equal(true);
+          expect(route.data).to.be.deep.equal({});
+          expect(route.tail).to.be.deep.equal({
+            prefix: '/client/list',
+            path: '',
+            __queryParams: {}
+          });
+        });
+
+        test('path matches the route because \'list\' in second part of the path is not required', function() {
+          route.route = {
+            prefix: '',
+            path: '/client/overview',
+            __queryParams: {}
+          };
+
+          expect(route.active).to.be.equal(true);
+          expect(route.data).to.be.deep.equal({});
+          expect(route.tail).to.be.deep.equal({
+            prefix: '/client/overview',
+            path: '',
+            __queryParams: {}
+          });
+        });
+
+      });
+
+    </script>
+
+  </body>
+
+</html>

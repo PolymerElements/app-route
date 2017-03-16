@@ -17,7 +17,7 @@
   "devDependencies": {
     "paper-styles": "polymerelements/paper-styles#^1.0.13",
     "paper-input": "polymerelements/paper-input#^1.1.2",
-    "web-component-tester": "^4.0.0",
+    "web-component-tester": "^5.0.1",
     "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
     "iron-test-helpers": "polymerelements/iron-test-helpers#^1.0.0",
     "iron-pages": "PolymerElements/iron-pages#^1.0.7",
