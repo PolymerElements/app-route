@@ -156,9 +156,9 @@ http://polymer.github.io/PATENTS.txt
           }
         },
 
-        attached: function(path) {
+        attached: function() {
           // If we do not have an initial URL, we redirect to /search
-          if (!path) {
+          if (!this.route || !this.route.path) {
             this.set('route.path', '/search/');
           }
         },
