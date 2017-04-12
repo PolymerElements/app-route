@@ -39,7 +39,7 @@
     "1.x": {
       "dependencies": {
         "iron-location": "polymerelements/iron-location#^0.8.1",
-        "polymer": "polymer/polymer#^1.3.1"
+        "polymer": "polymer/polymer#^1.7.0"
       },
       "devDependencies": {
         "google-youtube": "GoogleWebComponents/google-youtube#^1.2.1",
