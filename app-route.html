@@ -142,7 +142,7 @@ the `app-route` will update `route.path`. This in-turn will update the
         },
 
         /**
-         * Whether the current route is active. True if `route.path` matches the 
+         * Whether the current route is active. True if `route.path` matches the
          * `pattern`, false otherwise.
          */
         active: {
@@ -184,7 +184,7 @@ the `app-route` will update `route.path`. This in-turn will update the
        */
       __routeQueryParamsChanged: function(queryParams) {
         if (queryParams && this.tail) {
-          if (this.tail.__queryParams != queryParams) {
+          if (this.tail.__queryParams !== queryParams) {
             this.set('tail.__queryParams', queryParams);
           }
 
