@@ -383,7 +383,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var r = fixture('Redirection');
         r.set('data.page', 'bar');
         r.addEventListener('route-changed', function(e) {
-          console.log('inside before', r.route.path);
           if (e.detail.path === 'route.path' && r.route.path === '/foo/baz') {
             r.data = {page: 'bar'};
           }
