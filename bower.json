@@ -19,7 +19,7 @@
     "polymer": "Polymer/polymer#^2.0.0-rc.1"
   },
   "devDependencies": {
-    "google-youtube": "e111077/google-youtube#2.0-preview",
+    "google-youtube": "GoogleWebComponents/google-youtube#2.0-preview",
     "iron-component-page": "polymerelements/iron-component-page#2.0-preview",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
     "iron-pages": "PolymerElements/iron-pages#2.0-preview",
