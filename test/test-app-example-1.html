@@ -57,12 +57,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       expect(exampleApp.route).to.be.deep.eq({
         prefix: '',
         path: '/lol',
-        __queryParams: {}
+        __queryParams: {},
+        active: true
       });
       expect(exampleApp.userRoute).to.be.deep.eq({
         prefix: null,
         path: null,
-        __queryParams: {}
+        __queryParams: {},
+        active: false
       });
       expect(window.location.pathname).to.be.equal('/lol');
 
@@ -77,12 +79,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       expect(exampleApp.route).to.be.deep.eq({
         prefix: '',
         path: '/user/view',
-        __queryParams: {}
+        __queryParams: {},
+        active: true
       });
       expect(exampleApp.userRoute).to.be.deep.eq({
         prefix: '/user',
         path: '/view',
-        __queryParams: {}
+        __queryParams: {},
+        active: true
       });
       expect(window.location.pathname).to.be.equal('/user/view');
 
@@ -97,12 +101,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       expect(exampleApp.route).to.be.deep.eq({
         prefix: '',
         path: '/user/details',
-        __queryParams: {}
+        __queryParams: {},
+        active: true
       });
       expect(exampleApp.userRoute).to.be.deep.eq({
         prefix: '/user',
         path: '/details',
-        __queryParams: {}
+        __queryParams: {},
+        active: true
       });
       expect(window.location.pathname).to.be.equal('/user/details');
 

@@ -137,7 +137,7 @@ the `app-route` will update `route.path`. This in-turn will update the
          */
         tail: {
           type: Object,
-          value: function() {return {path: null, prefix: null, __queryParams: null};},
+          value: function() {return {path: null, prefix: null, __queryParams: null, active: false};},
           notify: true
         },
 
@@ -170,7 +170,8 @@ the `app-route` will update `route.path`. This in-turn will update the
         '__tailPathChanged(tail.path)',
         '__routeQueryParamsChanged(route.__queryParams)',
         '__tailQueryParamsChanged(tail.__queryParams)',
-        '__queryParamsChanged(queryParams.*)'
+        '__queryParamsChanged(queryParams.*)',
+        '__parentActiveChanged(route.active)'
       ],
 
       created: function() {
@@ -239,11 +240,10 @@ the `app-route` will update `route.path`. This in-turn will update the
         this.set('route.__' + changes.path, changes.value);
       },
 
-      __resetProperties: function() {
+      __deactivate: function() {
         this._setActive(false);
+        this.set('tail.active', false);
         this._matched = null;
-        //this.tail = { path: null, prefix: null, queryParams: null };
-        //this.data = {};
       },
 
       /**
@@ -260,7 +260,7 @@ the `app-route` will update `route.path`. This in-turn will update the
         }
 
         if (!path) {
-          this.__resetProperties();
+          this.__deactivate();
           return;
         }
 
@@ -279,7 +279,7 @@ the `app-route` will update `route.path`. This in-turn will update the
 
           // We don't match this path.
           if (!pathPiece && pathPiece !== '') {
-            this.__resetProperties();
+            this.__deactivate();
             return;
           }
           matched.push(pathPiece);
@@ -287,7 +287,7 @@ the `app-route` will update `route.path`. This in-turn will update the
           if (patternPiece.charAt(0) == ':') {
             namedMatches[patternPiece.slice(1)] = pathPiece;
           } else if (patternPiece !== pathPiece) {
-            this.__resetProperties();
+            this.__deactivate();
             return;
           }
         }
@@ -310,11 +310,13 @@ the `app-route` will update `route.path`. This in-turn will update the
         }
         if (!this.tail ||
             this.tail.prefix !== tailPrefix ||
-            this.tail.path !== tailPath) {
+            this.tail.path !== tailPath ||
+            this.tail.active !== this.active) {
           propertyUpdates.tail = {
             prefix: tailPrefix,
             path: tailPath,
-            __queryParams: this.route.__queryParams
+            __queryParams: this.route.__queryParams,
+            active: true
           };
         }
 
@@ -349,13 +351,13 @@ the `app-route` will update `route.path`. This in-turn will update the
       /**
        * @export
        */
-      __updatePathOnDataChange: function() {
-        if (!this.route || !this.active) {
+      __updatePathOnDataChange: function(data) {
+        if (!this.active) {
           return;
         }
         var newPath = this.__getLink({});
         var oldPath = this.__getLink(this._dataInUrl);
-        if (newPath === oldPath) {
+        if (this._dataInUrl && newPath === oldPath) {
           return;
         }
         this.set('route.path', newPath);
@@ -384,6 +386,14 @@ the `app-route` will update `route.path`. This in-turn will update the
           }
         }
         return interp.join('/');
+      },
+
+      __parentActiveChanged: function(active) {
+        if (!active) {
+          this.__deactivate();
+        } else {
+          this.__tryToMatch();
+        }
       },
 
       __setMulti: function(setObj) {
