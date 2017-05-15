@@ -15,30 +15,30 @@
   "private": true,
   "ignore": [],
   "dependencies": {
-    "iron-location": "PolymerElements/iron-location#2.0-preview",
-    "polymer": "Polymer/polymer#^2.0.0-rc.1"
+    "iron-location": "PolymerElements/iron-location#1 - 2",
+    "polymer": "Polymer/polymer#1.9 - 2"
   },
   "devDependencies": {
-    "google-youtube": "GoogleWebComponents/google-youtube#2.0-preview",
-    "iron-component-page": "polymerelements/iron-component-page#2.0-preview",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#2.0-preview",
-    "iron-pages": "PolymerElements/iron-pages#2.0-preview",
-    "iron-test-helpers": "polymerelements/iron-test-helpers#2.0-preview",
-    "paper-card": "PolymerElements/paper-card#2.0-preview",
-    "paper-icon-button": "polymerelements/paper-icon-button#2.0-preview",
-    "paper-input": "polymerelements/paper-input#2.0-preview",
-    "paper-spinner": "PolymerElements/paper-spinner#2.0-preview",
-    "paper-styles": "PolymerElements/paper-styles#2.0-preview",
-    "paper-toggle-button": "polymerelements/paper-toggle-button#2.0-preview",
+    "google-youtube": "GoogleWebComponents/google-youtube#1 - 2",
+    "iron-component-page": "polymerelements/iron-component-page#1 - 2",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#1 - 2",
+    "iron-pages": "PolymerElements/iron-pages#1 - 2",
+    "iron-test-helpers": "polymerelements/iron-test-helpers#1 - 2",
+    "paper-card": "PolymerElements/paper-card#1 - 2",
+    "paper-icon-button": "polymerelements/paper-icon-button#1 - 2",
+    "paper-input": "polymerelements/paper-input#1 - 2",
+    "paper-spinner": "PolymerElements/paper-spinner#1 - 2",
+    "paper-styles": "PolymerElements/paper-styles#1 - 2",
+    "paper-toggle-button": "polymerelements/paper-toggle-button#1 - 2",
     "url": "webcomponents/URL#^0.5.7",
-    "web-component-tester": "^6.0.0-prerelease.6",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0-rc.4"
+    "web-component-tester": "^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
   },
   "variants": {
     "1.x": {
       "dependencies": {
         "iron-location": "polymerelements/iron-location#^0.8.1",
-        "polymer": "polymer/polymer#^1.7.0"
+        "polymer": "Polymer/polymer#^1.9"
       },
       "devDependencies": {
         "google-youtube": "GoogleWebComponents/google-youtube#^1.2.1",
@@ -54,7 +54,13 @@
         "paper-toggle-button": "polymerelements/paper-toggle-button#^1.0.0",
         "web-component-tester": "^4.0.0",
         "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7"
       }
     }
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0"
   }
 }
