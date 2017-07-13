@@ -31,7 +31,7 @@
     "paper-styles": "PolymerElements/paper-styles#1 - 2",
     "paper-toggle-button": "polymerelements/paper-toggle-button#1 - 2",
     "url": "webcomponents/URL#^0.5.7",
-    "web-component-tester": "^6.0.0",
+    "web-component-tester": "^4.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
   },
   "variants": {
