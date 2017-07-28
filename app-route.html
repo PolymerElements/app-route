@@ -180,7 +180,6 @@ the `app-route` will update `route.path`. This in-turn will update the
 
       /**
        * Deal with the query params object being assigned to wholesale.
-       * @export
        */
       __routeQueryParamsChanged: function(queryParams) {
         if (queryParams && this.tail) {
@@ -221,18 +220,12 @@ the `app-route` will update `route.path`. This in-turn will update the
         }
       },
 
-      /**
-       * @export
-       */
       __tailQueryParamsChanged: function(queryParams) {
         if (queryParams && this.route && this.route.__queryParams != queryParams) {
           this.set('route.__queryParams', queryParams);
         }
       },
 
-      /**
-       * @export
-       */
       __queryParamsChanged: function(changes) {
         if (!this.active || this._queryParamsUpdating) {
           return;
@@ -246,9 +239,6 @@ the `app-route` will update `route.path`. This in-turn will update the
         this._matched = null;
       },
 
-      /**
-       * @export
-       */
       __tryToMatch: function() {
         if (!this.route) {
           return;
@@ -338,9 +328,6 @@ the `app-route` will update `route.path`. This in-turn will update the
         }
       },
 
-      /**
-       * @export
-       */
       __tailPathChanged: function(path) {
         if (!this.active) {
           return;
@@ -356,9 +343,6 @@ the `app-route` will update `route.path`. This in-turn will update the
         this.set('route.path', newPath);
       },
 
-      /**
-       * @export
-       */
       __updatePathOnDataChange: function() {
         if (!this.route || !this.active) {
           return;
