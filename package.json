@@ -1,0 +1,16 @@
+{
+  "name": "@polymer/app-route",
+  "flat": true,
+  "version": "3.0.0-pre.1",
+  "description": "App routing expressed as Polymer Custom Elements.",
+  "contributors": [
+    "The Polymer Authors"
+  ],
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/PolymerElements/app-route",
+  "dependencies": {
+    "@polymer/iron-location": "^3.0.0-pre.1",
+    "@polymer/polymer": "^3.0.0-pre.1"
+  },
+  "devDependencies": {}
+}
