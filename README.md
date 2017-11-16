@@ -14,6 +14,8 @@ thing! https://github.com/PolymerLabs/tedium/issues
 
 [![Build status](https://travis-ci.org/PolymerElements/app-route.svg?branch=master)](https://travis-ci.org/PolymerElements/app-route)
 
+_[Demo and API docs](https://elements.polymer-project.org/elements/app-route)_
+
 
 ## &lt;app-route&gt;
 
@@ -212,6 +214,6 @@ turn is consumed by the `app-route`.
 Provides bidirectional mapping between `path` and `queryParams` and a
 app-route compatible `route` object.
 
-For more information, see the docs for `app-route-converter`.
+For more information, see the docs for [`app-route-converter`](https://www.webcomponents.org/element/PolymerElements/app-route/elements/app-route-converter).
 
 
