@@ -318,14 +318,10 @@ the `app-route` will update `route.path`. This in-turn will update the
 
         if (this.setProperties) {
             //Update properties in a specific order: data, tail and set inactive during update if data changed
-            if(propertyUpdates.hasOwnProperty("data")){
-                this._setActive(false)
-                this.set("data", propertyUpdates.data);
-            }
-            propertyUpdates.hasOwnProperty("tail") && this.set("tail", propertyUpdates.tail);
-            if(propertyUpdates.hasOwnProperty("data") || propertyUpdates.active){
-                this._setActive(true);
-            }
+            propertyUpdates.hasOwnProperty("data") && this._setPendingPropertyOrPath("data", propertyUpdates.data, true);
+            propertyUpdates.hasOwnProperty("tail") && this._setPendingPropertyOrPath("tail", propertyUpdates.tail, true);
+            propertyUpdates.hasOwnProperty("active") && this._setPendingPropertyOrPath("active", propertyUpdates.active, true);
+            this._invalidateProperties();
         } else {
           this.__setMulti(propertyUpdates);
         }
