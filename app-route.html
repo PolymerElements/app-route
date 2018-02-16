@@ -286,7 +286,6 @@ the `app-route` will update `route.path`. This in-turn will update the
 
         this._matched = matched.join('/');
 
-        // Properties that must be updated atomically.
         var propertyUpdates = {};
 
         //this.active
@@ -318,8 +317,10 @@ the `app-route` will update `route.path`. This in-turn will update the
         }
 
         if (this.setProperties) {
-          // atomic update
-          this.setProperties(propertyUpdates, true);
+            //Update properties in a specific order: data, active, tail
+            propertyUpdates.hasOwnProperty("data") && this.set("data", propertyUpdates.data);
+            propertyUpdates.hasOwnProperty("active") && this._setActive(propertyUpdates.active);
+            propertyUpdates.hasOwnProperty("tail") && this.set("tail", propertyUpdates.tail);
         } else {
           this.__setMulti(propertyUpdates);
         }
