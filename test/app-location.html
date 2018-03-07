@@ -135,7 +135,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           test('it can handle special characters', function() {
             appLocation.set('queryParams.quote', "'");
-            expect(appLocation.__query).to.be.equal('quote=%27');
+            expect(appLocation.__query.indexOf('quote=%27')).to.not.be.equal(0);
           });
         });
 
