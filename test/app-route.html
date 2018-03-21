@@ -169,13 +169,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       route.pattern = '/user/:username/likes/:count';
 
-      // At the moment, we don't reset data when we no longer match.
-      expect(route.data).to.be.deep.equal({username: 'sans'});
+      // The data should reset when we no longer match.
+      expect(route.data).to.be.deep.equal({});
       expect(route.active).to.be.equal(false);
 
       route.set('route.path', "/does/not/match");
 
-      expect(route.data).to.be.deep.equal({username: 'sans'});
+      expect(route.data).to.be.deep.equal({});
       expect(route.active).to.be.equal(false);
 
       route.set('route.path', '/user/undyne/likes/20');
@@ -235,13 +235,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         expect(routes.baz.data).to.be.eql({});
       });
 
-      test('chained route state is untouched when deactivated', function() {
+      test('chained route state is cleared when deactivated', function() {
         var routes = fixtureChainedRoutes({ path: '/foo/123/bar/abc' });
 
         routes.foo.set('route.path', '/foo/321/baz/zyx');
 
         expect(routes.foo.data).to.be.eql({ foo: '321' });
-        expect(routes.bar.data).to.be.eql({ bar: 'abc' });
+	expect(routes.bar.data).to.be.eql({});
         expect(routes.baz.data).to.be.eql({ baz: 'zyx' });
       });
 
