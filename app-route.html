@@ -247,6 +247,10 @@ the `app-route` will update `route.path`. This in-turn will update the
         var path = this.route.path;
         var pattern = this.pattern;
 
+        if (path === '') {
+          path = '/';
+        }
+
         if (!pattern) {
           return;
         }
