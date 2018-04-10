@@ -58,14 +58,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
         },
 
-        params: {
-          type: Object,
-          computed: '_computeParams(apiKey, queryParams.search)'
-        },
+        params:
+            {type: Object, computed: '_computeParams(apiKey, queryParams.search)'},
 
-        route: {
-          type: Object
-        }
+        route: {type: Object}
       },
 
       observers: [
@@ -92,8 +88,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (!photo || !photo.farm) {
           return '';
         }
-        return 'https://farm' + photo.farm + '.staticflickr.com/' +
-            photo.server + '/' + photo.id + '_' + photo.secret + '.jpg';
+        return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server +
+            '/' + photo.id + '_' + photo.secret + '.jpg';
       },
 
       _computeLink: function(photo) {

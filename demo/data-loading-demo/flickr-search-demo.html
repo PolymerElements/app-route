@@ -49,12 +49,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'flickr-search-demo',
-      properties: {
-        apiKey: {
-          type: String,
-          value: '5358d9830b6865a13d251e5e1acb4c30'
-        }
-      },
+      properties:
+          {apiKey: {type: String, value: '5358d9830b6865a13d251e5e1acb4c30'}},
 
       attached: function() {
         if (this.route.path === '') {

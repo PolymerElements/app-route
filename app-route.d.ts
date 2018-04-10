@@ -90,7 +90,8 @@ interface AppRouteElement extends Polymer.Element {
    * For example the pattern "/foo" will match "/foo" or "/foo/bar"
    * but not "/foobar".
    *
-   * Path segments like `/:named` are mapped to properties on the `data` object.
+   * Path segments like `/:named` are mapped to properties on the `data`
+   * object.
    */
   pattern: string|null|undefined;
 

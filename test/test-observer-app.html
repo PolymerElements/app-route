@@ -28,35 +28,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
   </test-fixture>
   <script>
-  'use strict';
+    'use strict';
     function setLocation(url) {
       window.history.pushState({}, '', url);
-      Polymer.Base.fire('location-changed', {}, { node: window });
+      Polymer.Base.fire('location-changed', {}, {node: window});
     }
 
 
-    suite('observe app-route active changes', function(){
+    suite('observe app-route active changes', function() {
       var originalLocation;
       var sandbox, el;
-      setup(function(){
+      setup(function() {
         originalLocation = window.location.href;
         sandbox = sinon.sandbox.create();
         el = fixture('observer_app');
-     });
-      teardown(function(){
+      });
+      teardown(function() {
         sandbox.restore();
         window.history.replaceState({}, '', originalLocation);
       });
 
-      test('observer should fire when route selected', function(){
-        sandbox.spy(el,'checkActive');
+      test('observer should fire when route selected', function() {
+        sandbox.spy(el, 'checkActive');
         setLocation('/report/1000');
         expect(el.checkActive).to.have.been.called.once;
         expect(el.checkActive).to.have.been.calledWith(true);
       });
-      test('observer should fire when route deselected',function(){
+      test('observer should fire when route deselected', function() {
         setLocation('/report/1000');
-        sandbox.spy(el,'checkActive');
+        sandbox.spy(el, 'checkActive');
         setLocation('/menu');
         expect(el.checkActive).to.have.been.called.once;
         expect(el.checkActive).to.have.been.calledWith(false);

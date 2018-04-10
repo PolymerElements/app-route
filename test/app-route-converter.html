@@ -37,11 +37,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         converter.path = '/a/b/c';
         converter.queryParams = queryParams;
 
-        expect(converter.route).to.be.deep.equal({
-          prefix: '',
-          path: '/a/b/c',
-          __queryParams: queryParams
-        });
+        expect(converter.route)
+            .to.be.deep.equal(
+                {prefix: '', path: '/a/b/c', __queryParams: queryParams});
 
         converter.set('route.path', '/d/e/f');
         expect(converter.path).to.be.equal('/d/e/f');

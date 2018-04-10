@@ -30,10 +30,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function setLocation(url) {
     window.history.pushState({}, '', url);
-    Polymer.Base.fire('location-changed', {}, { node: window });
+    Polymer.Base.fire('location-changed', {}, {node: window});
   }
 
-  suite('<test-app-example-1>', function () {
+  suite('<test-app-example-1>', function() {
     var originalLocation;
     var exampleApp;
 
@@ -50,61 +50,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // Navigate to /lol
       setLocation('/lol');
 
-      expect(exampleApp.data).to.be.deep.eq({
-        page: 'lol'
-      });
-      expect(exampleApp.userData).to.be.deep.eq({
-      });
-      expect(exampleApp.route).to.be.deep.eq({
-        prefix: '',
-        path: '/lol',
-        __queryParams: {}
-      });
-      expect(exampleApp.userRoute).to.be.deep.eq({
-        prefix: null,
-        path: null,
-        __queryParams: {}
-      });
+      expect(exampleApp.data).to.be.deep.eq({page: 'lol'});
+      expect(exampleApp.userData).to.be.deep.eq({});
+      expect(exampleApp.route)
+          .to.be.deep.eq({prefix: '', path: '/lol', __queryParams: {}});
+      expect(exampleApp.userRoute)
+          .to.be.deep.eq({prefix: null, path: null, __queryParams: {}});
       expect(window.location.pathname).to.be.equal('/lol');
 
       // Navigate to /user
       setLocation('/user');
-      expect(exampleApp.data).to.be.deep.eq({
-        page: 'user'
-      });
+      expect(exampleApp.data).to.be.deep.eq({page: 'user'});
 
       // We should have redirected to /user/view because of a redirect in
       // the example app code.
-      expect(exampleApp.route).to.be.deep.eq({
-        prefix: '',
-        path: '/user/view',
-        __queryParams: {}
-      });
-      expect(exampleApp.userRoute).to.be.deep.eq({
-        prefix: '/user',
-        path: '/view',
-        __queryParams: {}
-      });
+      expect(exampleApp.route)
+          .to.be.deep.eq({prefix: '', path: '/user/view', __queryParams: {}});
+      expect(exampleApp.userRoute)
+          .to.be.deep.eq({prefix: '/user', path: '/view', __queryParams: {}});
       expect(window.location.pathname).to.be.equal('/user/view');
 
       // Navigate to /user/details
       setLocation('/user/details');
-      expect(exampleApp.data).to.be.deep.eq({
-        page: 'user'
-      });
-      expect(exampleApp.userData).to.be.deep.eq({
-        page: 'details'
-      });
-      expect(exampleApp.route).to.be.deep.eq({
-        prefix: '',
-        path: '/user/details',
-        __queryParams: {}
-      });
-      expect(exampleApp.userRoute).to.be.deep.eq({
-        prefix: '/user',
-        path: '/details',
-        __queryParams: {}
-      });
+      expect(exampleApp.data).to.be.deep.eq({page: 'user'});
+      expect(exampleApp.userData).to.be.deep.eq({page: 'details'});
+      expect(exampleApp.route)
+          .to.be.deep.eq({prefix: '', path: '/user/details', __queryParams: {}});
+      expect(exampleApp.userRoute)
+          .to.be.deep.eq({prefix: '/user', path: '/details', __queryParams: {}});
       expect(window.location.pathname).to.be.equal('/user/details');
 
       exampleApp.set('data.page', 'redirectToUser');

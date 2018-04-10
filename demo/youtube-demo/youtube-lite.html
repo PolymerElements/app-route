@@ -45,45 +45,22 @@ Note that this element is totally agnostic to routing!
       is: 'youtube-lite',
 
       properties: {
-        videoId: {
-          type: String,
-          notify: true
-        },
+        videoId: {type: String, notify: true},
 
-        state: {
-          type: String,
-          notify: true,
-          observer: '_stateChanged'
-        },
+        state: {type: String, notify: true, observer: '_stateChanged'},
 
-        currentTime: {
-          type: Number,
-          notify: true,
-          observer: '_currentTimeChanged'
-        },
+        currentTime: {type: Number, notify: true, observer: '_currentTimeChanged'},
 
-        startTime: {
-          type: Number
-        },
+        startTime: {type: Number},
 
-        __state: {
-          type: String,
-          observer: '__ytApiStateChange'
-        },
+        __state: {type: String, observer: '__ytApiStateChange'},
 
-        __currentTime: {
-          type: String,
-          observer: '_ytCurrentTimeChanged'
-        },
+        __currentTime: {type: String, observer: '_ytCurrentTimeChanged'},
 
-        __pauseOnFirstSeek: {
-          type: Boolean
-        }
+        __pauseOnFirstSeek: {type: Boolean}
       },
 
-      listeners: {
-        'google-youtube-ready': '_onYoutubeReady'
-      },
+      listeners: {'google-youtube-ready': '_onYoutubeReady'},
 
       _seekTo: function(newTime) {
         var player = this.$.player;
@@ -174,7 +151,7 @@ Note that this element is totally agnostic to routing!
       },
 
       __readableStateToApiState: function(readableState) {
-        var newApiState  = -2;
+        var newApiState = -2;
 
         if (readableState == this.__states.PLAYING) {
           newApiState = this.__apiStates.PLAYING;
@@ -186,10 +163,7 @@ Note that this element is totally agnostic to routing!
         return newApiState;
       },
 
-      __states: {
-        PLAYING: 'playing',
-        PAUSED: 'paused'
-      },
+      __states: {PLAYING: 'playing', PAUSED: 'paused'},
 
       __apiStates: {
         UNSTARTED: -1,
