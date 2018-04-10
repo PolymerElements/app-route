@@ -44,7 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     function setLocation(url) {
       window.history.pushState({}, '', url);
-      Polymer.Base.fire('location-changed', {}, { node: window });
+      Polymer.Base.fire('location-changed', {}, {node: window});
     }
 
     function assign(a, b) {
@@ -59,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       return a;
     }
 
-    suite('<app-location>', function () {
+    suite('<app-location>', function() {
       var initialUrl;
 
       setup(function() {
@@ -108,7 +108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
 
           test('it reflects completely replaced queryParams', function() {
-            appLocation.set('route.__queryParams', { bar: 1 });
+            appLocation.set('route.__queryParams', {bar: 1});
             expect(window.location.search).to.be.equal('?bar=1');
           });
 
@@ -134,7 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
 
           test('it can handle special characters', function() {
-            appLocation.set('queryParams.quote', "'");
+            appLocation.set('queryParams.quote', '\'');
             expect(appLocation.__query.indexOf('quote=%27')).to.not.be.equal(0);
           });
         });
@@ -161,9 +161,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           test('it reflects location.search to route.__queryParams', function() {
             setLocation('?fiz=buz');
-            expect(appLocation.route.__queryParams).to.be.eql({
-              fiz: 'buz'
-            });
+            expect(appLocation.route.__queryParams).to.be.eql({fiz: 'buz'});
           });
         });
       });

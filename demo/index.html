@@ -110,14 +110,9 @@ http://polymer.github.io/PATENTS.txt
         is: 'app-router-demo',
 
         properties: {
-          route: {
-            type: Object
-          },
+          route: {type: Object},
 
-          videoData: {
-            type: Object,
-            observer: '_videoDataChanged'
-          },
+          videoData: {type: Object, observer: '_videoDataChanged'},
 
           videoPageActive: {
             type: Boolean,
@@ -125,19 +120,11 @@ http://polymer.github.io/PATENTS.txt
             observer: '_videoPageActiveChanged'
           },
 
-          searchTail: {
-            type: Object,
-            notify: true
-          },
+          searchTail: {type: Object, notify: true},
 
-          videoTail: {
-            type: Object,
-            notify: true
-          },
+          videoTail: {type: Object, notify: true},
 
-          newCategory: {
-            type: String
-          },
+          newCategory: {type: String},
 
           videos: {
             type: Array,
@@ -149,9 +136,7 @@ http://polymer.github.io/PATENTS.txt
           data: {
             type: Object,
             value: function() {
-              return {
-                page: '/search/'
-              };
+              return {page: '/search/'};
             }
           }
         },
@@ -168,7 +153,7 @@ http://polymer.github.io/PATENTS.txt
 
           var that = this;
 
-          data.items.forEach(function (videoItem) {
+          data.items.forEach(function(videoItem) {
             var youtubeVideo = {
               id: videoItem.id.videoId,
               title: videoItem.snippet.title,
@@ -193,8 +178,8 @@ http://polymer.github.io/PATENTS.txt
             newColor = 255;
           }
 
-          document.body.style.backgroundColor = 'rgb(' + newColor + ',' + newColor
-              + ','  + newColor + ')';
+          document.body.style.backgroundColor =
+              'rgb(' + newColor + ',' + newColor + ',' + newColor + ')';
 
           // on first load, set the color then allow color transition animations
           if (previousValue === undefined) {

@@ -25,19 +25,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer({
         is: 'observer-tester',
         properties: {
-          route: {
-            type: Object,
-            notify:true
-          },
-          data: {
-            type: Object,
-            notify: true
-          },
-          active: {
-            type: Boolean,
-            value: false,
-            observer: 'checkActive'
-          }
+          route: {type: Object, notify: true},
+          data: {type: Object, notify: true},
+          active: {type: Boolean, value: false, observer: 'checkActive'}
         },
         checkActive: function(active) {
           var x = 1;

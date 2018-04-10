@@ -75,13 +75,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           computed: '_computeParams(apiKey, data.id, data.secret)'
         },
 
-        route: {
-          type: Object
-        }
+        route: {type: Object}
       },
-      observers: [
-        '_clearOldMetadata(route.path)'
-      ],
+      observers: ['_clearOldMetadata(route.path)'],
 
       _clearOldMetadata: function() {
         this.metadata = null;
@@ -102,8 +98,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (!photo || !photo.farm) {
           return '';
         }
-        return 'https://farm' + photo.farm + '.staticflickr.com/' +
-            photo.server + '/' + photo.id + '_' + photo.secret + '.jpg';
+        return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server +
+            '/' + photo.id + '_' + photo.secret + '.jpg';
       }
     });
   </script>

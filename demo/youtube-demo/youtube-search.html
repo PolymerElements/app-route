@@ -53,29 +53,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'youtube-search',
 
       properties: {
-        route: {
-          type: Object,
-          notify: true
-        },
+        route: {type: Object, notify: true},
 
-        data: {
-          type: Object
-        },
+        data: {type: Object},
 
-        category: {
-          type: String,
-          notify: true
-        },
+        category: {type: String, notify: true},
 
-        params: {
-          type: String,
-          computed: '_setParams(data.searchQuery)'
-        },
+        params: {type: String, computed: '_setParams(data.searchQuery)'},
 
-        videoData: {
-          type: Object,
-          notify: true
-        }
+        videoData: {type: Object, notify: true}
       },
 
       observers: ['_pathChanged(route.path)'],
@@ -90,10 +76,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _setParams: function(category) {
         return {
-          part: 'snippet',
-          q: this.data.searchQuery,
-          key: 'AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI',
-          type: 'video'
+          part: 'snippet', q: this.data.searchQuery,
+              key: 'AIzaSyAuecFZ9xJXbGDkQYWBmYrtzOGJD-iDIgI', type: 'video'
         }
       },
 
