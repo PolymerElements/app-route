@@ -129,12 +129,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
     test('it parses a path', function() {
-      route.route = {
-        prefix: '',
-        path: '/user/papyrus/details',
-        __queryParams: {}
-      } expect(route.tail.prefix)
-                        .to.be.equal('/user/papyrus');
+      route
+          .route = {prefix: '', path: '/user/papyrus/details', __queryParams: {}};
+      expect(route.tail.prefix).to.be.equal('/user/papyrus');
       expect(route.tail.path).to.be.equal('/details');
       expect(route.data.username).to.be.equal('papyrus');
     });
