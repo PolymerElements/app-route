@@ -25,12 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       observers: [
         'pageChanged(data.page)',
       ],
-      properties: {
-        subdata: {
-          type: Object,
-          value: {}
-        }
-      },
+      properties: {subdata: {type: Object, value: {}}},
       pageChanged(page) {
         if (page === '') {
           this.set('data.page', 'subroutepage')

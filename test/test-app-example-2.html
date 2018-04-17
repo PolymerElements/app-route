@@ -30,10 +30,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function setLocation(url) {
     window.history.pushState({}, '', url);
-    Polymer.Base.fire('location-changed', {}, { node: window });
+    Polymer.Base.fire('location-changed', {}, {node: window});
   }
 
-  suite('<test-app-example-2>', function () {
+  suite('<test-app-example-2>', function() {
     var originalLocation;
     var exampleApp;
 
@@ -50,40 +50,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // Navigate to /subroutepage
       setLocation('/');
 
-      expect(exampleApp.data).to.be.deep.eq({
-        page: 'subroutepage'
-      });
+      expect(exampleApp.data).to.be.deep.eq({page: 'subroutepage'});
 
-      expect(exampleApp.route).to.be.deep.eq({
-        prefix: '', 
-        path: '/subroutepage/subview', 
-        __queryParams: {}
-      });
+      expect(exampleApp.route)
+          .to.be.deep.eq(
+              {prefix: '', path: '/subroutepage/subview', __queryParams: {}});
 
-      expect(exampleApp.subroute).to.be.deep.eq({
-        prefix: '/subroutepage', 
-        path: '/subview', 
-        __queryParams: {}
-      });
-
+      expect(exampleApp.subroute)
+          .to.be.deep.eq(
+              {prefix: '/subroutepage', path: '/subview', __queryParams: {}});
     });
 
     test('changing the data to tail changing', function() {
       // Navigate to /foo/bar
       setLocation('/foo/bar');
 
-      expect(exampleApp.route).to.be.deep.eq({
-        prefix: '', 
-        path: '/foo/bar', 
-        __queryParams: {}
-      });
+      expect(exampleApp.route)
+          .to.be.deep.eq({prefix: '', path: '/foo/bar', __queryParams: {}});
 
-      expect(exampleApp.subroute).to.be.deep.eq({
-        prefix: '/foo', 
-        path: '/bar', 
-        __queryParams: {}
-      });
-
+      expect(exampleApp.subroute)
+          .to.be.deep.eq({prefix: '/foo', path: '/bar', __queryParams: {}});
     });
   });
 </script>
