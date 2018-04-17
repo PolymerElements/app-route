@@ -94,7 +94,10 @@ the `app-route` will update `route.path`. This in-turn will update the
       /**
        * The URL component managed by this element.
        */
-      route: {type: Object, notify: true},
+      route: {
+        type: Object,
+        notify: true,
+      },
 
       /**
        * The pattern of slash-separated segments to match `route.path` against.
@@ -105,7 +108,9 @@ the `app-route` will update `route.path`. This in-turn will update the
        * Path segments like `/:named` are mapped to properties on the `data`
        * object.
        */
-      pattern: {type: String},
+      pattern: {
+        type: String,
+      },
 
       /**
        * The parameterized values that are extracted from the route as
@@ -116,20 +121,20 @@ the `app-route` will update `route.path`. This in-turn will update the
         value: function() {
           return {};
         },
-        notify: true
+        notify: true,
       },
 
       /**
-        * Auto activate route if path empty
-        */
-        autoActivate: {
+       * Auto activate route if path empty
+       */
+      autoActivate: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       _queryParamsUpdating: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -140,7 +145,7 @@ the `app-route` will update `route.path`. This in-turn will update the
         value: function() {
           return {};
         },
-        notify: true
+        notify: true,
       },
 
       /**
@@ -149,22 +154,36 @@ the `app-route` will update `route.path`. This in-turn will update the
       tail: {
         type: Object,
         value: function() {
-          return {path: null, prefix: null, __queryParams: null};
+          return {
+            path: null,
+            prefix: null,
+            __queryParams: null,
+          };
         },
-        notify: true
+        notify: true,
       },
 
       /**
        * Whether the current route is active. True if `route.path` matches the
        * `pattern`, false otherwise.
        */
-      active: {type: Boolean, notify: true, readOnly: true},
+      active: {
+        type: Boolean,
+        notify: true,
+        readOnly: true,
+      },
 
-      _queryParamsUpdating: {type: Boolean, value: false},
+      _queryParamsUpdating: {
+        type: Boolean,
+        value: false,
+      },
       /**
        * @type {?string}
        */
-      _matched: {type: String, value: ''}
+      _matched: {
+        type: String,
+        value: '',
+      }
     },
 
     observers: [

@@ -89,7 +89,10 @@ firing a `location-changed` event on `window`. i.e.
          * A model representing the deserialized path through the route tree, as
          * well as the current queryParams.
          */
-        route: {type: Object, notify: true},
+        route: {
+          type: Object,
+          notify: true,
+        },
 
         /**
          * In many scenarios, it is convenient to treat the `hash` as a stand-in
@@ -102,7 +105,10 @@ firing a `location-changed` event on `window`. i.e.
 
          * the `path` for generating a `route`.
          */
-        useHashAsPath: {type: Boolean, value: false},
+        useHashAsPath: {
+          type: Boolean,
+          value: false,
+        },
 
         /**
          * A regexp that defines the set of URLs that should be considered part
@@ -117,39 +123,55 @@ firing a `location-changed` event on `window`. i.e.
          *
          * @type {string|RegExp}
          */
-        urlSpaceRegex: {type: String, notify: true},
+        urlSpaceRegex: {
+          type: String,
+          notify: true,
+        },
 
         /**
          * A set of key/value pairs that are universally accessible to branches
          * of the route tree.
          */
-        __queryParams: {type: Object},
+        __queryParams: {
+          type: Object,
+        },
 
         /**
          * The pathname component of the current URL.
          */
-        __path: {type: String},
+        __path: {
+          type: String,
+        },
 
         /**
          * The query string portion of the current URL.
          */
-        __query: {type: String},
+        __query: {
+          type: String,
+        },
 
         /**
          * The hash portion of the current URL.
          */
-        __hash: {type: String},
+        __hash: {
+          type: String,
+        },
 
         /**
          * The route path, which will be either the hash or the path, depending
          * on useHashAsPath.
          */
-        path: {type: String, observer: '__onPathChanged'},
+        path: {
+          type: String,
+          observer: '__onPathChanged',
+        },
 
         /**
          * Whether or not the ready function has been called.
          */
-        _isReady: {type: Boolean}
+        _isReady: {
+          type: Boolean,
+        }
       },
 
       behaviors: [Polymer.AppRouteConverterBehavior],
