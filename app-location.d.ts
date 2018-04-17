@@ -106,6 +106,18 @@ interface AppLocationElement extends Polymer.Element, Polymer.AppRouteConverterB
    * Whether or not the ready function has been called.
    */
   _isReady: boolean|null|undefined;
+
+  /**
+   * If the user was on a URL for less than `dwellTime` milliseconds, it
+   * won't be added to the browser's history, but instead will be
+   * replaced by the next entry.
+   *
+   * This is to prevent large numbers of entries from clogging up the
+   * user's browser history. Disable by setting to a negative number.
+   *
+   * See `iron-location` for more information.
+   */
+  dwellTime: number|null|undefined;
   ready(): void;
 }
 
