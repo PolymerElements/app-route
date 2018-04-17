@@ -111,6 +111,11 @@ interface AppRouteElement extends Polymer.Element {
    * `pattern`, false otherwise.
    */
   readonly active: boolean|null|undefined;
+
+  /**
+   * Auto activate route if path empty
+   */
+  autoActivate: boolean|null|undefined;
   _queryParamsUpdating: boolean|null|undefined;
   _matched: string|null;
   created(): void;

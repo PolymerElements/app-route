@@ -151,6 +151,14 @@ the `app-route` will update `route.path`. This in-turn will update the
           readOnly: true
         },
 
+        /**
+         * Auto activate route if path empty
+         */
+         autoActivate: {
+          type: Boolean,
+          value: false
+        },
+
         _queryParamsUpdating: {
           type: Boolean,
           value: false
@@ -247,7 +255,7 @@ the `app-route` will update `route.path`. This in-turn will update the
         var path = this.route.path;
         var pattern = this.pattern;
 
-        if (path === '') {
+        if (this.autoActivate && path === '') {
           path = '/';
         }
 
