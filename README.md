@@ -122,7 +122,7 @@ they automatically reflect back to the global location.
 
 ### Hashes vs Paths
 
-By default `app-location` routes using the pathname portion of the URL. This has
+By default `app-location` routes uses the pathname portion of the URL. This has
 broad browser support but it does require cooperation of the backend server. An
 `app-location` can be configured to use the hash part of a URL instead using
 the `use-hash-as-path` attribute, like so:
