@@ -4,7 +4,7 @@
   "description": "App routing expressed as Polymer Custom Elements.",
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "@polymer/gen-typescript-declarations": "^1.1.1",
+    "@polymer/gen-typescript-declarations": "^1.2.2",
     "bower": "^1.8.0",
     "webmat": "^0.2.0"
   },
