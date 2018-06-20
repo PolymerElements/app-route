@@ -8,6 +8,8 @@
  *   app-route-converter-behavior.html
  */
 
+/// <reference path="../polymer/types/polymer.d.ts" />
+
 declare namespace Polymer {
 
   /**
