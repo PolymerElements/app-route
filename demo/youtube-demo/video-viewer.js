@@ -1,4 +1,4 @@
-<!--
+/**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -6,20 +6,20 @@ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-<link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../../polymer/polymer.html">
-<link rel="import" href="../../../paper-styles/color.html">
-<link rel="import" href="../../../paper-input/paper-input.html">
-<link rel="import" href="../../../paper-toggle-button/paper-toggle-button.html">
+*/
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
 
-<link rel="import" href="../../app-route.html">
-
-<link rel="import" href="youtube-lite.html">
-<link rel="import" href="route-info.html">
-
-<dom-module id="video-viewer">
-  <template>
+import '@polymer/polymer/polymer-legacy.js';
+import '@polymer/paper-styles/color.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-toggle-button/paper-toggle-button.js';
+import '../../app-route.js';
+import './youtube-lite.js';
+import './route-info.js';
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+Polymer({
+  _template: html`
     <style>
       :host {
         display: block;
@@ -66,56 +66,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- You can bind any element's state into the URL by binding their
     properties into the queryParams object. youtube-lite doesn't have any code
     that's even aware of routing or the URL. -->
-    <youtube-lite
-        id="player"
-        video-id="{{data.vid}}"
-        state="{{queryParams.state}}"
-        current-time="{{queryParams.time}}"
-        start-time="{{queryParams.time}}">
+    <youtube-lite id="player" video-id="{{data.vid}}" state="{{queryParams.state}}" current-time="{{queryParams.time}}" start-time="{{queryParams.time}}">
     </youtube-lite>
 
     <div id="controls">
       <div>
-        <paper-input
-            id="time"
-            type="number"
-            on-focus="pause"
-            label="Time"
-            value="{{queryParams.time}}">
+        <paper-input id="time" type="number" on-focus="pause" label="Time" value="{{queryParams.time}}">
         </paper-input>
         <paper-toggle-button id="state" active="{{playing}}">[[queryParams.state]]</paper-toggle-button>
       </div>
       <route-info route="[[route]]"></route-info>
     </div>
-  </template>
+`,
 
-  <script>
-    Polymer({
-      is: 'video-viewer',
+  is: 'video-viewer',
 
-      properties: {
-        route: {type: Object, notify: true},
+  properties: {
+    route: {type: Object, notify: true},
 
-        data: {type: Object},
+    data: {type: Object},
 
-        playing: {type: Boolean},
+    playing: {type: Boolean},
 
-        queryParams: {type: Object}
-      },
+    queryParams: {type: Object}
+  },
 
-      observers: ['_playingChanged(playing)', '_stateChanged(queryParams.state)'],
+  observers: ['_playingChanged(playing)', '_stateChanged(queryParams.state)'],
 
-      pause: function() {
-        this.set('queryParams.state', 'paused');
-      },
+  pause: function() {
+    this.set('queryParams.state', 'paused');
+  },
 
-      _playingChanged: function(playing) {
-        this.set('queryParams.state', playing ? 'playing' : 'paused');
-      },
+  _playingChanged: function(playing) {
+    this.set('queryParams.state', playing ? 'playing' : 'paused');
+  },
 
-      _stateChanged: function(state) {
-        this.playing = state === 'playing';
-      }
-    });
-  </script>
-</dom-module>
+  _stateChanged: function(state) {
+    this.playing = state === 'playing';
+  }
+});

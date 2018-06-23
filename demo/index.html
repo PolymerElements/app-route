@@ -14,21 +14,21 @@ http://polymer.github.io/PATENTS.txt
 -->
 <html>
 <head>
-<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+<script src="../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
 <title>app-route Demo</title>
-<link rel="import" href="../../polymer/polymer.html">
+<script type="module" src="../../polymer/polymer-legacy.js"></script>
 
-<link rel="import" href="../../iron-demo-helpers/url-bar.html">
-<link rel="import" href="../../iron-pages/iron-pages.html">
+<script type="module" src="../../iron-demo-helpers/url-bar.js"></script>
+<script type="module" src="../../iron-pages/iron-pages.js"></script>
 
-<link rel="import" href="../app-location.html">
-<link rel="import" href="../app-route.html">
+<script type="module" src="../app-location.js"></script>
+<script type="module" src="../app-route.js"></script>
 
-<link rel="import" href="youtube-demo/youtube-search.html">
-<link rel="import" href="youtube-demo/youtube-toolbar.html">
-<link rel="import" href="youtube-demo/video-viewer.html">
-<link rel="import" href="youtube-demo/search-results.html">
+<script type="module" src="./youtube-demo/youtube-search.js"></script>
+<script type="module" src="./youtube-demo/youtube-toolbar.js"></script>
+<script type="module" src="./youtube-demo/video-viewer.js"></script>
+<script type="module" src="./youtube-demo/search-results.js"></script>
 
 <style>
   body {
@@ -104,92 +104,100 @@ http://polymer.github.io/PATENTS.txt
 
   </template>
 
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      Polymer({
-        is: 'app-router-demo',
+  <script type="module">
+import '@polymer/polymer/polymer-legacy.js';
+import '@polymer/iron-demo-helpers/url-bar.js';
+import '@polymer/iron-pages/iron-pages.js';
+import '../app-location.js';
+import '../app-route.js';
+import './youtube-demo/youtube-search.js';
+import './youtube-demo/youtube-toolbar.js';
+import './youtube-demo/video-viewer.js';
+import './youtube-demo/search-results.js';
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+Polymer({
+  is: 'app-router-demo',
 
-        properties: {
-          route: {type: Object},
+  properties: {
+    route: {type: Object},
 
-          videoData: {type: Object, observer: '_videoDataChanged'},
+    videoData: {type: Object, observer: '_videoDataChanged'},
 
-          videoPageActive: {
-            type: Boolean,
-            reflectToAttribute: true,
-            observer: '_videoPageActiveChanged'
-          },
+    videoPageActive: {
+      type: Boolean,
+      reflectToAttribute: true,
+      observer: '_videoPageActiveChanged'
+    },
 
-          searchTail: {type: Object, notify: true},
+    searchTail: {type: Object, notify: true},
 
-          videoTail: {type: Object, notify: true},
+    videoTail: {type: Object, notify: true},
 
-          newCategory: {type: String},
+    newCategory: {type: String},
 
-          videos: {
-            type: Array,
-            value: function() {
-              return [];
-            }
-          },
+    videos: {
+      type: Array,
+      value: function() {
+        return [];
+      }
+    },
 
-          data: {
-            type: Object,
-            value: function() {
-              return {page: '/search/'};
-            }
-          }
-        },
+    data: {
+      type: Object,
+      value: function() {
+        return {page: '/search/'};
+      }
+    }
+  },
 
-        attached: function() {
-          // If we do not have an initial URL, we redirect to /search
-          if (!this.route || !this.route.path) {
-            this.set('route.path', '/search/');
-          }
-        },
+  attached: function() {
+    // If we do not have an initial URL, we redirect to /search
+    if (!this.route || !this.route.path) {
+      this.set('route.path', '/search/');
+    }
+  },
 
-        _videoDataChanged: function(data) {
-          var allVideos = [];
+  _videoDataChanged: function(data) {
+    var allVideos = [];
 
-          var that = this;
+    var that = this;
 
-          data.items.forEach(function(videoItem) {
-            var youtubeVideo = {
-              id: videoItem.id.videoId,
-              title: videoItem.snippet.title,
-              thumbnail: videoItem.snippet.thumbnails.high.url
-            };
+    data.items.forEach(function(videoItem) {
+      var youtubeVideo = {
+        id: videoItem.id.videoId,
+        title: videoItem.snippet.title,
+        thumbnail: videoItem.snippet.thumbnails.high.url
+      };
 
-            allVideos.push(youtubeVideo);
-          });
-
-          this.set('videos', allVideos);
-        },
-
-        _videoPageActiveChanged: function(videoPageActive, previousValue) {
-          // change color of page on page change
-          var newColor;
-
-          if (videoPageActive) {
-            // black
-            newColor = 0;
-          } else {
-            // white
-            newColor = 255;
-          }
-
-          document.body.style.backgroundColor =
-              'rgb(' + newColor + ',' + newColor + ',' + newColor + ')';
-
-          // on first load, set the color then allow color transition animations
-          if (previousValue === undefined) {
-            document.body.style.transition = 'background-color .2s linear';
-            return;
-          }
-        }
-      });
+      allVideos.push(youtubeVideo);
     });
-  </script>
+
+    this.set('videos', allVideos);
+  },
+
+  _videoPageActiveChanged: function(videoPageActive, previousValue) {
+    // change color of page on page change
+    var newColor;
+
+    if (videoPageActive) {
+      // black
+      newColor = 0;
+    } else {
+      // white
+      newColor = 255;
+    }
+
+    document.body.style.backgroundColor =
+        'rgb(' + newColor + ',' + newColor + ',' + newColor + ')';
+
+    // on first load, set the color then allow color transition animations
+    if (previousValue === undefined) {
+      document.body.style.transition = 'background-color .2s linear';
+      return;
+    }
+  }
+});
+</script>
 </dom-module>
 </body>
 </html>

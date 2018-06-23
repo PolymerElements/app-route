@@ -1,4 +1,4 @@
-<!--
+/**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -6,15 +6,16 @@ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
+*/
+import '@polymer/polymer/polymer-legacy.js';
 
-<link rel="import" href="../../../polymer/polymer.html">
-<link rel="import" href="../../../iron-ajax/iron-ajax.html">
-<link rel="import" href="../../../paper-spinner/paper-spinner.html">
-<link rel="import" href="../../app-route.html">
-
-<dom-module id="flickr-image-page">
-  <template>
+import '@polymer/iron-ajax/iron-ajax.js';
+import '@polymer/paper-spinner/paper-spinner.js';
+import '../../app-route.js';
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+Polymer({
+  _template: html`
     <style>
       paper-spinner {
         display: block;
@@ -34,12 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-route route="{{route}}" pattern="/:farm/:server/:id/:secret" data="{{data}}">
     </app-route>
     <img src="{{_computeSrc(data)}}">
-    <iron-ajax auto url="https://www.flickr.com/services/rest/"
-               handle-as="json"
-               params="{{params}}"
-               last-response="{{metadata}}"
-               last-error="{{error}}"
-               loading="{{loading}}">
+    <iron-ajax auto="" url="https://www.flickr.com/services/rest/" handle-as="json" params="{{params}}" last-response="{{metadata}}" last-error="{{error}}" loading="{{loading}}">
     </iron-ajax>
     <paper-spinner active="{{loading}}"></paper-spinner>
     <div>
@@ -61,46 +57,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </ul>
       </div>
     </div>
-  </template>
-  <script>
-    Polymer({
-      is: 'flickr-image-page',
-      properties: {
-        apiKey: {
-          type: String,
-        },
+`,
 
-        params: {
-          type: Object,
-          computed: '_computeParams(apiKey, data.id, data.secret)'
-        },
+  is: 'flickr-image-page',
 
-        route: {type: Object}
-      },
-      observers: ['_clearOldMetadata(route.path)'],
+  properties: {
+    apiKey: {
+      type: String,
+    },
 
-      _clearOldMetadata: function() {
-        this.metadata = null;
-      },
+    params: {
+      type: Object,
+      computed: '_computeParams(apiKey, data.id, data.secret)'
+    },
 
-      _computeParams: function(apiKey, id, secret) {
-        return {
-          method: 'flickr.photos.getInfo',
-          api_key: apiKey,
-          photo_id: id,
-          secret: secret,
-          format: 'json',
-          nojsoncallback: 1
-        };
-      },
+    route: {type: Object}
+  },
 
-      _computeSrc: function(photo) {
-        if (!photo || !photo.farm) {
-          return '';
-        }
-        return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server +
-            '/' + photo.id + '_' + photo.secret + '.jpg';
-      }
-    });
-  </script>
-</dom-module>
+  observers: ['_clearOldMetadata(route.path)'],
+
+  _clearOldMetadata: function() {
+    this.metadata = null;
+  },
+
+  _computeParams: function(apiKey, id, secret) {
+    return {
+      method: 'flickr.photos.getInfo',
+      api_key: apiKey,
+      photo_id: id,
+      secret: secret,
+      format: 'json',
+      nojsoncallback: 1
+    };
+  },
+
+  _computeSrc: function(photo) {
+    if (!photo || !photo.farm) {
+      return '';
+    }
+    return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server +
+        '/' + photo.id + '_' + photo.secret + '.jpg';
+  }
+});

@@ -1,4 +1,4 @@
-<!--
+/**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -6,13 +6,15 @@ The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
 The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-<link rel="import" href="../../../polymer/polymer.html">
-<link rel="import" href="../../../paper-card/paper-card.html">
-<link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
+*/
+import '@polymer/polymer/polymer-legacy.js';
 
-<dom-module id="search-results">
-  <template>
+import '@polymer/paper-card/paper-card.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+Polymer({
+  _template: html`
     <style>
       :host {
         @apply --layout-horizontal;
@@ -48,12 +50,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-card>
       </a>
     </template>
-  </template>
-  <script>
-    Polymer({
-      is: 'search-results',
+`,
 
-      properties: {items: {type: Array}}
-    })
-  </script>
-</dom-module>
+  is: 'search-results',
+  properties: {items: {type: Array}}
+})

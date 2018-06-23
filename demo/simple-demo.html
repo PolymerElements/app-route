@@ -10,19 +10,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <html>
 <head>
-<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+<script src="../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
 <title>app-route Demo</title>
-<link rel="import" href="../../polymer/polymer.html">
+<script type="module" src="../../polymer/polymer-legacy.js"></script>
 
-<link rel="import" href="../../iron-demo-helpers/url-bar.html">
-<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-<link rel="import" href="../../iron-pages/iron-pages.html">
-<link rel="import" href="../../paper-input/paper-input.html">
-<link rel="import" href="../../paper-button/paper-button.html">
+<script type="module" src="../../iron-demo-helpers/url-bar.js"></script>
+<script type="module" src="../../iron-demo-helpers/demo-snippet.js"></script>
+<script type="module" src="../../iron-pages/iron-pages.js"></script>
+<script type="module" src="../../paper-input/paper-input.js"></script>
+<script type="module" src="../../paper-button/paper-button.js"></script>
 
-<link rel="import" href="../app-location.html">
-<link rel="import" href="../app-route.html">
+<script type="module" src="../app-location.js"></script>
+<script type="module" src="../app-route.js"></script>
 </head>
 
 <body>
@@ -35,13 +35,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div>}</div>
     </div>
   </template>
-  <script>
-    Polymer({
-      is: 'route-display',
+  <script type="module">
+import '@polymer/polymer/polymer-legacy.js';
+import '@polymer/iron-demo-helpers/url-bar.js';
+import '@polymer/iron-demo-helpers/demo-snippet.js';
+import '@polymer/iron-pages/iron-pages.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-button/paper-button.js';
+import '../app-location.js';
+import '../app-route.js';
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+Polymer({
+  is: 'route-display',
 
-      properties: {route: Object, tail: Boolean}
-    });
-  </script>
+  properties: {route: Object, tail: Boolean}
+});
+</script>
 </dom-module>
 
 <dom-bind>
