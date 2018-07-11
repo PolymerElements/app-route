@@ -1,11 +1,12 @@
 /**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+This code may only be used under the BSD style license found at
+http://polymer.github.io/LICENSE.txt The complete set of authors may be found at
+http://polymer.github.io/AUTHORS.txt The complete set of contributors may be
+found at http://polymer.github.io/CONTRIBUTORS.txt Code distributed by Google as
+part of the polymer project is also subject to an additional IP rights grant
+found at http://polymer.github.io/PATENTS.txt
 */
 /*
 youtube-lite provides a simple subset of the google-youtube element's API. By
@@ -20,10 +21,11 @@ Note that this element is totally agnostic to routing!
   then delete this comment!
 */
 import '@polymer/polymer/polymer-legacy.js';
+import './google-youtube.js';
 
-import 'google-youtube/google-youtube.js';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import {Polymer} from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+
 Polymer({
   _template: html`
     <style>
@@ -38,36 +40,65 @@ Polymer({
       }
     </style>
 
-    <google-youtube id="player" video-id="{{videoId}}" state="{{__state}}" currenttime="{{__currentTime}}" width="100%" height="100%">
+    <google-youtube
+        id="player"
+        video-id="{{videoId}}"
+        state="{{__state}}"
+        currenttime="{{__currentTime}}">
     </google-youtube>
-`,
+  `,
 
   is: 'youtube-lite',
 
   properties: {
-    videoId: {type: String, notify: true},
+    videoId: {
+      type: String,
+      notify: true,
+    },
 
-    state: {type: String, notify: true, observer: '_stateChanged'},
+    state: {
+      type: String,
+      notify: true,
+      observer: '_stateChanged',
+    },
 
-    currentTime: {type: Number, notify: true, observer: '_currentTimeChanged'},
+    currentTime: {
+      type: Number,
+      notify: true,
+      observer: '_currentTimeChanged',
+    },
 
-    startTime: {type: Number},
+    startTime: {
+      type: Number,
+    },
 
-    __state: {type: String, observer: '__ytApiStateChange'},
+    __state: {
+      type: String,
+      observer: '__ytApiStateChange',
+    },
 
-    __currentTime: {type: String, observer: '_ytCurrentTimeChanged'},
+    __currentTime: {
+      type: Number,
+      observer: '_ytCurrentTimeChanged',
+    },
 
-    __pauseOnFirstSeek: {type: Boolean}
+    __pauseOnFirstSeek: {
+      type: Boolean,
+    }
   },
 
   listeners: {'google-youtube-ready': '_onYoutubeReady'},
 
   _seekTo: function(newTime) {
     var player = this.$.player;
+    newTime = Number(newTime);
 
-    if (player.duration == 1 || newTime < player.duration) {
+    if ((player.duration == 1 || newTime < player.duration) &&
+        !this.__ytChangingTime) {
       player.seekTo(newTime);
     }
+
+    this.__ytChangingTime = false;
   },
 
   _onYoutubeReady: function() {
@@ -78,10 +109,11 @@ Polymer({
     }
   },
 
-  _currentTimeChanged: function(newTime, oldTime) {
+  _currentTimeChanged: function(newTime) {
     var apiState = this.__readableStateToApiState(this.state);
 
-    if (apiState != 2 || this.__state != 2) {
+    if (apiState != this.__apiStates.PAUSED ||
+        this.__state != this.__apiStates.PAUSED) {
       return;
     }
 
@@ -89,18 +121,16 @@ Polymer({
   },
 
   _ytCurrentTimeChanged: function(ytCurrentTime) {
-    if (this.__state === this.__apiStates.PAUSED) {
-      return;
-    }
-
+    this.__ytChangingTime = true;
     this.currentTime = ytCurrentTime;
   },
 
-  _stateChanged: function(newState, oldState) {
+  _stateChanged: function(newState) {
     var newApiState = this.__readableStateToApiState(newState);
 
     if (newApiState == this.__state ||
-        this.__state == this.__apiStates.UNSTARTED) {
+        this.__state == this.__apiStates.UNSTARTED ||
+        this.__state === undefined) {
       return;
     }
 
@@ -119,7 +149,7 @@ Polymer({
     }
   },
 
-  __ytApiStateChange: function(newState, oldState) {
+  __ytApiStateChange: function(newState) {
     var readableState;
 
     switch (newState) {

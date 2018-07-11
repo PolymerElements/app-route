@@ -6,6 +6,9 @@ addons:
 before_script:
   - npm install -g polymer-cli
   - git checkout package-lock.json
+  - >-
+    npm run format && git diff --exit-code || (echo -e '\n\033[31mERROR:\033[0m
+    Project is not formatted. Please run "npm run format".' && false)
 script:
   - xvfb-run polymer test --module-resolution=node --npm
   - 'if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then polymer test --module-resolution=node --npm -s ''default''; fi'

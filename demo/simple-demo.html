@@ -10,19 +10,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <html>
 <head>
-<script src="../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+<script src="https://unpkg.com/@webcomponents/webcomponentsjs@^2.0.0/webcomponents-loader.js"></script>
 
 <title>app-route Demo</title>
-<script type="module" src="../../polymer/polymer-legacy.js"></script>
-
-<script type="module" src="../../iron-demo-helpers/url-bar.js"></script>
-<script type="module" src="../../iron-demo-helpers/demo-snippet.js"></script>
-<script type="module" src="../../iron-pages/iron-pages.js"></script>
-<script type="module" src="../../paper-input/paper-input.js"></script>
-<script type="module" src="../../paper-button/paper-button.js"></script>
-
-<script type="module" src="../app-location.js"></script>
-<script type="module" src="../app-route.js"></script>
 </head>
 
 <body>
@@ -36,21 +26,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
   </template>
   <script type="module">
-import '@polymer/polymer/polymer-legacy.js';
-import '@polymer/iron-demo-helpers/url-bar.js';
-import '@polymer/iron-demo-helpers/demo-snippet.js';
-import '@polymer/iron-pages/iron-pages.js';
-import '@polymer/paper-input/paper-input.js';
-import '@polymer/paper-button/paper-button.js';
-import '../app-location.js';
-import '../app-route.js';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-Polymer({
-  is: 'route-display',
+    import '@polymer/polymer/polymer-legacy.js';
+    import '@polymer/iron-demo-helpers/url-bar.js';
+    import '@polymer/iron-demo-helpers/demo-snippet.js';
+    import '@polymer/iron-pages/iron-pages.js';
+    import '@polymer/paper-input/paper-input.js';
+    import '@polymer/paper-button/paper-button.js';
+    import '../app-location.js';
+    import '../app-route.js';
+    import {Polymer} from '@polymer/polymer/lib/legacy/polymer-fn.js';
+    Polymer({
+      is: 'route-display',
 
-  properties: {route: Object, tail: Boolean}
-});
-</script>
+      properties: {route: Object, tail: Boolean}
+    });
+  </script>
 </dom-module>
 
 <dom-bind>
@@ -98,7 +88,7 @@ Polymer({
         <paper-input value="{{pathData.firstPath}}"></paper-input>
         Change location of second part of the path:
         <paper-input value="{{pathData.secondPath}}"></paper-input>
-        
+
         <app-route
             route="{{pathDataTail}}"
             pattern="/:thirdPath"

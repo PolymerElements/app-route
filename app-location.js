@@ -1,12 +1,22 @@
 /**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+This code may only be used under the BSD style license found at
+http://polymer.github.io/LICENSE.txt The complete set of authors may be found at
+http://polymer.github.io/AUTHORS.txt The complete set of contributors may be
+found at http://polymer.github.io/CONTRIBUTORS.txt Code distributed by Google as
+part of the polymer project is also subject to an additional IP rights grant
+found at http://polymer.github.io/PATENTS.txt
 */
+import '@polymer/polymer/polymer-legacy.js';
+import '@polymer/iron-location/iron-location.js';
+import '@polymer/iron-location/iron-query-params.js';
+
+import {Polymer} from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+
+import {AppRouteConverterBehavior} from './app-route-converter-behavior.js';
+
 /**
 `app-location` is an element that provides synchronization between the
 browser location bar and the state of an app. When created, `app-location`
@@ -59,26 +69,13 @@ firing a `location-changed` event on `window`. i.e.
 @element app-location
 @demo demo/index.html
 */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
-import '@polymer/polymer/polymer-legacy.js';
-
-import '@polymer/iron-location/iron-location.js';
-import '@polymer/iron-location/iron-query-params.js';
-import { AppRouteConverterBehavior } from './app-route-converter-behavior.js';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-
 Polymer({
   _template: html`
     <iron-query-params params-string="{{__query}}" params-object="{{queryParams}}">
     </iron-query-params>
     <iron-location path="{{__path}}" query="{{__query}}" hash="{{__hash}}" url-space-regex="[[urlSpaceRegex]]" dwell-time="[[dwellTime]]">
     </iron-location>
-`,
+  `,
 
   is: 'app-location',
 

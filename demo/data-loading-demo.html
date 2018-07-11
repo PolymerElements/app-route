@@ -15,44 +15,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
 
   <title>carbon-route data loading example</title>
-  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@^2.0.0/webcomponents-loader.js"></script>
+  <script type="module">
+    import '@polymer/iron-demo-helpers/url-bar.js';
+    import './data-loading-demo/flickr-search-demo.js';
+    import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+    const template =
+        html`<style is="custom-style" include="demo-pages-shared-styles">
+    </style>`;
 
-  <script type="module" src="../../iron-demo-helpers/url-bar.js"></script>
-  <script type="module" src="../../iron-demo-helpers/demo-pages-shared-styles.js"></script>
-  <script type="module" src="./data-loading-demo/flickr-search-demo.js"></script>
-
-  <!-- FIXME(polymer-modulizer):
-        These imperative modules that innerHTML your HTML are
-        a hacky way to be sure that any mixins in included style
-        modules are ready before any elements that reference them are
-        instantiated, otherwise the CSS @apply mixin polyfill won't be
-        able to expand the underlying CSS custom properties.
-        See: https://github.com/Polymer/polymer-modulizer/issues/154
-        -->
-    <script type="module">
-const $_documentContainer = document.createElement('template');
-$_documentContainer.setAttribute('style', 'display: none;');
-
-$_documentContainer.innerHTML = `<style is="custom-style" include="demo-pages-shared-styles">
-  </style>`;
-
-document.head.appendChild($_documentContainer.content);
-</script>
+    document.head.appendChild(template.content);
+  </script>
 </head>
 <body>
-
-<script type="module">
-const $_documentContainer = document.createElement('template');
-$_documentContainer.innerHTML = `<url-bar></url-bar>`;
-document.body.appendChild($_documentContainer.content);
-</script>
-
-<script type="module">
-const $_documentContainer = document.createElement('template');
-$_documentContainer.innerHTML = `<flickr-search-demo></flickr-search-demo>`;
-document.body.appendChild($_documentContainer.content);
-</script>
-
-
-
-</body></html>
+  <url-bar></url-bar>
+  <flickr-search-demo></flickr-search-demo>
+</body>
+</html>
