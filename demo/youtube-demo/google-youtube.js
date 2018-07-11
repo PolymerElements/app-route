@@ -105,15 +105,6 @@ class GoogleYoutube extends PolymerElement {
         onStateChange: this.__onStateChange.bind(this),
       }
     });
-    // this.loadVideo(this.videoId);
-  }
-
-  loadVideo(id) {
-    if (!this.isReady) {
-      return;
-    }
-
-    this.__player.loadVideoById(id)
   }
 
   connectedCallback() {
