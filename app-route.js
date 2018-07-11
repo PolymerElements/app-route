@@ -1,17 +1,23 @@
 /**
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+This code may only be used under the BSD style license found at
+http://polymer.github.io/LICENSE.txt The complete set of authors may be found at
+http://polymer.github.io/AUTHORS.txt The complete set of contributors may be
+found at http://polymer.github.io/CONTRIBUTORS.txt Code distributed by Google as
+part of the polymer project is also subject to an additional IP rights grant
+found at http://polymer.github.io/PATENTS.txt
 */
+import '@polymer/polymer/polymer-legacy.js';
+
+import {Polymer} from '@polymer/polymer/lib/legacy/polymer-fn.js';
+
 /**
 `app-route` is an element that enables declarative, self-describing routing
 for a web app.
 
-> *n.b. app-route is still in beta. We expect it will need some changes. We're counting on your feedback!*
+> *n.b. app-route is still in beta. We expect it will need some changes. We're
+counting on your feedback!*
 
 In its typical usage, a `app-route` element consumes an object that describes
 some state about the current route, via the `route` property. It then parses
@@ -33,8 +39,8 @@ In the above example, the `app-location` produces a `route` value. Then, the
 `route.path` property is matched by comparing it to the `pattern` property. If
 the `pattern` property matches `route.path`, the `app-route` will set or update
 its `data` property with an object whose properties correspond to the parameters
-in `pattern`. So, in the above example, if `route.path` was `'/about'`, the value
-of `data` would be `{"page": "about"}`.
+in `pattern`. So, in the above example, if `route.path` was `'/about'`, the
+value of `data` would be `{"page": "about"}`.
 
 The `tail` property represents the remaining part of the route state after the
 `pattern` has been applied to a matching `route`.
@@ -79,15 +85,6 @@ the `app-route` will update `route.path`. This in-turn will update the
 @demo demo/data-loading-demo.html
 @demo demo/simple-demo.html
 */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
-import '@polymer/polymer/polymer-legacy.js';
-
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-
 Polymer({
   is: 'app-route',
 
