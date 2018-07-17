@@ -44,7 +44,7 @@ Polymer({
         id="player"
         video-id="{{videoId}}"
         state="{{__state}}"
-        currenttime="{{__currentTime}}">
+        current-time="{{__currentTime}}">
     </google-youtube>
   `,
 
