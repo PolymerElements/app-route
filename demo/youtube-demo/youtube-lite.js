@@ -14,7 +14,8 @@ simplifying the API we're also able to make it more amenable to two-way data
 binding.
 
 Note that this element is totally agnostic to routing!
-*/'@polymer/polymer/polymer-legacy.js';
+*/
+import '@polymer/polymer/polymer-legacy.js';
 import './google-youtube.js';
 
 import {Polymer} from '@polymer/polymer/lib/legacy/polymer-fn.js';
