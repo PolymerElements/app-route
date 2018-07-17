@@ -16,9 +16,6 @@ import {Polymer} from '@polymer/polymer/lib/legacy/polymer-fn.js';
 `app-route` is an element that enables declarative, self-describing routing
 for a web app.
 
-> *n.b. app-route is still in beta. We expect it will need some changes. We're
-counting on your feedback!*
-
 In its typical usage, a `app-route` element consumes an object that describes
 some state about the current route, via the `route` property. It then parses
 that state using the `pattern` property, and produces two artifacts: some `data`
