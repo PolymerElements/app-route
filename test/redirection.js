@@ -12,11 +12,6 @@ found at http://polymer.github.io/PATENTS.txt
  There are three relevant factors to route.path, and when any one of them
  changes we want to support synchronously updating any of the others.
 */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
 import '@polymer/polymer/polymer-legacy.js';
 
 import '../app-location.js';
