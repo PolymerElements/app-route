@@ -14,13 +14,7 @@ simplifying the API we're also able to make it more amenable to two-way data
 binding.
 
 Note that this element is totally agnostic to routing!
-*/
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
-import '@polymer/polymer/polymer-legacy.js';
+*/'@polymer/polymer/polymer-legacy.js';
 import './google-youtube.js';
 
 import {Polymer} from '@polymer/polymer/lib/legacy/polymer-fn.js';

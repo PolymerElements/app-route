@@ -9,7 +9,6 @@ part of the polymer project is also subject to an additional IP rights grant
 found at http://polymer.github.io/PATENTS.txt
 */
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
-
 import '@polymer/polymer/polymer-legacy.js';
 import '@polymer/paper-styles/color.js';
 import '@polymer/paper-input/paper-input.js';
@@ -60,7 +59,7 @@ Polymer({
     a app-route in the host of this element. This means that the parent that
     provides this route decides where this element lives in the URL space. In
     this case, the parent, which uses hashes, matches #/video and hence this
-    element lives in <App serving point>?querParams#/video/:vid -->
+    element lives in <App serving point>?queryParams#/video/:vid -->
     <app-route
         route="{{route}}"
         pattern="/:vid"
