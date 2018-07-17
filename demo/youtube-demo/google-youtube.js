@@ -12,8 +12,8 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 
 /**
- * This element supports a subset of the features of the google-map element
- * v2.x. Namely, the fluid attribute and videoId/list properties are supported.
+ * This element supports a subset of the features of the google-youtube element
+ * v2.x.
  */
 class GoogleYoutube extends PolymerElement {
   static get template() {
@@ -23,12 +23,6 @@ class GoogleYoutube extends PolymerElement {
           display: block;
         }
 
-        :host([fluid]) {
-          width: 100%;
-          max-width: 100%;
-          position: relative;
-        }
-
         #container {
           width: 100%;
           height: 100%;
@@ -36,22 +30,9 @@ class GoogleYoutube extends PolymerElement {
           max-height: 100%;
         }
 
-        :host([fluid]) #container {
-          width: 100%;
-          height: auto;
-          padding-top: 56.25%;
-        }
-
         #iframe {
           width: 100%;
           height: 100%;
-        }
-
-        :host([fluid]) #iframe {
-          vertical-align: bottom;
-          position: absolute;
-          top: 0px;
-          left: 0px;
         }
       </style>
       <div id="container"></div>
@@ -70,7 +51,7 @@ class GoogleYoutube extends PolymerElement {
         notify: true,
       },
 
-      currenttime: {
+      currentTime: {
         type: Number,
         notify: true,
       },
@@ -151,7 +132,7 @@ class GoogleYoutube extends PolymerElement {
       return;
     }
 
-    this.currenttime = Math.floor(this.__player.getCurrentTime());
+    this.currentTime = Math.floor(this.__player.getCurrentTime());
   }
 
   __onStateChange(e) {
