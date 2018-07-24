@@ -24,23 +24,28 @@ npm install --save @polymer/app-route
 <html>
   <head>
     <script type="module">
+      import '@polymer/polymer/lib/elements/dom-bind.js';
       import '@polymer/app-route/app-location.js';
       import '@polymer/app-route/app-route.js';
     </script>
   </head>
   <body>
-    <app-location route="{{route}}"></app-location>
-    <app-route
-        route="{{route}}"
-        pattern="/:page"
-        data="{{routeData}}"
-        tail="{{subroute}}">
-    </app-route>
-    <app-route
-        route="{{subroute}}"
-        pattern="/:id"
-        data="{{subrouteData}}">
-    </app-route>
+    <dom-bind>
+      <template>
+        <app-location route="{{route}}"></app-location>
+        <app-route
+            route="{{route}}"
+            pattern="/:page"
+            data="{{routeData}}"
+            tail="{{subroute}}">
+        </app-route>
+        <app-route
+            route="{{subroute}}"
+            pattern="/:id"
+            data="{{subrouteData}}">
+        </app-route>
+      </template>
+    </dom-bind>
   </body>
 </html>
 ```
