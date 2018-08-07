@@ -42,7 +42,7 @@ Polymer({
 
     <route-info route="[[route]]"></route-info>
 
-    <iron-ajax auto="" id="youtubeSearch" url="https://www.googleapis.com/youtube/v3/search" params="{{params}}" last-response="{{videoData}}">
+    <iron-ajax auto id="youtubeSearch" url="https://www.googleapis.com/youtube/v3/search" params="{{params}}" last-response="{{videoData}}">
     </iron-ajax>
 `,
 

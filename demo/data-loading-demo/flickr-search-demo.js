@@ -28,7 +28,7 @@ Polymer({
         text-decoration: underline;
       }
     </style>
-    <app-location route="{{route}}" use-hash-as-path=""></app-location>
+    <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{data}}">
     </app-route>
     <app-route route="{{route}}" pattern="/search" tail="{{searchRoute}}">

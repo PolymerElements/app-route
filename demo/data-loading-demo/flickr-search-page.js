@@ -28,10 +28,10 @@ Polymer({
     </style>
     <app-route pattern="/" route="{{route}}" query-params="{{queryParams}}" active="{{active}}">
     </app-route>
-    <paper-input autofocus="" label="Search the public domain on Flickr" value="{{queryParams.search}}">
+    <paper-input autofocus label="Search the public domain on Flickr" value="{{queryParams.search}}">
     </paper-input>
 
-    <iron-ajax auto="" url="https://www.flickr.com/services/rest/" handle-as="json" debounce-duration="300" params="{{params}}" last-response="{{response}}" last-error="{{error}}" loading="{{loading}}">
+    <iron-ajax auto url="https://www.flickr.com/services/rest/" handle-as="json" debounce-duration="300" params="{{params}}" last-response="{{response}}" last-error="{{error}}" loading="{{loading}}">
     </iron-ajax>
     <paper-spinner active="{{loading}}"></paper-spinner>
     <template is="dom-repeat" items="{{response.photos.photo}}" as="photo">
