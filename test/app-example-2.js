@@ -38,7 +38,7 @@ Polymer({
 })
 Polymer({
   _template: html`
-    <app-route id="tail" auto-activate="" route="{{route}}" pattern="/:page" data="{{data}}">
+    <app-route id="tail" auto-activate route="{{route}}" pattern="/:page" data="{{data}}">
     </app-route>
   `,
 

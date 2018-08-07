@@ -36,7 +36,7 @@ Polymer({
     <app-route route="{{route}}" pattern="/:farm/:server/:id/:secret" data="{{data}}">
     </app-route>
     <img src="{{_computeSrc(data)}}">
-    <iron-ajax auto="" url="https://www.flickr.com/services/rest/" handle-as="json" params="{{params}}" last-response="{{metadata}}" last-error="{{error}}" loading="{{loading}}">
+    <iron-ajax auto url="https://www.flickr.com/services/rest/" handle-as="json" params="{{params}}" last-response="{{metadata}}" last-error="{{error}}" loading="{{loading}}">
     </iron-ajax>
     <paper-spinner active="{{loading}}"></paper-spinner>
     <div>
