@@ -196,6 +196,6 @@ Polymer({
     PLAYING: 1,
     PAUSED: 2,
     BUFFERING: 3,
-    QUEUED: 5
+    QUEUED: 5,
   }
 });
