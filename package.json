@@ -4,18 +4,18 @@
   "name": "@polymer/app-route",
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "@polymer/iron-ajax": "^3.0.0-pre.21",
-    "@polymer/iron-demo-helpers": "^3.0.0-pre.20",
-    "@polymer/iron-icons": "^3.0.0-pre.21",
-    "@polymer/iron-pages": "^3.0.0-pre.20",
-    "@polymer/iron-test-helpers": "^3.0.0-pre.20",
-    "@polymer/paper-button": "^3.0.0-pre.21",
-    "@polymer/paper-card": "^3.0.0-pre.20",
-    "@polymer/paper-icon-button": "^3.0.0-pre.20",
-    "@polymer/paper-input": "^3.0.0-pre.20",
-    "@polymer/paper-spinner": "^3.0.0-pre.20",
-    "@polymer/paper-styles": "^3.0.0-pre.20",
-    "@polymer/paper-toggle-button": "^3.0.0-pre.20",
+    "@polymer/iron-ajax": "^3.0.0-pre.22",
+    "@polymer/iron-demo-helpers": "^3.0.0-pre.22",
+    "@polymer/iron-icons": "^3.0.0-pre.22",
+    "@polymer/iron-pages": "^3.0.0-pre.22",
+    "@polymer/iron-test-helpers": "^3.0.0-pre.22",
+    "@polymer/paper-button": "^3.0.0-pre.22",
+    "@polymer/paper-card": "^3.0.0-pre.22",
+    "@polymer/paper-icon-button": "^3.0.0-pre.22",
+    "@polymer/paper-input": "^3.0.0-pre.22",
+    "@polymer/paper-spinner": "^3.0.0-pre.22",
+    "@polymer/paper-styles": "^3.0.0-pre.22",
+    "@polymer/paper-toggle-button": "^3.0.0-pre.22",
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "wct-browser-legacy": "^1.0.1",
     "webmat": "^0.2.2",
@@ -23,13 +23,13 @@
   },
   "scripts": {
     "format": "webmat",
-    "generate-types": "gen-typescript-declarations --deleteExisting --outDir .",
+    "generate-types": "gen-typescript-declarations --deleteExisting --outDir . --verify",
     "prepack": "npm run generate-types"
   },
   "version": "3.0.0-pre.22",
   "author": "The Polymer Authors",
   "dependencies": {
-    "@polymer/iron-location": "^3.0.0-pre.20",
+    "@polymer/iron-location": "^3.0.0-pre.22",
     "@polymer/polymer": "^3.0.0"
   }
 }
