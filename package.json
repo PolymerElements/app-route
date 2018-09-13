@@ -3,6 +3,10 @@
   "homepage": "https://github.com/PolymerElements/app-route",
   "name": "@polymer/app-route",
   "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PolymerElements/app-route"
+  },
   "devDependencies": {
     "@polymer/iron-ajax": "^3.0.0-pre.26",
     "@polymer/iron-demo-helpers": "^3.0.1",
