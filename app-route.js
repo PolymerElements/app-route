@@ -84,6 +84,7 @@ the `app-route` will update `route.path`. This in-turn will update the
 */
 Polymer({
   is: 'app-route',
+  _template: null,
 
   properties: {
     /**
