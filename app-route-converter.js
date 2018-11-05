@@ -72,6 +72,7 @@ turn is consumed by the `app-route`.
 */
 Polymer({
   is: 'app-route-converter',
+  _template: null,
 
   behaviors: [AppRouteConverterBehavior]
 });
