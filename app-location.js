@@ -70,6 +70,7 @@ firing a `location-changed` event on `window`. i.e.
 @demo demo/index.html
 */
 Polymer({
+  /** @override */
   _template: html`
     <iron-query-params params-string="{{__query}}" params-object="{{queryParams}}">
     </iron-query-params>
@@ -186,6 +187,7 @@ Polymer({
   behaviors: [AppRouteConverterBehavior],
   observers: ['__computeRoutePath(useHashAsPath, __hash, __path)'],
 
+  /** @override */
   ready: function() {
     this._isReady = true;
   },
