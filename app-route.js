@@ -84,6 +84,7 @@ the `app-route` will update `route.path`. This in-turn will update the
 */
 Polymer({
   is: 'app-route',
+  /** @override */
   _template: null,
 
   properties: {
@@ -187,6 +188,7 @@ Polymer({
     '__queryParamsChanged(queryParams.*)'
   ],
 
+  /** @override */
   created: function() {
     this.linkPaths('route.__queryParams', 'tail.__queryParams');
     this.linkPaths('tail.__queryParams', 'route.__queryParams');

@@ -62,6 +62,7 @@ export const AppRouteConverterBehavior = {
     '_routeQueryParamsChanged(route.__queryParams)'
   ],
 
+  /** @override */
   created: function() {
     this.linkPaths('route.__queryParams', 'queryParams');
     this.linkPaths('queryParams', 'route.__queryParams');
