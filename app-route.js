@@ -335,12 +335,8 @@ Polymer({
       this._dataInUrl[key] = namedMatches[key];
     }
 
-    if (this.setProperties) {
-      // atomic update
-      this.setProperties(propertyUpdates, true);
-    } else {
-      this.__setMulti(propertyUpdates);
-    }
+    // atomic update
+    this.setProperties(propertyUpdates, true);
   },
 
   __tailPathChanged: function(path) {
@@ -394,34 +390,4 @@ Polymer({
     }
     return interp.join('/');
   },
-
-  __setMulti: function(setObj) {
-    // HACK(rictic): skirting around 1.0's lack of a setMulti by poking at
-    //     internal data structures. I would not advise that you copy this
-    //     example.
-    //
-    //     In the future this will be a feature of Polymer itself.
-    //     See: https://github.com/Polymer/polymer/issues/3640
-    //
-    //     Hacking around with private methods like this is juggling footguns,
-    //     and is likely to have unexpected and unsupported rough edges.
-    //
-    //     Be ye so warned.
-    for (var property in setObj) {
-      this._propertySetter(property, setObj[property]);
-    }
-    // notify in a specific order
-    if (setObj.data !== undefined) {
-      this._pathEffector('data', this.data);
-      this._notifyChange('data');
-    }
-    if (setObj.active !== undefined) {
-      this._pathEffector('active', this.active);
-      this._notifyChange('active');
-    }
-    if (setObj.tail !== undefined) {
-      this._pathEffector('tail', this.tail);
-      this._notifyChange('tail');
-    }
-  }
 });
